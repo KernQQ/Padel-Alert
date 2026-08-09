@@ -1894,7 +1894,126 @@ textarea {
 .app-toast span { margin-left:auto; }
 @media(max-width:900px){ .my-center-grid{grid-template-columns:1fr;} .request-list>article{grid-template-columns:auto 1fr;} .request-status,.request-actions{grid-column:2;} }
 @media(max-width:640px){ .profile-form-grid{grid-template-columns:1fr;} .profile-wide{grid-column:auto;} .owner-post-card header{flex-direction:column;} .owner-post-actions{width:100%; flex-direction:column;} .owner-post-actions button{width:100%;} .app-toast{right:12px;bottom:82px;left:12px;} }
-\n\n/* POWIADOMIENIA LIVE + BADGE W MENU */\n.nav-unread-badge {\n  color: #fff !important;\n  background: var(--red) !important;\n  box-shadow: 0 0 0 3px rgba(213, 90, 104, 0.18);\n}\n\n.mobile-bottom-nav button {\n  position: relative;\n}\n\n.mobile-unread-badge {\n  position: absolute;\n  top: 3px;\n  right: calc(50% - 23px);\n  display: grid;\n  min-width: 18px;\n  height: 18px;\n  place-items: center;\n  padding: 0 5px;\n  border: 2px solid var(--surface);\n  border-radius: 999px;\n  color: #fff;\n  background: var(--red);\n  font-size: 9px;\n  line-height: 1;\n}\n\n.notification-head-actions {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: flex-end;\n  gap: 7px;\n}\n\n.notification-list article {\n  cursor: pointer;\n}\n\n.app-toast {\n  position: fixed;\n  right: 22px;\n  bottom: 22px;\n  z-index: 130;\n  display: grid;\n  grid-template-columns: auto minmax(0, 1fr) auto;\n  align-items: center;\n  gap: 12px;\n  width: min(430px, calc(100% - 32px));\n  padding: 14px;\n  border: 1px solid color-mix(in srgb, var(--primary) 40%, var(--line));\n  border-radius: 16px;\n  color: var(--text);\n  background: color-mix(in srgb, var(--surface) 96%, transparent);\n  box-shadow: var(--shadow-strong);\n  backdrop-filter: blur(18px);\n  cursor: pointer;\n  text-align: left;\n  animation: notificationToastIn 0.24s ease;\n}\n\n.app-toast-icon {\n  display: grid;\n  width: 42px;\n  height: 42px;\n  place-items: center;\n  border-radius: 13px;\n  background: color-mix(in srgb, var(--primary) 12%, var(--surface));\n  font-size: 19px;\n}\n\n.app-toast strong,\n.app-toast small {\n  display: block;\n}\n\n.app-toast small {\n  margin-top: 3px;\n  overflow: hidden;\n  color: var(--muted);\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.app-toast > b {\n  color: var(--primary);\n  font-size: 11px;\n}\n\n@keyframes notificationToastIn {\n  from {\n    opacity: 0;\n    transform: translateY(16px) scale(0.98);\n  }\n}\n\n@media (max-width: 640px) {\n  .notification-head-actions {\n    width: 100%;\n    flex-direction: column;\n  }\n\n  .notification-head-actions button {\n    width: 100%;\n  }\n\n  .app-toast {\n    right: 10px;\n    bottom: 78px;\n    left: 10px;\n    width: auto;\n  }\n\n  .app-toast > b {\n    display: none;\n  }\n}\n
+
+
+/* POWIADOMIENIA LIVE + BADGE W MENU */
+.nav-unread-badge {
+  color: #fff !important;
+  background: var(--red) !important;
+  box-shadow: 0 0 0 3px rgba(213, 90, 104, 0.18);
+}
+
+.mobile-bottom-nav button {
+  position: relative;
+}
+
+.mobile-unread-badge {
+  position: absolute;
+  top: 3px;
+  right: calc(50% - 23px);
+  display: grid;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0 5px;
+  border: 2px solid var(--surface);
+  border-radius: 999px;
+  color: #fff;
+  background: var(--red);
+  font-size: 9px;
+  line-height: 1;
+}
+
+.notification-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.notification-list article {
+  cursor: pointer;
+}
+
+.app-toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 130;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: min(430px, calc(100% - 32px));
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--primary) 40%, var(--line));
+  border-radius: 16px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  box-shadow: var(--shadow-strong);
+  backdrop-filter: blur(18px);
+  cursor: pointer;
+  text-align: left;
+  animation: notificationToastIn 0.24s ease;
+}
+
+.app-toast-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+  font-size: 19px;
+}
+
+.app-toast strong,
+.app-toast small {
+  display: block;
+}
+
+.app-toast small {
+  margin-top: 3px;
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-toast > b {
+  color: var(--primary);
+  font-size: 11px;
+}
+
+@keyframes notificationToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+
+@media (max-width: 640px) {
+  .notification-head-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .notification-head-actions button {
+    width: 100%;
+  }
+
+  .app-toast {
+    right: 10px;
+    bottom: 78px;
+    left: 10px;
+    width: auto;
+  }
+
+  .app-toast > b {
+    display: none;
+  }
+}
+
 
 /* V5 ONE-FILE PREMIUM */
 .smart-match-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.smart-match-card{padding:17px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow);transition:.2s ease}.smart-match-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-strong)}.smart-match-score{display:flex;align-items:center;justify-content:space-between;gap:8px}.smart-match-score strong{font-size:28px;color:var(--primary)}.smart-match-profile{display:flex;align-items:center;gap:10px;margin:14px 0}.smart-match-profile h3,.smart-match-profile p{margin:0}.smart-match-profile p{margin-top:3px;color:var(--muted);font-size:12px}.smart-match-tags{display:flex;flex-wrap:wrap;gap:6px}.smart-match-tags span{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface-soft);color:var(--muted);font-size:10px;font-weight:800}.smart-match-card button{width:100%;min-height:40px;margin-top:14px;border:0;border-radius:10px;color:#fff;background:var(--primary);cursor:pointer;font-weight:900}.club-showcase{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.club-showcase-card{position:relative;overflow:hidden;min-height:190px;padding:18px;border-radius:20px;color:#fff;background:linear-gradient(145deg,#173a25,#56a970);box-shadow:var(--shadow);cursor:pointer;transition:.2s ease}.club-showcase-card:nth-child(2){background:linear-gradient(145deg,#254773,#5e89c5)}.club-showcase-card:nth-child(3){background:linear-gradient(145deg,#80591f,#d09745)}.club-showcase-card:hover{transform:translateY(-4px)}.club-showcase-card:after{content:"";position:absolute;right:-35px;bottom:-55px;width:150px;height:150px;border:1px solid rgba(255,255,255,.3);border-radius:50%}.club-showcase-card small,.club-showcase-card strong{display:block}.club-showcase-card h3{margin:34px 0 4px;font-size:24px}.club-showcase-card .club-count{font-size:34px;font-weight:900}.profile-summary-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:18px;border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:var(--shadow)}.profile-summary-card h3,.profile-summary-card p{margin:0}.profile-summary-card p{margin-top:4px;color:var(--muted)}.profile-summary-card button{padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);cursor:pointer;font-weight:800}.notification-bell-top{position:fixed;top:20px;right:24px;z-index:70;display:grid;width:44px;height:44px;place-items:center;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--shadow);cursor:pointer}.notification-bell-top span{position:absolute;top:-5px;right:-5px;display:grid;min-width:20px;height:20px;place-items:center;padding:0 5px;border-radius:999px;color:#fff;background:var(--red);font-size:10px;font-weight:900}.v5-fade{animation:v5Fade .35s ease both}@keyframes v5Fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}@media(max-width:1000px){.smart-match-grid,.club-showcase{grid-template-columns:1fr 1fr}}@media(max-width:640px){.smart-match-grid,.club-showcase{grid-template-columns:1fr}.notification-bell-top{top:8px;right:58px}.profile-summary-card{grid-template-columns:auto 1fr}.profile-summary-card button{grid-column:1/-1;width:100%}}
