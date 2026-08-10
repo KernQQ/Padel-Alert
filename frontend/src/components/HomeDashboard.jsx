@@ -16,113 +16,125 @@ function HomeDashboard({
   onInvitePlayer
 }) {
   const firstName = nickname || "Gość";
-  const hasRecommendations = recommendations.length > 0;
-  const activePlayers = players.slice(0, 4);
+  const nextSlots = recommendations.slice(0, 4);
+  const activePlayers = players.slice(0, 3);
 
   return (
-    <div className="v4-home">
-      <header className="v4-home-header">
+    <div className="consumer-home">
+      <header className="consumer-home-header">
         <div>
-          <span className="v4-overline">PADELALERT</span>
-          <h1>Cześć, {firstName}.</h1>
-          <p>Znajdź kort, mecz albo partnera do gry.</p>
+          <p className="consumer-location">Szczecin</p>
+          <h1>Graj w padla.</h1>
+          <p className="consumer-subtitle">
+            Kort, mecz albo partner — bez przeklikiwania kilku stron.
+          </p>
         </div>
-        <div className="v4-refresh">
-          <span className="live-dot" />
-          Odświeżenie za {countdown}s
-        </div>
+
+        <button className="consumer-profile-button" type="button" onClick={onOpenSaved}>
+          <span>{firstName.slice(0, 1).toUpperCase()}</span>
+          <div>
+            <strong>{firstName}</strong>
+            <small>Poziom {level || "3.0"}</small>
+          </div>
+        </button>
       </header>
 
-      <section className="v4-actions" aria-label="Szybkie akcje">
-        <button type="button" onClick={onOpenCourts}>
-          <span className="v4-action-index">01</span>
-          <strong>Znajdź kort</strong>
-          <small>Sprawdź wolne terminy</small>
+      <section className="consumer-primary-actions">
+        <button className="consumer-action consumer-action-primary" type="button" onClick={onOpenCourts}>
+          <span className="consumer-action-label">Rezerwacja</span>
+          <strong>Znajdź wolny kort</strong>
+          <small>Porównaj terminy w klubach</small>
           <b>→</b>
         </button>
-        <button type="button" onClick={onOpenMatches}>
-          <span className="v4-action-index">02</span>
-          <strong>Mecze</strong>
-          <small>Utwórz lub dołącz</small>
-          <b>→</b>
-        </button>
-        <button type="button" onClick={onOpenPlayers}>
-          <span className="v4-action-index">03</span>
-          <strong>Gracze</strong>
-          <small>Znajdź partnera</small>
+
+        <button className="consumer-action" type="button" onClick={onOpenMatches}>
+          <span className="consumer-action-label">Społeczność</span>
+          <strong>Znajdź mecz</strong>
+          <small>Dołącz albo utwórz własny</small>
           <b>→</b>
         </button>
       </section>
 
-      <section className="v4-section">
-        <div className="v4-section-head">
+      <section className="consumer-section">
+        <header className="consumer-section-header">
           <div>
-            <span className="v4-overline">WOLNE KORTY</span>
-            <h2>Najbliższe terminy</h2>
+            <h2>Najbliższe wolne terminy</h2>
+            <p>Na podstawie ostatniego wyszukiwania</p>
           </div>
-          <button type="button" onClick={onOpenCourts}>Wszystkie terminy</button>
-        </div>
+          <button type="button" onClick={onOpenCourts}>Zobacz wszystkie</button>
+        </header>
 
-        {hasRecommendations ? (
-          <div className="v4-slot-list">
-            {recommendations.slice(0, 5).map((item) => (
-              <article className="v4-slot" key={`${item.courtKey}-${item.startHour}`}>
-                <div className="v4-slot-time">
-                  <strong>{item.startHour}</strong>
-                  <small>{duration} min</small>
-                </div>
-                <div className="v4-slot-club">
+        {nextSlots.length > 0 ? (
+          <div className="consumer-slot-list">
+            {nextSlots.map((item) => (
+              <button
+                className="consumer-slot-row"
+                type="button"
+                key={`${item.courtKey}-${item.startHour}`}
+                onClick={() => onSelectCourt(item)}
+              >
+                <time>{item.startHour}</time>
+                <span className="consumer-slot-main">
                   <strong>{item.clubName}</strong>
-                  <small>{item.courtName}</small>
-                </div>
-                <div className="v4-slot-type">
-                  {item.courtType === "outdoor" ? "zewnętrzny" : "wewnętrzny"}
-                </div>
-                <button type="button" onClick={() => onSelectCourt(item)}>Wybierz →</button>
-              </article>
+                  <small>{item.courtName} · {duration} min</small>
+                </span>
+                <span className="consumer-slot-availability">Wolny</span>
+                <b>→</b>
+              </button>
             ))}
           </div>
         ) : (
-          <div className="v4-empty">
-            Brak wyników dla ostatniego wyszukiwania.
-            <button type="button" onClick={onOpenCourts}>Ustaw wyszukiwanie</button>
+          <div className="consumer-empty">
+            <strong>Nie ma wyników dla ostatniego wyszukiwania.</strong>
+            <span>Wybierz inną godzinę albo sprawdź kolejny dzień.</span>
+            <button type="button" onClick={onOpenCourts}>Znajdź kort</button>
           </div>
         )}
       </section>
 
-      <div className="v4-two-col">
-        <section className="v4-section">
-          <div className="v4-section-head">
-            <div>
-              <span className="v4-overline">KLUBY</span>
-              <h2>Dostępność</h2>
-            </div>
+      <section className="consumer-section">
+        <header className="consumer-section-header">
+          <div>
+            <h2>Kluby w Szczecinie</h2>
+            <p>Dostępność pobierana z BO5</p>
           </div>
-          <div className="v4-club-list">
-            {clubStats.slice(0, 4).map((club) => (
-              <button type="button" key={club.slug} onClick={onOpenCourts}>
-                <span>
-                  <strong>{club.name}</strong>
-                  <small>{Object.keys(club.courts || {}).length} kortów</small>
-                </span>
-                <b>{club.available}</b>
-              </button>
-            ))}
-          </div>
-        </section>
+        </header>
 
-        <section className="v4-section">
-          <div className="v4-section-head">
-            <div>
-              <span className="v4-overline">GRACZE</span>
-              <h2>Szukają gry</h2>
-            </div>
-            <button type="button" onClick={onOpenPlayers}>Wszyscy</button>
+        <div className="consumer-club-strip">
+          {clubStats.slice(0, 3).map((club) => (
+            <button type="button" key={club.slug} onClick={onOpenCourts}>
+              <span className="consumer-club-mark">
+                {club.name.slice(0, 1).toUpperCase()}
+              </span>
+              <span>
+                <strong>{club.name}</strong>
+                <small>
+                  {Object.keys(club.courts || {}).length} kortów
+                  {club.available > 0 ? ` · ${club.available} wolnych` : ""}
+                </small>
+              </span>
+              <b>→</b>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="consumer-section">
+        <header className="consumer-section-header">
+          <div>
+            <h2>Gracze szukający gry</h2>
+            <p>Znajdź osoby o podobnym poziomie</p>
           </div>
-          <div className="v4-player-list">
-            {activePlayers.length > 0 ? activePlayers.map((player) => (
+          <button type="button" onClick={onOpenPlayers}>Wszyscy gracze</button>
+        </header>
+
+        {activePlayers.length > 0 ? (
+          <div className="consumer-player-list">
+            {activePlayers.map((player) => (
               <article key={player.id}>
-                <span className="v4-avatar">{player.nickname.slice(0,1).toUpperCase()}</span>
+                <span className="consumer-player-avatar">
+                  {player.nickname.slice(0, 1).toUpperCase()}
+                </span>
                 <div>
                   <strong>{player.nickname}</strong>
                   <small>{player.clubName} · {player.from}–{player.to}</small>
@@ -130,22 +142,19 @@ function HomeDashboard({
                 <LevelBadge level={player.level} compact />
                 <button type="button" onClick={() => onInvitePlayer(player)}>Zaproś</button>
               </article>
-            )) : (
-              <div className="v4-empty compact">Na razie nikt nie dodał zgłoszenia.</div>
-            )}
+            ))}
           </div>
-        </section>
-      </div>
+        ) : (
+          <div className="consumer-empty consumer-empty-small">
+            <strong>Na razie brak aktywnych zgłoszeń.</strong>
+            <button type="button" onClick={onOpenPlayers}>Dodaj zgłoszenie</button>
+          </div>
+        )}
+      </section>
 
-      <footer className="v4-profile-strip">
-        <div>
-          <span className="v4-avatar">{firstName.slice(0,1).toUpperCase()}</span>
-          <span>
-            <strong>{firstName}</strong>
-            <small>{level || "Uzupełnij profil gracza"}</small>
-          </span>
-        </div>
-        <button type="button" onClick={onOpenSaved}>Profil i ustawienia →</button>
+      <footer className="consumer-status">
+        <span><i /> Dane odświeżane automatycznie</span>
+        <small>następne odświeżenie za {countdown}s</small>
       </footer>
     </div>
   );

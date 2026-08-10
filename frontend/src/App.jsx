@@ -1209,119 +1209,102 @@ function App() {
           )}
 
           {activeTab === "courts" && (
-            <>
-              <section className="page-heading">
-                <span className="eyebrow">WOLNE KORTY</span>
-                <h1>Znajdź najlepszy termin.</h1>
-                <p>
-                  Ustaw klub, datę i czas gry. Pokażemy tylko pełne bloki.
-                </p>
+            <div className="consumer-courts">
+              <header className="consumer-page-header">
+                <div>
+                  <p>Szczecin</p>
+                  <h1>Wolne korty</h1>
+                </div>
+                <span className="consumer-refresh-status">
+                  <i /> aktualizacja za {countdown}s
+                </span>
+              </header>
+
+              <section className="consumer-search-card">
+                <div className="consumer-date-pills">
+                  {[0, 1, 2, 3].map((offset) => {
+                    const base = new Date(`${today}T12:00:00`);
+                    base.setDate(base.getDate() + offset);
+                    const value = [
+                      base.getFullYear(),
+                      String(base.getMonth() + 1).padStart(2, "0"),
+                      String(base.getDate()).padStart(2, "0")
+                    ].join("-");
+                    const labels = ["Dzisiaj", "Jutro"];
+                    const label = labels[offset] || base.toLocaleDateString("pl-PL", {
+                      weekday: "short",
+                      day: "numeric"
+                    });
+
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        className={date === value ? "active" : ""}
+                        onClick={() => setDate(value)}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {renderSearchForm("consumer-search-form")}
               </section>
 
-              {renderSearchForm()}
-
-              <div className="toolbar">
-                <button onClick={saveSearch}>☆ Zapisz</button>
-                <button onClick={createAlert}>◉ Utwórz alert</button>
-                <button onClick={loadAvailability}>↻ Odśwież</button>
-
+              <div className="consumer-toolbar">
+                <button type="button" onClick={saveSearch}>Zapisz wyszukiwanie</button>
+                <button type="button" onClick={createAlert}>Utwórz alert</button>
+                <button type="button" onClick={loadAvailability}>Odśwież</button>
                 <label>
                   <input
                     type="checkbox"
                     checked={autoRefresh}
-                    onChange={(event) =>
-                      setAutoRefresh(event.target.checked)
-                    }
+                    onChange={(event) => setAutoRefresh(event.target.checked)}
                   />
-                  Auto {autoRefresh ? `${countdown}s` : "wyłączone"}
+                  Auto
                 </label>
               </div>
 
               {loading && (
-                <div className="loading-grid">
-                  {[1, 2, 3].map((item) => (
-                    <div className="loading-card" key={item} />
-                  ))}
+                <div className="consumer-loading">
+                  <div />
+                  <div />
+                  <div />
                 </div>
               )}
 
-              {error && <div className="error-box">{error}</div>}
-
-              {!loading && !error && topRecommendations.length > 0 && (
-                <section className="section-block">
-                  <div className="section-heading">
-                    <div>
-                      <span className="section-kicker">Smart ranking</span>
-                      <h2>Najlepsze propozycje</h2>
-                    </div>
-                  </div>
-
-                  <div className="recommendation-grid">
-                    {topRecommendations.map((item, index) => (
-                      <article
-                        className={`recommendation-card card-${index + 1}`}
-                        key={`${item.courtKey}-${item.startHour}`}
-                      >
-                        <div className="recommendation-head">
-                          <span>#{index + 1} · {item.score}%</span>
-
-                          <button
-                            onClick={() => toggleFavorite(item.courtKey)}
-                          >
-                            {favorites.includes(item.courtKey) ? "♥" : "♡"}
-                          </button>
-                        </div>
-
-                        <div className="recommendation-time">
-                          {item.startHour}–{item.endHour}
-                        </div>
-
-                        <h3>{item.courtName}</h3>
-                        <p>{item.clubName}</p>
-
-                        <button
-                          className="primary-card-button"
-                          onClick={() => setSelectedProposal(item)}
-                        >
-                          Wybierz
-                        </button>
-                      </article>
-                    ))}
-                  </div>
-                </section>
-              )}
+              {error && <div className="consumer-error">{error}</div>}
 
               {!loading && !error && groupedProposals.length > 0 && (
-                <section className="section-block">
-                  <div className="section-heading">
+                <section className="consumer-results">
+                  <header>
                     <div>
-                      <span className="section-kicker">Pełna lista</span>
-                      <h2>Dostępne przedziały</h2>
+                      <h2>Dostępne terminy</h2>
+                      <p>
+                        {groupedProposals.reduce(
+                          (total, group) => total + group.courts.length,
+                          0
+                        )} dostępnych kortów
+                      </p>
                     </div>
-                  </div>
+                  </header>
 
-                  <div className="time-groups">
+                  <div className="consumer-time-list">
                     {groupedProposals.map((proposal) => (
                       <article
-                        className="time-group"
+                        className="consumer-time-group"
                         key={`${proposal.startHour}-${proposal.endHour}`}
                       >
-                        <header>
-                          <div>
-                            <span>Godzina gry</span>
-                            <h3>
-                              {proposal.startHour}–{proposal.endHour}
-                            </h3>
-                          </div>
+                        <div className="consumer-time-column">
+                          <strong>{proposal.startHour}</strong>
+                          <small>do {proposal.endHour}</small>
+                        </div>
 
-                          <span className="count-pill">
-                            {proposal.courts.length} korty
-                          </span>
-                        </header>
-
-                        <div className="court-grid">
+                        <div className="consumer-court-options">
                           {proposal.courts.map((court) => (
                             <button
+                              type="button"
                               key={`${proposal.startHour}-${court.courtKey}`}
                               onClick={() =>
                                 setSelectedProposal({
@@ -1331,14 +1314,11 @@ function App() {
                                 })
                               }
                             >
-                              <span className="court-line" />
-
                               <span>
-                                <strong>{court.courtName}</strong>
-                                <small>{court.clubName}</small>
+                                <strong>{court.clubName}</strong>
+                                <small>{court.courtName}</small>
                               </span>
-
-                              <span>Wybierz →</span>
+                              <b>Wybierz</b>
                             </button>
                           ))}
                         </div>
@@ -1348,83 +1328,82 @@ function App() {
                 </section>
               )}
 
-              {!loading &&
-                !error &&
-                groupedProposals.length === 0 && (
-                  <div className="empty-state large">
-                    Brak pasujących terminów. Zmień godzinę lub czas gry.
+              {!loading && !error && groupedProposals.length === 0 && (
+                <section className="consumer-no-results">
+                  <span className="consumer-no-results-mark">—</span>
+                  <h2>Brak wolnych kortów w tym przedziale.</h2>
+                  <p>Spróbuj innej godziny albo sprawdź następny dzień.</p>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFrom("16:00");
+                        setTo("22:00");
+                      }}
+                    >
+                      Pokaż od 16:00
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const base = new Date(`${date}T12:00:00`);
+                        base.setDate(base.getDate() + 1);
+                        setDate([
+                          base.getFullYear(),
+                          String(base.getMonth() + 1).padStart(2, "0"),
+                          String(base.getDate()).padStart(2, "0")
+                        ].join("-"));
+                      }}
+                    >
+                      Sprawdź jutro
+                    </button>
                   </div>
-                )}
+                </section>
+              )}
 
               {selectedProposal && (
-                <section className="booking-bar">
+                <section className="consumer-booking-sheet">
                   <div>
-                    <span>Twój wybór</span>
-                    <strong>{selectedProposal.courtName}</strong>
-                    <small>
-                      {selectedProposal.clubName} ·{" "}
-                      {formatDate(activeSearch.date)} ·{" "}
-                      {selectedProposal.startHour}–
-                      {selectedProposal.endHour}
-                    </small>
+                    <small>Wybrany termin</small>
+                    <strong>
+                      {selectedProposal.startHour}–{selectedProposal.endHour}
+                      {" · "}
+                      {selectedProposal.clubName}
+                    </strong>
+                    <span>{selectedProposal.courtName}</span>
                   </div>
 
-                  <div className="booking-hint">
-                    BO5 otworzy właściwy klub i termin. Na stronie BO5 kliknij
-                    wskazany kort o {selectedProposal.startHour}.
-                  </div>
-
-                  <div className="booking-bar-actions">
-                    <button onClick={() => setSelectedProposal(null)}>
+                  <div className="consumer-booking-actions">
+                    <button type="button" onClick={() => setSelectedProposal(null)}>
                       Zmień
                     </button>
-
                     <button
-                      className="booking-create-match"
+                      type="button"
                       onClick={() => {
                         setActiveTab("matches");
                         setMatchCreateSignal((value) => value + 1);
-                        setToast(
-                          `Wybrano ${selectedProposal.courtName}, ${selectedProposal.startHour}–${selectedProposal.endHour}. Utwórz mecz dla tego terminu.`
-                        );
                       }}
                     >
-                      ＋ Utwórz mecz
+                      Utwórz mecz
                     </button>
-
                     <a
-                      className="booking-bo5-button"
-                      href={buildBo5DeepLink(
-                        selectedProposal,
-                        selectedClub
-                      ) || "#"}
+                      href={buildBo5DeepLink(selectedProposal, selectedClub) || "#"}
                       target="_blank"
                       rel="noreferrer"
                       onClick={(event) => {
-                        const href = buildBo5DeepLink(
-                          selectedProposal,
-                          selectedClub
-                        );
-
+                        const href = buildBo5DeepLink(selectedProposal, selectedClub);
                         if (!href) {
                           event.preventDefault();
-                          setToast(
-                            "Nie udało się przygotować linku do BO5."
-                          );
-                          return;
+                          setToast("Nie udało się przygotować linku do BO5.");
                         }
-
-                        setToast(
-                          `BO5 otworzy właściwy klub i termin. Kliknij tam ${selectedProposal.courtName} o ${selectedProposal.startHour}.`
-                        );
                       }}
                     >
-                      Przejdź do BO5 ↗
+                      Przejdź do rezerwacji
                     </a>
                   </div>
                 </section>
               )}
-            </>
+            </div>
           )}
 
           {activeTab === "matches" && (
@@ -1442,11 +1421,10 @@ function App() {
             <>
               <section className="partners-heading partners-heading-premium">
                 <div>
-                  <span className="eyebrow">SPOŁECZNOŚĆ</span>
-                  <h1>Znajdź partnera do meczu.</h1>
+                  <span className="eyebrow">Gracze</span>
+                  <h1>Znajdź graczy</h1>
                   <p>
-                    Przefiltruj graczy po klubie, poziomie i godzinie albo
-                    dodaj własną dyspozycyjność.
+                    Wybierz poziom, klub i termin. Napisz do osoby, z którą chcesz zagrać.
                   </p>
                 </div>
 
