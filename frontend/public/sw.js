@@ -1,10 +1,14 @@
-const CACHE = "padelalert-shell-v1";
+const CACHE = "padelalert-shell-v2";
 const SHELL = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(SHELL)).catch(() => null)
+    caches
+      .open(CACHE)
+      .then((cache) => cache.addAll(SHELL))
+      .catch(() => null)
   );
+
   self.skipWaiting();
 });
 
@@ -18,6 +22,7 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
+
   self.clients.claim();
 });
 
@@ -26,18 +31,38 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(event.request.url);
 
-  // API/BO5 data should always stay fresh.
-  if (url.port === "3000") return;
+  // API, Render backend, BO5 and every other cross-origin request
+  // must bypass the service worker completely.
+  // This prevents stale API responses and "Failed to fetch"
+  // after changing environments/deployments.
+  if (url.origin !== self.location.origin) {
+    return;
+  }
 
+  // Navigation: network first, cached shell only as offline fallback.
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match("/"))
+    );
+    return;
+  }
+
+  // Static assets: network first + cache fallback.
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE).then((cache) => cache.put(event.request, copy));
+        if (response.ok) {
+          const copy = response.clone();
+
+          caches
+            .open(CACHE)
+            .then((cache) =>
+              cache.put(event.request, copy)
+            );
+        }
+
         return response;
       })
-      .catch(() =>
-        caches.match(event.request).then((cached) => cached || caches.match("/"))
-      )
+      .catch(() => caches.match(event.request))
   );
 });

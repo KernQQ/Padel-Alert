@@ -391,6 +391,10 @@ function App() {
           clubSlug: firstSlot.clubSlug,
           clubName: firstSlot.clubName,
           courtType: firstSlot.courtType,
+          reservationUrl:
+            firstSlot.reservationUrl ||
+            firstSlot.sourceUrl ||
+            "",
           blocks: bookingBlocks
         });
       });
@@ -1440,17 +1444,50 @@ function App() {
                     </small>
                   </div>
 
-                  <div>
+                  <div className="booking-bar-actions">
                     <button onClick={() => setSelectedProposal(null)}>
                       Zmień
                     </button>
 
+                    <button
+                      className="booking-create-match"
+                      onClick={() => {
+                        setActiveTab("matches");
+                        setMatchCreateSignal((value) => value + 1);
+                        setToast(
+                          `Wybrano ${selectedProposal.courtName}, ${selectedProposal.startHour}–${selectedProposal.endHour}. Utwórz mecz dla tego terminu.`
+                        );
+                      }}
+                    >
+                      ＋ Utwórz mecz
+                    </button>
+
                     <a
-                      href={selectedClub?.url || "#"}
+                      className="booking-bo5-button"
+                      href={
+                        selectedProposal.reservationUrl ||
+                        selectedProposal.blocks?.[0]?.reservationUrl ||
+                        selectedClub?.sourceUrl ||
+                        "#"
+                      }
                       target="_blank"
                       rel="noreferrer"
+                      onClick={(event) => {
+                        const href =
+                          selectedProposal.reservationUrl ||
+                          selectedProposal.blocks?.[0]?.reservationUrl ||
+                          selectedClub?.sourceUrl ||
+                          "";
+
+                        if (!href) {
+                          event.preventDefault();
+                          setToast(
+                            "Nie udało się znaleźć linku rezerwacji dla tego kortu."
+                          );
+                        }
+                      }}
                     >
-                      Otwórz BO5
+                      Rezerwuj w BO5 ↗
                     </a>
                   </div>
                 </section>

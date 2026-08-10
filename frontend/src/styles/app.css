@@ -6018,3 +6018,52 @@ textarea {
     gap: 5px !important;
   }
 }
+
+
+/* =========================================================
+   v2.4 — PUBLIC BETA CORE
+   Reservation flow
+   ========================================================= */
+
+.booking-bar-actions {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.booking-bar .booking-create-match,
+.booking-bar .booking-bo5-button {
+  display:inline-flex;
+  min-height:42px;
+  align-items:center;
+  justify-content:center;
+  padding:0 14px;
+  border-radius:10px;
+  font-weight:900;
+  text-decoration:none;
+}
+
+.booking-bar .booking-create-match {
+  border:1px solid var(--line);
+  color:var(--text);
+  background:var(--surface-soft);
+  cursor:pointer;
+}
+
+.booking-bar .booking-bo5-button {
+  border:0;
+  color:#fff;
+  background:var(--primary);
+}
+
+@media(max-width:760px) {
+  .booking-bar-actions {
+    width:100%;
+  }
+
+  .booking-bar-actions > * {
+    flex:1 1 100%;
+    width:100%;
+  }
+}
