@@ -38,18 +38,78 @@ const BO5_CLUB_URLS = {
     "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
 };
 
-function buildBo5DeepLink(proposal, club) {
-  const mappedBase =
-    BO5_CLUB_URLS[proposal?.clubSlug] ||
-    BO5_CLUB_URLS[club?.slug] ||
-    "";
+const BO5_CLUB_URLS_BY_ID = {
+  "264": "https://bo5.pl/padelARENApoludniowa/reservation",
+  "595": "https://bo5.pl/padelclub/reservation",
+  "528": "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
+};
 
-  const base = String(
-    mappedBase ||
+function normalizeClubKey(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function resolveBo5ClubBase(proposal, club) {
+  const idCandidates = [
+    proposal?.clubId,
+    proposal?.blocks?.[0]?.clubId,
+    club?.id
+  ]
+    .filter(Boolean)
+    .map(String);
+
+  for (const id of idCandidates) {
+    if (BO5_CLUB_URLS_BY_ID[id]) {
+      return BO5_CLUB_URLS_BY_ID[id];
+    }
+  }
+
+  const slugCandidates = [
+    proposal?.clubSlug,
+    proposal?.blocks?.[0]?.clubSlug,
+    club?.slug
+  ].filter(Boolean);
+
+  for (const slug of slugCandidates) {
+    if (BO5_CLUB_URLS[slug]) {
+      return BO5_CLUB_URLS[slug];
+    }
+  }
+
+  const normalizedName = normalizeClubKey(
+    proposal?.clubName ||
+    proposal?.blocks?.[0]?.clubName ||
+    club?.name ||
+    ""
+  );
+
+  if (normalizedName.includes("padel-arena-poludniowa")) {
+    return BO5_CLUB_URLS["padel-arena-poludniowa"];
+  }
+
+  if (normalizedName === "padel-club" || normalizedName.includes("padel-club")) {
+    return BO5_CLUB_URLS["padel-club"];
+  }
+
+  if (normalizedName.includes("fabryka-energii")) {
+    return BO5_CLUB_URLS["fabryka-energii"];
+  }
+
+  const fallbackSource =
     club?.sourceUrl ||
     proposal?.sourceUrl ||
-    ""
-  ).split("?")[0];
+    proposal?.blocks?.[0]?.sourceUrl ||
+    "";
+
+  return String(fallbackSource).split("?")[0];
+}
+
+function buildBo5DeepLink(proposal, club) {
+  const base = resolveBo5ClubBase(proposal, club);
 
   if (!base) return "";
 
@@ -57,6 +117,7 @@ function buildBo5DeepLink(proposal, club) {
 
   const clubId =
     proposal?.clubId ||
+    proposal?.blocks?.[0]?.clubId ||
     club?.id ||
     "";
 
