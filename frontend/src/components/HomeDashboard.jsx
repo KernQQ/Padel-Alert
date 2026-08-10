@@ -29,14 +29,6 @@ function HomeDashboard({
             Kort, mecz albo partner — bez przeklikiwania kilku stron.
           </p>
         </div>
-
-        <button className="consumer-profile-button" type="button" onClick={onOpenSaved}>
-          <span>{firstName.slice(0, 1).toUpperCase()}</span>
-          <div>
-            <strong>{firstName}</strong>
-            <small>Poziom {level || "3.0"}</small>
-          </div>
-        </button>
       </header>
 
       <section className="consumer-primary-actions">

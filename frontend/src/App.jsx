@@ -19,10 +19,8 @@ import HomeDashboard from "./components/HomeDashboard";
 import LevelSelect from "./components/ui/LevelSelect";
 import LevelBadge from "./components/ui/LevelBadge";
 import InstallAppButton from "./components/InstallAppButton";
-import MobileQuickActions from "./components/MobileQuickActions";
 import MyMatchesPanel from "./components/MyMatchesPanel";
 import MatchInvitationsPanel from "./components/MatchInvitationsPanel";
-import RealtimeBadge from "./components/RealtimeBadge";
 import ConnectionBanner from "./components/ConnectionBanner";
 import AccountPanel from "./components/AccountPanel";
 import { useRealtime } from "./hooks/useRealtime";
@@ -181,6 +179,58 @@ function buildBo5DeepLink(proposal, club) {
   if (courtId) url.searchParams.set("court", String(courtId));
 
   return url.toString();
+}
+
+
+function NavGlyph({ id }) {
+  const common = {
+    width: 20,
+    height: 20,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true
+  };
+
+  if (id === "home") {
+    return <svg {...common}><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/><path d="M9.5 21v-6h5v6"/></svg>;
+  }
+
+  if (id === "courts") {
+    return <svg {...common}><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16M3 12h18"/></svg>;
+  }
+
+  if (id === "matches") {
+    return <svg {...common}><circle cx="12" cy="12" r="8"/><path d="M8.5 9.5c1.8-1.6 5.2-1.6 7 0M8.5 14.5c1.8 1.6 5.2 1.6 7 0"/></svg>;
+  }
+
+  if (id === "partners") {
+    return <svg {...common}><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3.5 20c.5-4 2.6-6 5.5-6s5 2 5.5 6M14.5 15c2.8 0 4.7 1.7 5 5"/></svg>;
+  }
+
+  return <svg {...common}><path d="M6 4h12v17l-6-4-6 4z"/></svg>;
+}
+
+function BellIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+      <path d="M10 21h4"/>
+    </svg>
+  );
 }
 
 function App() {
@@ -1158,14 +1208,28 @@ function App() {
     <>
       <ConnectionBanner />
       <div className="app-shell">
-      <AccountPanel
-                    user={accountUser}
-                    anonymousToken={anonymousToken}
-                    onAuthenticated={handleAuthenticated}
-                    onLogout={handleLogout}
-                  />
-                  <RealtimeBadge status={realtimeStatus} />
-      <button className="notification-bell-top" type="button" onClick={() => setActiveTab("saved")} title="Powiadomienia">Alerty{unreadNotificationsCount > 0 && <span>{unreadNotificationsCount}</span>}</button>
+      <div className="desktop-top-actions">
+        <button
+          className="top-icon-button"
+          type="button"
+          onClick={() => setActiveTab("saved")}
+          title="Powiadomienia"
+          aria-label="Powiadomienia"
+        >
+          <BellIcon />
+          {unreadNotificationsCount > 0 && (
+            <span>{unreadNotificationsCount > 9 ? "9+" : unreadNotificationsCount}</span>
+          )}
+        </button>
+
+        <AccountPanel
+          user={accountUser}
+          anonymousToken={anonymousToken}
+          onAuthenticated={handleAuthenticated}
+          onLogout={handleLogout}
+          onOpenProfile={() => setActiveTab("saved")}
+        />
+      </div>
       <aside className="sidebar">
         <button
           type="button"
@@ -1190,7 +1254,7 @@ function App() {
               className={activeTab === item.id ? "active" : ""}
               onClick={() => setActiveTab(item.id)}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon"><NavGlyph id={item.id} /></span>
               {item.label}
 
               {item.id === "partners" && posts.length > 0 && (
@@ -1242,22 +1306,36 @@ function App() {
           </button>
 
           <div className="mobile-topbar-actions">
+            <button
+              type="button"
+              className="mobile-icon-button"
+              onClick={() => setActiveTab("saved")}
+              aria-label="Powiadomienia"
+            >
+              <BellIcon />
+              {unreadNotificationsCount > 0 && (
+                <span className="mobile-top-unread">
+                  {unreadNotificationsCount > 9 ? "9+" : unreadNotificationsCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              className="mobile-icon-button"
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              aria-label={theme === "light" ? "Włącz tryb ciemny" : "Włącz tryb jasny"}
+            >
+              {theme === "light" ? "☾" : "☀"}
+            </button>
+
             <AccountPanel
               user={accountUser}
               anonymousToken={anonymousToken}
               onAuthenticated={handleAuthenticated}
               onLogout={handleLogout}
+              onOpenProfile={() => setActiveTab("saved")}
             />
-            <RealtimeBadge status={realtimeStatus} />
-            <InstallAppButton compact />
-
-          <button
-            type="button"
-            className="mobile-theme"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          >
-            {theme === "light" ? "☾" : "☀"}
-          </button>
           </div>
         </header>
 
@@ -2061,15 +2139,6 @@ function App() {
           )}
         </main>
 
-        <button
-          type="button"
-          className="mobile-global-action"
-          onClick={() => setShowMobileActions(true)}
-          aria-label="Szybkie akcje"
-        >
-          ＋
-        </button>
-
         <nav className="mobile-bottom-nav">
           {NAVIGATION.map((item) => (
             <button
@@ -2077,7 +2146,7 @@ function App() {
               className={activeTab === item.id ? "active" : ""}
               onClick={() => setActiveTab(item.id)}
             >
-              <span>{item.icon}</span>
+              <span className="mobile-nav-icon"><NavGlyph id={item.id} /></span>
               <small>{item.label}</small>
               {item.id === "saved" && unreadNotificationsCount > 0 && (
                 <b className="mobile-unread-badge">
@@ -2091,25 +2160,6 @@ function App() {
         </nav>
       </div>
 
-      <MobileQuickActions
-        open={showMobileActions}
-        onClose={() => setShowMobileActions(false)}
-        onCreateMatch={() => {
-          setShowMobileActions(false);
-          setActiveTab("matches");
-          setMatchCreateSignal((value) => value + 1);
-        }}
-        onPlayNow={() => {
-          setShowMobileActions(false);
-          setActiveTab("matches");
-          setPlayNowSignal((value) => value + 1);
-        }}
-        onFindCourt={() => {
-          setShowMobileActions(false);
-          setActiveTab("courts");
-        }}
-      />
-
       {toast && (
         <button
           type="button"
@@ -2119,7 +2169,7 @@ function App() {
             setToast("");
           }}
         >
-          <span className="app-toast-icon">🔔</span>
+          <span className="app-toast-icon"><BellIcon /></span>
           <span>
             <strong>Nowe powiadomienie</strong>
             <small>{toast}</small>
