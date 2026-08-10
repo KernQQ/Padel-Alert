@@ -8289,216 +8289,746 @@ body{background:var(--v8-bg)!important}.main-shell::before{opacity:.06!important
 
 
 /* =========================================================
-   PADELALERT v9 — DESKTOP HOTFIX / FULL-SCALE BOOKING UI
+   PADELALERT v10 — APPROVED DESKTOP A + MOBILE B
+   Separate layouts by breakpoint. No shared hero scaling.
    ========================================================= */
+
+.pa10-mobile { display: none; }
+.pa10-desktop { display: block; }
+
 @media (min-width: 901px) {
-  .app-shell {
-    grid-template-columns: 190px minmax(0,1fr) !important;
+  .page {
+    width: min(1480px, calc(100% - 48px)) !important;
+    max-width: none !important;
+    padding-top: 72px !important;
   }
+
+  .pa10-desktop {
+    color: #121814;
+  }
+
+  .pa10-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(420px, .9fr) minmax(520px, 1.1fr);
+    height: 250px;
+    overflow: hidden;
+    border: 1px solid #e2e6e2;
+    border-radius: 16px 16px 0 0;
+    background: #fff;
+  }
+
+  .pa10-hero-copy {
+    position: relative;
+    z-index: 2;
+    padding: 34px 38px;
+  }
+
+  .pa10-kicker {
+    color: #28784a;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .pa10-hero h1 {
+    margin: 12px 0 0;
+    font-size: clamp(48px, 4vw, 66px);
+    line-height: .88;
+    letter-spacing: -.06em;
+  }
+
+  .pa10-hero h1 span,
+  .pa10-hero h1 strong {
+    display: block;
+  }
+
+  .pa10-hero h1 span {
+    font-weight: 420;
+  }
+
+  .pa10-hero h1 strong {
+    margin-top: 5px;
+    color: #0c653b;
+    font-weight: 900;
+  }
+
+  .pa10-hero p {
+    margin: 14px 0 0;
+    color: #6f7771;
+    font-size: 13px;
+  }
+
+  .pa10-hero-photo {
+    background:
+      linear-gradient(90deg, #fff 0%, rgba(255,255,255,.06) 20%, transparent 40%),
+      url("/padelalert-hero-reference.jpg") center / cover no-repeat;
+  }
+
+  .pa10-hero-heart {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 3;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,.45);
+    border-radius: 50%;
+    color: white;
+    background: rgba(7,18,12,.3);
+    backdrop-filter: blur(8px);
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .pa10-searchbar {
+    position: relative;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr .9fr .8fr .7fr 190px;
+    align-items: stretch;
+    margin: -28px 28px 0;
+    overflow: hidden;
+    border: 1px solid #dce2dc;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 16px 36px rgba(18,42,27,.12);
+  }
+
+  .pa10-searchbar > div {
+    display: flex;
+    min-height: 70px;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 18px;
+    border-right: 1px solid #ecefec;
+  }
+
+  .pa10-searchbar small {
+    color: #7b827d;
+    font-size: 9px;
+  }
+
+  .pa10-searchbar strong {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+  .pa10-searchbar > button {
+    margin: 9px;
+    border: 0;
+    border-radius: 8px;
+    color: #10140e;
+    background: #c9ef2f;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 850;
+  }
+
+  .pa10-searchbar > button b {
+    margin-left: 18px;
+  }
+
+  .pa10-datebar {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 14px 28px 0;
+    border-bottom: 1px solid #dfe4df;
+  }
+
+  .pa10-datebar button {
+    min-width: 112px;
+    min-height: 48px;
+    padding: 0 18px;
+    border: 0;
+    color: #333a35;
+    background: transparent;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 750;
+  }
+
+  .pa10-datebar button small {
+    display: block;
+    margin-top: 2px;
+    font-size: 8px;
+  }
+
+  .pa10-datebar button.active {
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+    background: #08140e;
+  }
+
+  .pa10-datebar > span {
+    margin-left: auto;
+    align-self: center;
+    color: #7f8781;
+    font-size: 9px;
+  }
+
+  .pa10-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 16px;
+    margin-top: 14px;
+  }
+
+  .pa10-board,
+  .pa10-map-card,
+  .pa10-next-card {
+    border: 1px solid #dfe4df;
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .pa10-board {
+    overflow: hidden;
+  }
+
+  .pa10-board > header,
+  .pa10-map-card > header,
+  .pa10-next-card > header {
+    display: flex;
+    min-height: 56px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-bottom: 1px solid #edf0ed;
+  }
+
+  .pa10-board h2,
+  .pa10-map-card h3,
+  .pa10-next-card h3 {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .pa10-board header p {
+    margin: 3px 0 0;
+    color: #8a908b;
+    font-size: 8px;
+  }
+
+  .pa10-board header button,
+  .pa10-map-card header button,
+  .pa10-next-card header button {
+    border: 0;
+    color: #14623d;
+    background: transparent;
+    cursor: pointer;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .pa10-board-head,
+  .pa10-board-row {
+    display: grid;
+    grid-template-columns: 250px repeat(7, minmax(70px, 1fr));
+  }
+
+  .pa10-board-head {
+    min-height: 34px;
+    align-items: center;
+    color: #8a918b;
+    background: #fafbfa;
+    font-size: 8px;
+    text-align: center;
+  }
+
+  .pa10-board-head span {
+    padding-left: 18px;
+    text-align: left;
+  }
+
+  .pa10-board-row {
+    min-height: 72px;
+    border-top: 1px solid #edf0ed;
+  }
+
+  .pa10-club-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border: 0;
+    border-right: 1px solid #edf0ed;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .pa10-club-image,
+  .pa10-mobile-club-photo {
+    flex: 0 0 auto;
+    background:
+      linear-gradient(rgba(10,40,23,.18), rgba(10,40,23,.18)),
+      url("/padelalert-hero-reference.jpg") center / cover no-repeat;
+  }
+
+  .pa10-club-image {
+    width: 58px;
+    height: 42px;
+    border-radius: 6px;
+  }
+
+  .pa10-club-cell strong,
+  .pa10-club-cell small {
+    display: block;
+  }
+
+  .pa10-club-cell strong {
+    font-size: 10px;
+  }
+
+  .pa10-club-cell small {
+    margin-top: 3px;
+    color: #818882;
+    font-size: 8px;
+  }
+
+  .pa10-slot {
+    display: grid;
+    min-width: 0;
+    place-items: center;
+    border: 0;
+    border-right: 1px solid #edf0ed;
+    color: #a2a8a3;
+    background: #fbfcfb;
+    cursor: pointer;
+  }
+
+  .pa10-slot.available {
+    color: #203323;
+    background: #edf7d8;
+  }
+
+  .pa10-slot.available:hover {
+    color: #0c180c;
+    background: #c9ef2f;
+  }
+
+  .pa10-slot strong,
+  .pa10-slot small {
+    display: block;
+  }
+
+  .pa10-slot strong { font-size: 9px; }
+  .pa10-slot small { margin-top: 2px; font-size: 7px; }
+
+  .pa10-more {
+    width: 100%;
+    min-height: 42px;
+    border: 0;
+    border-top: 1px solid #edf0ed;
+    background: white;
+    cursor: pointer;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .pa10-rail {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .pa10-map {
+    position: relative;
+    height: 135px;
+    margin: 12px;
+    overflow: hidden;
+    border-radius: 10px;
+    background:
+      linear-gradient(35deg, transparent 47%, rgba(31,85,51,.12) 48% 52%, transparent 53%),
+      linear-gradient(-25deg, transparent 47%, rgba(31,85,51,.12) 48% 52%, transparent 53%),
+      #eef3ed;
+    background-size: 64px 64px;
+  }
+
+  .pa10-map .pin {
+    position: absolute;
+    display: grid;
+    width: 25px;
+    height: 25px;
+    place-items: center;
+    border-radius: 50% 50% 50% 4px;
+    color: #0b170d;
+    background: #c9ef2f;
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 900;
+    transform: rotate(-45deg);
+  }
+
+  .pa10-map .pin::first-letter { transform: rotate(45deg); }
+  .pa10-map .p1 { top: 20px; left: 74px; }
+  .pa10-map .p2 { top: 66px; left: 150px; }
+  .pa10-map .p3 { top: 39px; right: 34px; }
+
+  .pa10-map-card > button,
+  .pa10-next-card > button {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    align-items: center;
+    gap: 8px;
+    width: calc(100% - 24px);
+    min-height: 50px;
+    margin: 0 12px;
+    border: 0;
+    border-top: 1px solid #edf0ed;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .pa10-map-card > button b {
+    display: grid;
+    width: 21px;
+    height: 21px;
+    place-items: center;
+    border-radius: 50%;
+    color: #0e1a10;
+    background: #c9ef2f;
+    font-size: 8px;
+  }
+
+  .pa10-map-card > button strong,
+  .pa10-map-card > button small,
+  .pa10-next-card > button strong,
+  .pa10-next-card > button small {
+    display: block;
+  }
+
+  .pa10-map-card > button strong,
+  .pa10-next-card > button strong {
+    font-size: 9px;
+  }
+
+  .pa10-map-card > button small,
+  .pa10-next-card > button small {
+    margin-top: 2px;
+    color: #848a85;
+    font-size: 7px;
+  }
+
+  .pa10-map-card > button i,
+  .pa10-next-card > button b {
+    color: #1d6944;
+    font-size: 10px;
+  }
+
+  .pa10-next-card > button {
+    grid-template-columns: 42px 1fr auto;
+  }
+
+  .pa10-next-card time {
+    color: #11623c;
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .pa10-next-card > p {
+    padding: 16px;
+    color: #7f8681;
+    font-size: 9px;
+  }
+
+  .pa10-feature-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 14px;
+    border: 1px solid #dfe4df;
+    border-radius: 12px;
+    background: white;
+  }
+
+  .pa10-feature-strip button {
+    display: flex;
+    min-height: 78px;
+    align-items: center;
+    gap: 12px;
+    padding: 0 18px;
+    border: 0;
+    border-right: 1px solid #edf0ed;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .pa10-feature-strip button:last-child { border-right: 0; }
+  .pa10-feature-strip b { color: #8fba12; font-size: 22px; }
+  .pa10-feature-strip strong,
+  .pa10-feature-strip small { display: block; }
+  .pa10-feature-strip strong { font-size: 10px; }
+  .pa10-feature-strip small { margin-top: 3px; color: #868d87; font-size: 8px; }
+}
+
+/* MOBILE — intentionally separate from desktop */
+@media (max-width: 900px) {
+  .pa10-desktop { display: none !important; }
+  .pa10-mobile { display: block !important; }
 
   .page {
-    width: min(1440px, calc(100% - 52px)) !important;
-    max-width: none !important;
-    padding-top: 64px !important;
+    width: min(100% - 24px, 560px) !important;
+    padding-top: 20px !important;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
   }
 
-  .v8-home {
-    max-width: none !important;
+  .pa10-mobile-intro {
+    margin: 8px 0 18px;
   }
 
-  /* Kill the "portfolio hero" look and make it a compact product header */
-  .v8-home-hero {
-    grid-template-columns: 1fr 440px !important;
-    min-height: 245px !important;
-    border-radius: 14px !important;
-    border: 1px solid #dfe5df !important;
-    background: #fff !important;
-    box-shadow: 0 10px 30px rgba(15,35,23,.06) !important;
+  .pa10-mobile-intro span {
+    color: #24784a;
+    font-size: 10px;
+    font-weight: 800;
   }
 
-  .v8-home-hero-copy {
-    padding: 34px 40px !important;
+  .pa10-mobile-intro h1 {
+    margin: 5px 0 0;
+    font-size: 36px;
+    letter-spacing: -.055em;
   }
 
-  .v8-home-hero-copy h1 {
-    font-size: clamp(48px,4.2vw,68px) !important;
-    line-height: .92 !important;
-    letter-spacing: -.055em !important;
+  .pa10-mobile-intro p {
+    margin: 6px 0 0;
+    color: #737b75;
+    font-size: 11px;
   }
 
-  .v8-home-hero-copy .consumer-subtitle {
-    font-size: 14px !important;
-    margin-top: 15px !important;
+  .pa10-mobile-days {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 12px;
+    overflow-x: auto;
   }
 
-  .v8-hero-actions {
-    margin-top: 22px !important;
+  .pa10-mobile-days button {
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid #e1e5e1;
+    border-radius: 18px;
+    background: white;
+    white-space: nowrap;
+    font-size: 9px;
+    font-weight: 750;
   }
 
-  .v8-primary-cta,
-  .v8-secondary-cta {
-    min-height: 46px !important;
-    border-radius: 9px !important;
-    font-size: 12px !important;
+  .pa10-mobile-days button.active {
+    color: white;
+    border-color: #111814;
+    background: #111814;
   }
 
-  .v8-home-photo {
-    min-height: 245px !important;
-    border-radius: 0 14px 14px 0 !important;
-    background:
-      linear-gradient(180deg,rgba(6,23,14,.05),rgba(6,23,14,.42)),
-      linear-gradient(135deg,#39714f 0%,#183c29 48%,#081c12 100%) !important;
+  .pa10-mobile-filter {
+    margin-bottom: 12px;
   }
 
-  .v8-home-photo::after {
-    display:none !important;
+  .pa10-mobile-filter button {
+    display: flex;
+    width: 100%;
+    min-height: 42px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 13px;
+    border: 1px solid #e1e5e1;
+    border-radius: 10px;
+    background: white;
+    font-size: 10px;
+    font-weight: 700;
   }
 
-  .v8-ball {
-    display:none !important;
+  .pa10-mobile-clubs {
+    display: grid;
+    gap: 10px;
   }
 
-  /* Court geometry instead of fake PA balls */
-  .v8-home-photo::before {
-    opacity:.7 !important;
-    transform: perspective(560px) rotateX(54deg) rotateZ(-5deg) scale(1.22) !important;
+  .pa10-mobile-clubs article {
+    padding: 12px;
+    border: 1px solid #e1e5e1;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 5px 16px rgba(20,41,27,.035);
   }
 
-  /* Make the availability area feel like a real booking product */
-  .v8-section {
-    margin-top: 26px !important;
+  .pa10-mobile-clubs header {
+    display: grid;
+    grid-template-columns: 48px minmax(0,1fr) auto;
+    align-items: center;
+    gap: 9px;
   }
 
-  .consumer-section-header {
-    margin-bottom: 12px !important;
+  .pa10-mobile-club-photo {
+    width: 48px;
+    height: 38px;
+    border-radius: 7px;
   }
 
-  .consumer-section-header h2 {
-    font-size: 24px !important;
-    letter-spacing: -.035em !important;
+  .pa10-mobile-clubs header strong,
+  .pa10-mobile-clubs header small {
+    display: block;
   }
 
-  .consumer-section-header p {
-    font-size: 11px !important;
+  .pa10-mobile-clubs header strong {
+    font-size: 10px;
   }
 
-  .v8-availability-list {
-    display: grid !important;
-    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
-    gap: 12px !important;
-    border-top: 0 !important;
+  .pa10-mobile-clubs header small {
+    margin-top: 3px;
+    color: #828984;
+    font-size: 8px;
   }
 
-  .v8-availability-row {
-    position:relative !important;
-    display:grid !important;
-    grid-template-columns: 62px 44px minmax(0,1fr) !important;
-    grid-template-rows:auto auto !important;
-    min-height:112px !important;
-    gap:8px 10px !important;
-    padding:16px !important;
-    border:1px solid #dde3dd !important;
-    border-radius:12px !important;
-    background:#fff !important;
-    box-shadow:0 7px 22px rgba(18,39,26,.045) !important;
+  .pa10-mobile-clubs header > button {
+    border: 0;
+    color: #2b342e;
+    background: transparent;
+    font-size: 8px;
+    font-weight: 700;
   }
 
-  .v8-availability-row:hover {
-    border-color:#aab9ad !important;
-    transform:translateY(-1px);
+  .pa10-mobile-hours {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 6px;
+    margin-top: 12px;
   }
 
-  .v8-availability-row time {
-    grid-column:1 !important;
-    grid-row:1 !important;
-    font-size:20px !important;
+  .pa10-mobile-hours button {
+    min-height: 51px;
+    border: 1px solid #e3e7e3;
+    border-radius: 9px;
+    background: #fff;
   }
 
-  .v8-thumb {
-    grid-column:2 !important;
-    grid-row:1 / span 2 !important;
-    width:42px !important;
-    height:42px !important;
-    border-radius:8px !important;
+  .pa10-mobile-hours button.selected {
+    color: white;
+    border-color: #13241a;
+    background: #13241a;
   }
 
-  .v8-availability-main {
-    grid-column:3 !important;
-    grid-row:1 !important;
+  .pa10-mobile-hours strong,
+  .pa10-mobile-hours small {
+    display: block;
   }
 
-  .v8-availability-main strong {
-    font-size:12px !important;
+  .pa10-mobile-hours strong { font-size: 10px; }
+  .pa10-mobile-hours small { margin-top: 3px; color: #8a918c; font-size: 7px; }
+  .pa10-mobile-hours button.selected small { color: #c7cec9; }
+
+  .pa10-mobile-more {
+    width: 100%;
+    min-height: 42px;
+    margin-top: 10px;
+    border: 1px solid #e1e5e1;
+    border-radius: 9px;
+    background: white;
+    font-size: 9px;
+    font-weight: 750;
   }
 
-  .v8-availability-main small {
-    font-size:10px !important;
+  .pa10-mobile-community {
+    margin-top: 28px;
   }
 
-  .v8-availability-row > span:nth-last-of-type(1) {
-    grid-column:1 !important;
-    grid-row:2 !important;
-    font-size:9px !important;
+  .pa10-mobile-community > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
   }
 
-  .v8-availability-row b {
-    position:absolute !important;
-    right:15px !important;
-    bottom:14px !important;
-    padding:7px 10px !important;
-    border-radius:7px !important;
-    background:#eaf5ee !important;
-    font-size:10px !important;
+  .pa10-mobile-community h2 {
+    margin: 0;
+    font-size: 20px;
   }
 
-  .v8-home-grid {
-    grid-template-columns:1.15fr .85fr !important;
-    gap:18px !important;
-    margin-top:8px !important;
+  .pa10-mobile-community > header button {
+    border: 0;
+    color: #17643f;
+    background: transparent;
+    font-size: 9px;
+    font-weight: 700;
   }
 
-  .v8-home-grid .v8-section {
-    padding:20px !important;
-    border:1px solid #dfe5df !important;
-    border-radius:14px !important;
-    background:#fff !important;
+  .pa10-mobile-community article {
+    display: grid;
+    grid-template-columns: 36px 1fr auto auto;
+    align-items: center;
+    gap: 8px;
+    min-height: 58px;
+    border-bottom: 1px solid #e8ece8;
   }
 
-  .v8-clubs-list,
-  .v8-players-list {
-    border-top:0 !important;
+  .pa10-mobile-community article strong,
+  .pa10-mobile-community article small {
+    display: block;
   }
 
-  .v8-clubs-list > button,
-  .v8-players-list article {
-    min-height:68px !important;
-    border-bottom:1px solid #e7ebe7 !important;
+  .pa10-mobile-community article strong { font-size: 10px; }
+  .pa10-mobile-community article small { margin-top: 2px; color: #858c86; font-size: 7px; }
+  .pa10-mobile-community article > button {
+    border: 0;
+    color: #17643f;
+    background: transparent;
+    font-size: 8px;
+    font-weight: 750;
   }
 
-  /* Courts page: much larger / less empty */
-  .v8-courts .consumer-page-header h1 {
-    font-size:52px !important;
+  .pa10-empty-player {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid #e1e5e1;
+    border-radius: 9px;
+    background: white;
+    font-size: 9px;
+    font-weight: 700;
   }
 
-  .v8-courts .consumer-search-card {
-    padding:18px !important;
-    border-radius:14px !important;
-    box-shadow:0 8px 26px rgba(18,39,26,.05) !important;
+  /* Bottom navigation matches B: clean, flat, no floating card */
+  .mobile-bottom-nav {
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    min-height: 62px !important;
+    padding: 4px 10px calc(4px + env(safe-area-inset-bottom)) !important;
+    border: 0 !important;
+    border-top: 1px solid #e3e7e3 !important;
+    border-radius: 0 !important;
+    background: rgba(255,255,255,.97) !important;
+    box-shadow: 0 -4px 18px rgba(21,40,28,.05) !important;
   }
 
-  .v8-courts .consumer-time-list {
-    margin-top:18px !important;
-    border-radius:14px !important;
-    background:#fff !important;
+  .mobile-bottom-nav button {
+    min-height: 50px !important;
+    border-radius: 0 !important;
   }
 
-  .v8-courts .consumer-time-group {
-    min-height:88px !important;
-  }
-
-  .v8-courts .consumer-court-options button {
-    min-height:68px !important;
+  .mobile-bottom-nav button.active {
+    color: #17643f !important;
+    background: transparent !important;
   }
 }
 
-/* Preserve v8 mobile deliberately */
+/* dark mode preserves layouts */
+:root[data-theme="dark"] .pa10-mobile-clubs article,
+:root[data-theme="dark"] .pa10-mobile-filter button,
+:root[data-theme="dark"] .pa10-mobile-days button,
+:root[data-theme="dark"] .pa10-mobile-more,
+:root[data-theme="dark"] .pa10-empty-player {
+  color: #eef2ef;
+  border-color: #303a32;
+  background: #1a201b;
+}
+
+:root[data-theme="dark"] .pa10-mobile-days button.active {
+  color: #111814;
+  border-color: #a9d65a;
+  background: #a9d65a;
+}
+
+:root[data-theme="dark"] .mobile-bottom-nav {
+  border-top-color: #2f3931 !important;
+  background: rgba(13,18,14,.98) !important;
+}
