@@ -113,7 +113,7 @@ function MatchmakerPanel({
       <div className="matchmaker-heading">
         <div>
           <span className="section-kicker">
-            SMART MATCHMAKING
+            PropozycjeMAKING
           </span>
           <h2>Złóż mi mecz.</h2>
           <p>
@@ -265,7 +265,7 @@ function MatchmakerPanel({
                   </header>
 
                   <div className="ready-court">
-                    <span>🎾</span>
+                    <span></span>
                     <div>
                       <strong>{ready.courtName}</strong>
                       <small>{ready.clubName}</small>

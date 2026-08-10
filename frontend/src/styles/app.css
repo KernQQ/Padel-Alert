@@ -7291,3 +7291,262 @@ button {
     justify-content: center;
   }
 }
+
+
+/* =========================================================
+   PADELALERT v6 — ALL-IN-ONE ULTIMATE BETA
+   Community + My + alerts + product polish
+   ========================================================= */
+
+/* Subtle court identity — intentionally not an AI-style gradient. */
+.consumer-action-primary {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.consumer-action-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 48%;
+  z-index: -1;
+  opacity: .18;
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(255,255,255,.8) 49%, rgba(255,255,255,.8) 51%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, rgba(255,255,255,.8) 49%, rgba(255,255,255,.8) 51%, transparent 51%);
+  background-size: 62px 100%, 100% 52px;
+  transform: skewX(-9deg) scale(1.12);
+}
+
+/* Matches and community are now consumer screens, not admin dashboards. */
+.match-page,
+.partners-page,
+.my-center-grid,
+.owner-posts-section,
+.matchmaker-panel,
+.match-invitations-panel {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.match-card,
+.partner-card,
+.owner-post-card,
+.my-match-card,
+.invitation-card {
+  border: 1px solid var(--v5-line) !important;
+  border-radius: 14px !important;
+  background: var(--v5-surface) !important;
+  box-shadow: none !important;
+}
+
+.match-card:hover,
+.partner-card:hover,
+.owner-post-card:hover {
+  transform: none !important;
+  border-color: color-mix(in srgb, var(--v5-green) 35%, var(--v5-line)) !important;
+}
+
+.match-card button,
+.partner-card button,
+.owner-post-card button,
+.my-match-card button,
+.invitation-card button {
+  border-radius: 8px !important;
+}
+
+.section-kicker,
+.eyebrow {
+  text-transform: none !important;
+  letter-spacing: .03em !important;
+}
+
+.match-center-modal {
+  border-radius: 18px !important;
+}
+
+.match-center-header h2 {
+  letter-spacing: -.035em;
+}
+
+.center-status,
+.organizer-badge,
+.player-ready-badge,
+.my-match-status,
+.request-status,
+.status-badge {
+  border-radius: 999px !important;
+}
+
+/* My area */
+.my-center-heading {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.my-center-grid {
+  gap: 12px !important;
+}
+
+.profile-editor-panel,
+.notifications-panel {
+  border: 1px solid var(--v5-line) !important;
+  border-radius: 16px !important;
+  background: var(--v5-surface) !important;
+  box-shadow: none !important;
+}
+
+.profile-form-grid input,
+.profile-form-grid select,
+.profile-form-grid textarea {
+  border-color: var(--v5-line) !important;
+  border-radius: 9px !important;
+  color: var(--v5-text) !important;
+  background: var(--v5-surface-soft) !important;
+}
+
+.profile-save-button {
+  border-radius: 9px !important;
+  background: var(--v5-green) !important;
+}
+
+.notifications-panel article {
+  border-color: var(--v5-line) !important;
+}
+
+.v6-saved-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.saved-panel {
+  min-width: 0;
+  border: 1px solid var(--v5-line) !important;
+  border-radius: 14px !important;
+  background: var(--v5-surface) !important;
+  box-shadow: none !important;
+}
+
+.saved-panel > article {
+  gap: 8px;
+}
+
+.v6-inline-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.v6-inline-actions button {
+  padding: 6px 8px !important;
+  border: 1px solid var(--v5-line) !important;
+  border-radius: 7px !important;
+  color: var(--v5-text) !important;
+  background: var(--v5-surface-soft) !important;
+  font-size: 9px !important;
+}
+
+/* My matches: current + collapsible history */
+.v6-match-summary {
+  display: flex;
+  gap: 18px;
+  margin: -2px 0 12px;
+  color: var(--v5-muted);
+  font-size: 10px;
+}
+
+.v6-match-summary strong {
+  color: var(--v5-text);
+  font-size: 15px;
+}
+
+.v6-match-history {
+  margin-top: 12px;
+  border-top: 1px solid var(--v5-line);
+  padding-top: 10px;
+}
+
+.v6-match-history summary {
+  cursor: pointer;
+  color: var(--v5-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.v6-match-history[open] summary {
+  margin-bottom: 8px;
+}
+
+.my-match-card {
+  min-height: 72px !important;
+}
+
+/* Player screen */
+.partner-hero,
+.partner-filter-panel {
+  border-radius: 16px !important;
+  box-shadow: none !important;
+}
+
+.partner-card .colorful-avatar,
+.profile-editor-avatar,
+.small-avatar {
+  background: var(--v5-green-soft) !important;
+  color: var(--v5-green) !important;
+  box-shadow: none !important;
+}
+
+/* Buttons throughout should look like product controls, not generated pills. */
+.side-primary-button,
+.match-primary-button,
+.match-create-button,
+.primary-action,
+.primary-button {
+  border-radius: 9px !important;
+  background: var(--v5-green) !important;
+}
+
+/* Dark mode must retain the exact same hierarchy. */
+:root[data-theme="dark"] .saved-panel,
+:root[data-theme="dark"] .profile-editor-panel,
+:root[data-theme="dark"] .notifications-panel,
+:root[data-theme="dark"] .my-match-card,
+:root[data-theme="dark"] .owner-post-card,
+:root[data-theme="dark"] .partner-card,
+:root[data-theme="dark"] .match-card {
+  color: var(--v5-text) !important;
+  background: var(--v5-surface) !important;
+}
+
+/* Mobile community area */
+@media (max-width: 900px) {
+  .v6-saved-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .my-center-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .owner-post-card header,
+  .my-match-card {
+    align-items: flex-start !important;
+  }
+
+  .my-match-card {
+    grid-template-columns: 62px 1fr !important;
+  }
+
+  .my-match-actions {
+    grid-column: 1 / -1;
+  }
+
+  .my-match-actions button {
+    width: 100%;
+  }
+}

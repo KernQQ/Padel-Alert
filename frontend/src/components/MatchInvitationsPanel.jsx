@@ -75,7 +75,7 @@ function MatchInvitationsPanel({ ownerToken }) {
 
       setMessage(
         decision === "accepted"
-          ? "Dołączyłeś do meczu. 🎾"
+          ? "Dołączyłeś do meczu. "
           : "Zaproszenie odrzucone."
       );
 
@@ -142,10 +142,10 @@ function MatchInvitationsPanel({ ownerToken }) {
                     compact
                   />
                   <span>
-                    👥 {match.playersCount}/{match.maxPlayers}
+                     {match.playersCount}/{match.maxPlayers}
                   </span>
                   {match.courtName && (
-                    <span>🎾 {match.courtName}</span>
+                    <span> {match.courtName}</span>
                   )}
                 </div>
               </div>

@@ -256,6 +256,7 @@ function App() {
   const [toast, setToast] = useState("");
   const knownNotificationIds = useRef(new Set());
   const notificationsInitialized = useRef(false);
+  const alertHitIds = useRef(new Set());
   const [playerForm, setPlayerForm] = useState({
     nickname: "",
     contact: "",
@@ -487,6 +488,48 @@ function App() {
 
     return () => window.clearInterval(interval);
   }, [autoRefresh, loadAvailability]);
+
+  useEffect(() => {
+    if (!slots.length || !alerts.length) return;
+
+    for (const alert of alerts) {
+      const matchingSlot = slots.find((slot) => {
+        const clubMatches =
+          !alert.club ||
+          alert.club === "all" ||
+          slot.clubSlug === alert.club;
+
+        return (
+          clubMatches &&
+          slot.date === alert.date &&
+          slot.hour >= alert.from &&
+          slot.hour < alert.to
+        );
+      });
+
+      if (!matchingSlot) continue;
+
+      const hitKey = `${alert.id}:${matchingSlot.clubSlug}:${matchingSlot.courtId}:${matchingSlot.date}:${matchingSlot.hour}`;
+
+      if (alertHitIds.current.has(hitKey)) continue;
+      alertHitIds.current.add(hitKey);
+
+      const message =
+        `Wolny kort: ${matchingSlot.clubName}, ${matchingSlot.courtName}, ` +
+        `${matchingSlot.date} ${matchingSlot.hour}.`;
+
+      setToast(message);
+
+      if (
+        "Notification" in window &&
+        Notification.permission === "granted"
+      ) {
+        new Notification("PadelAlert — znaleziono termin", {
+          body: message
+        });
+      }
+    }
+  }, [slots, alerts]);
 
   const groupedProposals = useMemo(() => {
     const slotsByCourt = {};
@@ -737,21 +780,53 @@ function App() {
       },
       ...current
     ]);
+
+    setToast("Wyszukiwanie zostało zapisane.");
+  }
+
+  function applySavedSearch(search) {
+    setClubSlug(search.club || "all");
+    setDate(search.date || today);
+    setFrom(search.from || "18:00");
+    setTo(search.to || "22:00");
+    setDuration(Number(search.duration) || 90);
+    setCourtType(search.courtType || "all");
+
+    setActiveSearch({
+      club: search.club || "all",
+      date: search.date || today,
+      from: search.from || "18:00",
+      to: search.to || "22:00",
+      courtType: search.courtType || "all"
+    });
+
+    setActiveTab("courts");
+    setToast(`Wczytano: ${search.name || "zapisane wyszukiwanie"}.`);
   }
 
   function createAlert() {
+    const selectedClub = clubs.find((club) => club.slug === clubSlug);
+
     setAlerts((current) => [
       {
         id: crypto.randomUUID(),
         club: clubSlug,
+        clubName: clubSlug === "all"
+          ? "Wszystkie kluby"
+          : selectedClub?.name || clubSlug,
         date,
         from,
         to,
         duration,
-        courtType
+        courtType,
+        createdAt: new Date().toISOString()
       },
       ...current
     ]);
+
+    setToast(
+      "Alert zapisany. Gdy PadelAlert zobaczy pasujący wolny termin podczas odświeżania, dostaniesz komunikat."
+    );
   }
 
   function openNewPlayerListing() {
@@ -1843,9 +1918,9 @@ function App() {
           {activeTab === "saved" && (
             <>
               <section className="page-heading my-center-heading">
-                <span className="eyebrow">TWOJE CENTRUM</span>
-                <h1>Profil, mecze i powiadomienia.</h1>
-                <p>Wszystko, co dotyczy Twojej aktywności w PadelAlert.</p>
+                <span className="eyebrow">Moje</span>
+                <h1>Twoja gra</h1>
+                <p>Profil, mecze, alerty i zapisane wyszukiwania.</p>
               </section>
 
               <div className="my-center-grid">
@@ -1937,16 +2012,49 @@ function App() {
                 </div>
               </section>
 
-              <div className="saved-grid secondary-saved-grid">
+              <div className="saved-grid secondary-saved-grid v6-saved-grid">
                 <section className="saved-panel">
-                  <h2>Moje wysłane zgłoszenia</h2>
-                  {outgoingRequests.map((request) => <article key={request.id}><div><strong>{request.post?.nickname || "Gracz"}</strong><small>{request.post?.clubName} · {request.post?.date} · status: {request.status}</small></div></article>)}
-                  {outgoingRequests.length === 0 && <div className="empty-state">Nie wysłano jeszcze zaproszeń.</div>}
+                  <h2>Zapisane wyszukiwania</h2>
+                  {savedSearches.map((search) => (
+                    <article key={search.id}>
+                      <div>
+                        <strong>{search.name}</strong>
+                        <small>{search.date} · {search.from}–{search.to} · {search.duration} min</small>
+                      </div>
+                      <div className="v6-inline-actions">
+                        <button onClick={() => applySavedSearch(search)}>Otwórz</button>
+                        <button onClick={() => setSavedSearches((current) => current.filter((item) => item.id !== search.id))}>Usuń</button>
+                      </div>
+                    </article>
+                  ))}
+                  {savedSearches.length === 0 && <div className="empty-state">Nie masz zapisanych wyszukiwań.</div>}
                 </section>
+
                 <section className="saved-panel">
                   <h2>Alerty kortów</h2>
-                  {alerts.map((alert) => <article key={alert.id}><div><strong>{alert.club}</strong><small>{alert.date} · {alert.from}–{alert.to} · {alert.duration} min</small></div><button onClick={() => setAlerts((current) => current.filter((item) => item.id !== alert.id))}>Usuń</button></article>)}
+                  {alerts.map((alert) => (
+                    <article key={alert.id}>
+                      <div>
+                        <strong>{alert.clubName || alert.club || "Wszystkie kluby"}</strong>
+                        <small>{alert.date} · {alert.from}–{alert.to} · {alert.duration} min</small>
+                      </div>
+                      <button onClick={() => setAlerts((current) => current.filter((item) => item.id !== alert.id))}>Usuń</button>
+                    </article>
+                  ))}
                   {alerts.length === 0 && <div className="empty-state">Nie masz aktywnych alertów.</div>}
+                </section>
+
+                <section className="saved-panel">
+                  <h2>Wysłane zgłoszenia</h2>
+                  {outgoingRequests.map((request) => (
+                    <article key={request.id}>
+                      <div>
+                        <strong>{request.post?.nickname || "Gracz"}</strong>
+                        <small>{request.post?.clubName} · {request.post?.date} · status: {request.status}</small>
+                      </div>
+                    </article>
+                  ))}
+                  {outgoingRequests.length === 0 && <div className="empty-state">Nie wysłano jeszcze zgłoszeń.</div>}
                 </section>
               </div>
             </>

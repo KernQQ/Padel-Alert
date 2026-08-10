@@ -1,0 +1,56 @@
+PADELALERT v6 — TEST PUBLIC BETA
+
+KONTO
+[ ] rejestracja
+[ ] wylogowanie
+[ ] logowanie
+[ ] profil zapisuje się po restarcie
+
+KORTY
+[ ] 3 kluby
+[ ] Dzisiaj/Jutro
+[ ] 60/90/120 min
+[ ] Wybierz
+[ ] BO5
+[ ] zapisz wyszukiwanie
+[ ] alert
+
+MECZE
+[ ] utwórz
+[ ] edytuj
+[ ] dołącz z drugiego konta
+[ ] opuść
+[ ] 4/4
+[ ] lista oczekujących
+[ ] usuń uczestnika
+[ ] gotowość
+[ ] zaproszenie
+[ ] anulowanie
+[ ] historia
+
+GRACZE
+[ ] dodaj dyspozycyjność
+[ ] edytuj
+[ ] usuń
+[ ] filtr poziomu
+[ ] filtr klubu
+[ ] kontakt/zaproszenie
+
+MOJE
+[ ] powiadomienia
+[ ] moje mecze
+[ ] historia
+[ ] alerty
+[ ] zapisane wyszukiwania
+[ ] wysłane zgłoszenia
+
+TECHNICZNE
+[ ] /health
+[ ] /ready
+[ ] /meta
+[ ] PostgreSQL
+[ ] realtime
+[ ] telefon
+[ ] PWA
+[ ] light
+[ ] dark

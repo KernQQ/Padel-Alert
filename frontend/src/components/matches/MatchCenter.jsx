@@ -41,7 +41,7 @@ function MatchCenter({
 }) {
   async function share() {
     const text =
-      `🎾 ${match.clubName}\n` +
+      `${match.clubName}\n` +
       `${match.date}, ${match.from}–${match.to}\n` +
       `${match.playersCount}/${match.maxPlayers} graczy\n` +
       `Poziom: ${match.level}`;
@@ -65,7 +65,7 @@ function MatchCenter({
 
         <header className="match-center-header">
           <div>
-            <span className="eyebrow">CENTRUM MECZU</span>
+            <span className="eyebrow">Mecz</span>
             <h2>
               {match.from}–{match.to}
             </h2>
@@ -219,7 +219,7 @@ function MatchCenter({
 
         <section className="center-utility-actions">
           <button onClick={() => createCalendarFile(match)}>
-            📅 Dodaj do kalendarza
+            Dodaj do kalendarza
           </button>
 
           <button onClick={share}>
@@ -233,7 +233,7 @@ function MatchCenter({
               target="_blank"
               rel="noreferrer"
             >
-              🎾 Rezerwuj w BO5
+              Przejdź do BO5
             </a>
           )}
         </section>

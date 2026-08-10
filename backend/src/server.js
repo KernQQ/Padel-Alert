@@ -100,6 +100,29 @@ app.use(
 app.use("/auth/login", authRateLimit);
 app.use("/auth/register", authRateLimit);
 
+
+app.get("/meta", (req, res) => {
+  res.json({
+    ok: true,
+    name: "PadelAlert",
+    version: "6.0.0-beta",
+    stage: "public-beta",
+    features: [
+      "availability",
+      "accounts",
+      "profiles",
+      "matches",
+      "matchmaking",
+      "players",
+      "invitations",
+      "notifications",
+      "realtime",
+      "postgresql",
+      "pwa"
+    ]
+  });
+});
+
 app.get("/health", (req, res) => {
   res.json({
     ok: true,

@@ -377,7 +377,7 @@ function MatchPage({
 
       <section className="matches-stats">
         <article>
-          <span>🎾</span>
+          <span></span>
           <div>
             <strong>
               {
@@ -392,7 +392,7 @@ function MatchPage({
         </article>
 
         <article>
-          <span>🔥</span>
+          <span></span>
           <div>
             <strong>{urgentMatches.length}</strong>
             <small>meczów 3/4</small>
@@ -430,7 +430,7 @@ function MatchPage({
           <div className="urgent-match-grid">
             {urgentMatches.map((match) => (
               <article key={match.id} className="urgent-match-card">
-                <span className="urgent-flame">🔥</span>
+                <span className="urgent-flame"></span>
 
                 <div>
                   <strong>
@@ -610,9 +610,9 @@ function MatchPage({
 
                 <div className="match-tags">
                   <LevelBadge level={match.level} compact />
-                  <span>🎾 {match.gameType}</span>
+                  <span> {match.gameType}</span>
                   {match.spotsLeft > 0 && (
-                    <span>👥 Brakuje {match.spotsLeft}</span>
+                    <span> Brakuje {match.spotsLeft}</span>
                   )}
                 </div>
 
@@ -679,7 +679,7 @@ function MatchPage({
           </div>
         ) : (
           <div className="matches-empty-state">
-            <span>🎾</span>
+            <span></span>
             <h2>Nie ma jeszcze pasujących meczów</h2>
             <p>
               Utwórz pierwszy mecz albo zaznacz „Gram teraz”.

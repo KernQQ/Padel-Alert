@@ -11,6 +11,10 @@ function statusLabel(status) {
   return "Szukamy graczy";
 }
 
+function isPastMatch(match) {
+  return ["completed", "cancelled"].includes(match.status);
+}
+
 function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
   const [matches, setMatches] = useState([]);
   const [message, setMessage] = useState("");
@@ -122,7 +126,7 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
     <section className="owner-posts-section my-matches-panel">
       <div className="section-heading">
         <div>
-          <span className="section-kicker">ORGANIZATOR</span>
+          <span className="section-kicker">Mecze</span>
           <h2>Moje mecze</h2>
         </div>
         <span className="my-matches-count">{matches.length}</span>
@@ -139,8 +143,13 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
         </button>
       )}
 
+      <div className="v6-match-summary">
+        <span><strong>{matches.filter((match) => !isPastMatch(match)).length}</strong> nadchodzących</span>
+        <span><strong>{matches.filter((match) => match.status === "completed").length}</strong> zakończonych</span>
+      </div>
+
       <div className="my-match-list">
-        {matches.map((match) => (
+        {matches.filter((match) => !isPastMatch(match)).map((match) => (
           <article
             key={match.id}
             className={`my-match-card status-${match.status}`}
@@ -153,50 +162,73 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
             <div className="my-match-info">
               <div className="my-match-title-row">
                 <strong>{match.clubName}</strong>
-                <span className="my-match-status">
-                  {statusLabel(match.status)}
-                </span>
+                <span className="my-match-status">{statusLabel(match.status)}</span>
               </div>
 
               <div className="my-match-meta">
                 <LevelBadge level={match.level} compact />
-                <span>
-                  👥 {match.playersCount}/{match.maxPlayers}
-                </span>
-                <span>🎾 {match.gameType}</span>
+                <span>{match.playersCount}/{match.maxPlayers} graczy</span>
+                <span>{match.gameType}</span>
               </div>
             </div>
 
             <div className="my-match-actions">
-              {!["cancelled", "completed"].includes(match.status) ? (
-                <button
-                  type="button"
-                  className="my-match-cancel"
-                  disabled={busyId === match.id}
-                  onClick={() => cancelMatch(match)}
-                >
-                  Anuluj mecz
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="my-match-delete"
-                  disabled={busyId === match.id}
-                  onClick={() => deleteMatch(match)}
-                >
-                  Usuń
-                </button>
-              )}
+              <button
+                type="button"
+                className="my-match-cancel"
+                disabled={busyId === match.id}
+                onClick={() => cancelMatch(match)}
+              >
+                Anuluj mecz
+              </button>
             </div>
           </article>
         ))}
 
-        {matches.length === 0 && (
-          <div className="empty-state large">
-            Nie organizujesz jeszcze żadnego meczu.
-          </div>
+        {matches.filter((match) => !isPastMatch(match)).length === 0 && (
+          <div className="empty-state">Brak nadchodzących meczów.</div>
         )}
       </div>
+
+      {matches.some(isPastMatch) && (
+        <details className="v6-match-history">
+          <summary>Historia meczów ({matches.filter(isPastMatch).length})</summary>
+          <div className="my-match-list">
+            {matches.filter(isPastMatch).map((match) => (
+              <article
+                key={match.id}
+                className={`my-match-card status-${match.status}`}
+              >
+                <div className="my-match-date">
+                  <strong>{match.from}</strong>
+                  <small>{match.date}</small>
+                </div>
+                <div className="my-match-info">
+                  <div className="my-match-title-row">
+                    <strong>{match.clubName}</strong>
+                    <span className="my-match-status">{statusLabel(match.status)}</span>
+                  </div>
+                  <div className="my-match-meta">
+                    <LevelBadge level={match.level} compact />
+                    <span>{match.playersCount}/{match.maxPlayers} graczy</span>
+                    <span>{match.gameType}</span>
+                  </div>
+                </div>
+                <div className="my-match-actions">
+                  <button
+                    type="button"
+                    className="my-match-delete"
+                    disabled={busyId === match.id}
+                    onClick={() => deleteMatch(match)}
+                  >
+                    Usuń
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </details>
+      )}
     </section>
   );
 }
