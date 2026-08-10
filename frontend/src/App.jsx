@@ -120,6 +120,29 @@ function buildBo5DeepLink(proposal, club) {
 
   if (!base) return "";
 
+  const clubKey =
+    proposal?.clubSlug ||
+    proposal?.blocks?.[0]?.clubSlug ||
+    club?.slug ||
+    "";
+
+  const clubName = normalizeClubKey(
+    proposal?.clubName ||
+    proposal?.blocks?.[0]?.clubName ||
+    club?.name ||
+    ""
+  );
+
+  // Padel Arena Południowa redirects incorrectly when BO5 query
+  // parameters are appended to its public Padel URL.
+  // Always open the clean Padel tab for this club.
+  if (
+    clubKey === "padel-arena-poludniowa" ||
+    clubName.includes("padel-arena-poludniowa")
+  ) {
+    return "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel";
+  }
+
   const url = new URL(base);
 
   const disciplineId =
