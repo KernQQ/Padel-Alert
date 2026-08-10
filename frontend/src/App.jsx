@@ -28,8 +28,24 @@ import { useRealtime } from "./hooks/useRealtime";
 import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
 
 
+
+const BO5_CLUB_URLS = {
+  "padel-arena-poludniowa":
+    "https://bo5.pl/padelARENApoludniowa/reservation",
+  "padel-club":
+    "https://bo5.pl/padelclub/reservation",
+  "fabryka-energii":
+    "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
+};
+
 function buildBo5DeepLink(proposal, club) {
+  const mappedBase =
+    BO5_CLUB_URLS[proposal?.clubSlug] ||
+    BO5_CLUB_URLS[club?.slug] ||
+    "";
+
   const base = String(
+    mappedBase ||
     club?.sourceUrl ||
     proposal?.sourceUrl ||
     ""
