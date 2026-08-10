@@ -31,7 +31,7 @@ import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
 
 const BO5_CLUB_URLS = {
   "padel-arena-poludniowa":
-    "https://bo5.pl/padelARENApoludniowa/reservation",
+    "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
   "padel-club":
     "https://bo5.pl/padelclub/reservation",
   "fabryka-energii":
@@ -39,7 +39,7 @@ const BO5_CLUB_URLS = {
 };
 
 const BO5_CLUB_URLS_BY_ID = {
-  "264": "https://bo5.pl/padelARENApoludniowa/reservation",
+  "264": "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
   "595": "https://bo5.pl/padelclub/reservation",
   "528": "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
 };
