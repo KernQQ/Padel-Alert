@@ -138,16 +138,16 @@ function SmartLobby({
     <section className="smart-lobby">
       <div className="smart-lobby-top">
         <div>
-          <span className="section-kicker">Szybki dostęp</span>
-          <h2>Co chcesz zrobić?</h2>
+          <span className="section-kicker">CO CHCESZ ZROBIĆ DZISIAJ?</span>
+          <h2>Znajdź mecz lub ekipę w kilka sekund.</h2>
           <p>
-            Najczęściej używane funkcje PadelAlert.
+            Korty, gracze i mecze — najważniejsze rzeczy od razu pod ręką.
           </p>
         </div>
 
         <div className="smart-live-pill">
           <span className="live-dot" />
-          {nowPlayers.length} dostępnych teraz
+          LIVE · {nowPlayers.length} dostępnych teraz
         </div>
       </div>
 
@@ -164,25 +164,25 @@ function SmartLobby({
 
       <div className="smart-lobby-actions">
         <button type="button" onClick={onOpenMatches}>
-          <span>01</span>
-          <strong>Znajdź graczy</strong>
+          <span>🎾</span>
+          <strong>Znajdź ekipę</strong>
           <small>Matchmaking + {activeMatches.length} aktywnych meczów</small>
         </button>
 
         <button type="button" onClick={onOpenMatches}>
-          <span>02</span>
-          <strong>Mecze 3/4</strong>
+          <span>🔥</span>
+          <strong>Brakuje jednej osoby</strong>
           <small>{urgentMatches.length} meczów 3/4</small>
         </button>
 
         <button type="button" onClick={onOpenCourts}>
-          <span>03</span>
-          <strong>Wolne korty</strong>
+          <span>◫</span>
+          <strong>Znajdź kort</strong>
           <small>Sprawdź dostępność BO5</small>
         </button>
 
         <button type="button" onClick={onOpenNotifications}>
-          <span>04</span>
+          <span>🔔</span>
           <strong>Powiadomienia</strong>
           <small>{unreadNotificationsCount} nowych</small>
         </button>
@@ -192,7 +192,7 @@ function SmartLobby({
         <div className="smart-lobby-section smart-urgent-section">
           <div className="smart-section-heading">
             <div>
-              <span className="section-kicker">Mecze 3/4</span>
+              <span className="section-kicker">NAJSZYBSZA DROGA DO GRY</span>
               <h3>Brakuje tylko jednego gracza</h3>
             </div>
             <button type="button" onClick={onOpenMatches}>
@@ -204,7 +204,7 @@ function SmartLobby({
             {urgentMatches.slice(0, 2).map((match) => (
               <article key={match.id}>
                 <div>
-                  <span className="smart-urgent-label">3/4 graczy</span>
+                  <span className="smart-urgent-label">🔥 3/4</span>
                   <strong>{match.from}–{match.to}</strong>
                   <h4>{match.clubName}</h4>
                   <LevelBadge level={match.level} compact />
@@ -227,8 +227,8 @@ function SmartLobby({
         <div className="smart-lobby-section">
           <div className="smart-section-heading">
             <div>
-              <span className="section-kicker">Propozycje</span>
-              <h3>Mecze pasujące do profilu</h3>
+              <span className="section-kicker">SMART MATCH</span>
+              <h3>Polecane dla Ciebie</h3>
             </div>
           </div>
 
@@ -274,8 +274,8 @@ function SmartLobby({
         <div className="smart-lobby-section">
           <div className="smart-section-heading">
             <div>
-              <span className="section-kicker">Twoje mecze</span>
-              <h3>Najbliższe</h3>
+              <span className="section-kicker">TWÓJ DZIEŃ</span>
+              <h3>Twoje mecze</h3>
             </div>
           </div>
 
@@ -303,7 +303,7 @@ function SmartLobby({
 
           {clubActivity && (
             <div className="smart-club-of-day">
-              <span>Aktywny klub</span>
+              <span>🔥 Najwięcej dzieje się teraz</span>
               <strong>{clubActivity.name}</strong>
               <small>
                 {clubActivity.matches} meczów · {clubActivity.now} dostępnych teraz
@@ -315,11 +315,12 @@ function SmartLobby({
 
       <div className="smart-profile-hint">
         <div>
-          <span className="section-kicker">Poziom</span>
+          <span className="section-kicker">TWÓJ POZIOM</span>
           <strong>{normalizeLevel(profile.level)}</strong>
         </div>
         <p>
-          Poziom i preferencje pomagają dopasować mecze i graczy.
+          Smart Match wykorzystuje Twój poziom, ulubiony klub i aktywność
+          meczu do ustawiania rekomendacji.
         </p>
       </div>
     </section>

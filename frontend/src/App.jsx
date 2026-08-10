@@ -15,6 +15,7 @@ import { apiFetch } from "./services/api";
 import Toast from "./components/Toast";
 import MatchPage from "./components/MatchPage";
 import SmartLobby from "./components/SmartLobby";
+import HomeDashboard from "./components/HomeDashboard";
 import LevelSelect from "./components/ui/LevelSelect";
 import LevelBadge from "./components/ui/LevelBadge";
 import InstallAppButton from "./components/InstallAppButton";
@@ -1089,7 +1090,7 @@ function App() {
                     onLogout={handleLogout}
                   />
                   <RealtimeBadge status={realtimeStatus} />
-      <button className="notification-bell-top" type="button" onClick={() => setActiveTab("saved")} title="Powiadomienia">🔔{unreadNotificationsCount > 0 && <span>{unreadNotificationsCount}</span>}</button>
+      <button className="notification-bell-top" type="button" onClick={() => setActiveTab("saved")} title="Powiadomienia">Alerty{unreadNotificationsCount > 0 && <span>{unreadNotificationsCount}</span>}</button>
       <aside className="sidebar">
         <button
           type="button"
@@ -1187,255 +1188,24 @@ function App() {
 
         <main className="page">
           {activeTab === "home" && (
-            <>
-              <section className="welcome-row">
-                <div>
-                  <span className="eyebrow">Dzisiaj</span>
-                  <h1>Cześć, {myProfile.nickname || "Graczu"}.</h1>
-                  <p>
-                    Wolne korty, mecze i gracze w jednym miejscu.
-                  </p>
-                </div>
-
-                <div className="live-update">
-                  <span className="live-dot" />
-                  Aktualizacja za {countdown}s
-                </div>
-              </section>
-
-              <SmartLobby
-                ownerToken={ownerToken}
-                clubs={clubs}
-                profile={myProfile}
-                unreadNotificationsCount={unreadNotificationsCount}
-                onOpenMatches={() => setActiveTab("matches")}
-                onOpenCourts={() => setActiveTab("courts")}
-                onOpenNotifications={() => setActiveTab("saved")}
-              />
-
-              <section className="hero-search-card">
-                <div className="hero-search-copy">
-                  <span>Wolne korty</span>
-                  <h2>Znajdź termin.</h2>
-                  <p>
-                    Wybierz klub, dzień i długość gry.
-                  </p>
-                </div>
-
-                {renderSearchForm("dashboard-search")}
-              </section>
-
-              <section className="metric-grid">
-                <article className="metric-card metric-green">
-                  <span className="metric-icon">K</span>
-                  <div>
-                    <strong>{ranked.length}</strong>
-                    <small>wolnych możliwości</small>
-                  </div>
-                </article>
-
-                <article className="metric-card metric-blue">
-                  <span className="metric-icon">M</span>
-                  <div>
-                    <strong>{posts.length}</strong>
-                    <small>zgłoszeń graczy</small>
-                  </div>
-                </article>
-
-                <article className="metric-card metric-amber">
-                  <span className="metric-icon">U</span>
-                  <div>
-                    <strong>{favorites.length}</strong>
-                    <small>ulubionych kortów</small>
-                  </div>
-                </article>
-
-                <article className="metric-card metric-red">
-                  <span className="metric-icon">A</span>
-                  <div>
-                    <strong>{alerts.length}</strong>
-                    <small>aktywnych alertów</small>
-                  </div>
-                </article>
-              </section>
-
-              <section className="section-block">
-                <div className="section-heading">
-                  <div>
-                    <span className="section-kicker">Dostępność</span>
-                    <h2>Najbliższe wolne terminy</h2>
-                  </div>
-
-                  <button onClick={() => setActiveTab("courts")}>
-                    Wszystkie wyniki →
-                  </button>
-                </div>
-
-                <div className="recommendation-grid">
-                  {topRecommendations.map((item, index) => (
-                    <article
-                      className={`recommendation-card card-${index + 1}`}
-                      key={`${item.courtKey}-${item.startHour}`}
-                    >
-                      <div className="recommendation-head">
-                        <span>Propozycja {index + 1}</span>
-
-                        <button onClick={() => toggleFavorite(item.courtKey)}>
-                          {favorites.includes(item.courtKey) ? "♥" : "♡"}
-                        </button>
-                      </div>
-
-                      <div className="recommendation-time">
-                        {item.startHour}–{item.endHour}
-                      </div>
-
-                      <h3>{item.courtName}</h3>
-                      <p>{item.clubName}</p>
-
-                      <div className="tag-row">
-                        <span>{duration} min</span>
-                        <span>
-                          {item.courtType === "outdoor"
-                            ? "Zewnętrzny"
-                            : "Wewnętrzny"}
-                        </span>
-                      </div>
-
-                      <button
-                        className="primary-card-button"
-                        onClick={() => {
-                          setSelectedProposal(item);
-                          setActiveTab("courts");
-                        }}
-                      >
-                        Wybierz termin
-                      </button>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="section-block v5-fade">
-                <div className="section-heading">
-                  <div><span className="section-kicker">Kluby</span><h2>Gdzie chcesz zagrać?</h2></div>
-                </div>
-                <div className="club-showcase">
-                  {clubStats.slice(0, 3).map((club) => (
-                    <article className="club-showcase-card" key={club.slug} onClick={() => { setClubSlug(club.slug); setActiveSearch({ ...activeSearch, club: club.slug }); setActiveTab("courts"); }}>
-                      <small>{Object.keys(club.courts || {}).length} kortów</small>
-                      <h3>{club.name}</h3>
-                      <span className="club-count">{club.available}</span>
-                      <strong>wolnych możliwości</strong>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="section-block v5-fade">
-                <div className="section-heading">
-                  <div><span className="section-kicker">Gracze</span><h2>Osoby szukające gry</h2></div>
-                  <button onClick={() => setActiveTab("partners")}>Wszyscy gracze →</button>
-                </div>
-                {smartMatches.length > 0 ? (
-                  <div className="smart-match-grid">
-                    {smartMatches.map((post) => (
-                      <article className="smart-match-card" key={post.id}>
-                        <div className="smart-match-score"><span className="section-kicker">Dopasowanie</span><strong>{post.match}%</strong></div>
-                        <div className="smart-match-profile">
-                          <span className="large-avatar colorful-avatar" style={{ "--avatar-hue": getAvatarHue(post.nickname) }}>{post.nickname.slice(0,1).toUpperCase()}</span>
-                          <div><h3>{post.nickname}</h3><p>{post.preferredSide || "Dowolna"}</p><LevelBadge level={post.level} compact /></div>
-                        </div>
-                        <div className="smart-match-tags"><span>{post.clubName}</span><span>{post.from}–{post.to}</span><span>{formatShortDate(post.date)}</span></div>
-                        <button onClick={() => openJoinRequest(post)}>Zaproś do meczu</button>
-                      </article>
-                    ))}
-                  </div>
-                ) : <div className="empty-state">Dodaj profil i poczekaj na zgłoszenia graczy — Smart Match pojawi się automatycznie.</div>}
-              </section>
-
-              <section className="section-block v5-fade">
-                <div className="profile-summary-card">
-                  <span className="large-avatar colorful-avatar" style={{ "--avatar-hue": getAvatarHue(myProfile.nickname || "G") }}>{(myProfile.nickname || "G").slice(0,1).toUpperCase()}</span>
-                  <div><span className="section-kicker">Twój profil</span><h3>{myProfile.nickname || "Uzupełnij profil"}</h3><p>{myProfile.level || "Brak poziomu"} · {myProfile.preferredSide || "Dowolna strona"} · {myProfile.city || "Szczecin"}</p></div>
-                  <button onClick={() => setActiveTab("saved")}>Edytuj profil</button>
-                </div>
-              </section>
-
-              <section className="dashboard-columns">
-                <section className="panel">
-                  <div className="section-heading compact">
-                    <div>
-                      <span className="section-kicker">Kluby</span>
-                      <h2>Dostępność</h2>
-                    </div>
-                  </div>
-
-                  <div className="club-ranking">
-                    {clubStats.map((club, index) => (
-                      <article key={club.slug}>
-                        <span className="rank-number">{index + 1}</span>
-
-                        <div>
-                          <strong>{club.name}</strong>
-                          <small>
-                            {Object.keys(club.courts || {}).length} kortów
-                          </small>
-                        </div>
-
-                        <div className="availability">
-                          <strong>{club.available}</strong>
-                          <small>opcji</small>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
-                </section>
-
-                <section className="panel">
-                  <div className="section-heading compact">
-                    <div>
-                      <span className="section-kicker">Społeczność</span>
-                      <h2>Szukają meczu</h2>
-                    </div>
-
-                    <button onClick={() => setActiveTab("partners")}>
-                      Więcej
-                    </button>
-                  </div>
-
-                  <div className="partner-preview">
-                    {posts.slice(0, 4).map((post) => (
-                      <article key={post.id}>
-                        <span className="small-avatar">
-                          {post.nickname.slice(0, 1).toUpperCase()}
-                        </span>
-
-                        <div>
-                          <strong>{post.nickname}</strong>
-                          <small>
-                            {post.level} · {post.clubName}
-                          </small>
-                          <p>
-                            {formatShortDate(post.date)} · {post.from}–
-                            {post.to}
-                          </p>
-                        </div>
-
-                        <button onClick={() => copyPlayerContact(post)}>
-                          Zaproś
-                        </button>
-                      </article>
-                    ))}
-
-                    {posts.length === 0 && (
-                      <div className="empty-state">
-                        Brak ogłoszeń. Dodaj pierwsze zgłoszenie.
-                      </div>
-                    )}
-                  </div>
-                </section>
-              </section>
-            </>
+            <HomeDashboard
+              nickname={myProfile.nickname || "Gość"}
+              level={myProfile.level}
+              countdown={countdown}
+              recommendations={topRecommendations}
+              clubStats={clubStats}
+              players={posts}
+              duration={duration}
+              onOpenCourts={() => setActiveTab("courts")}
+              onOpenMatches={() => setActiveTab("matches")}
+              onOpenPlayers={() => setActiveTab("partners")}
+              onOpenSaved={() => setActiveTab("saved")}
+              onSelectCourt={(item) => {
+                setSelectedProposal(item);
+                setActiveTab("courts");
+              }}
+              onInvitePlayer={openJoinRequest}
+            />
           )}
 
           {activeTab === "courts" && (
@@ -1493,7 +1263,7 @@ function App() {
                         key={`${item.courtKey}-${item.startHour}`}
                       >
                         <div className="recommendation-head">
-                          <span>Propozycja {index + 1}</span>
+                          <span>#{index + 1} · {item.score}%</span>
 
                           <button
                             onClick={() => toggleFavorite(item.courtKey)}
@@ -1687,7 +1457,7 @@ function App() {
 
               <section className="metric-grid partner-metrics">
                 <article className="metric-card metric-blue">
-                  <span className="metric-icon">M</span>
+                  <span className="metric-icon">◎</span>
                   <div>
                     <strong>{posts.length}</strong>
                     <small>aktywnych zgłoszeń</small>

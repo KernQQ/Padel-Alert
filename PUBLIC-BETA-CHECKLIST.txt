@@ -1,0 +1,40 @@
+PADELALERT — PUBLIC BETA CHECKLIST
+
+LOKALNIE
+[ ] PostgreSQL connected
+[ ] /health = 200
+[ ] /ready = 200
+[ ] Konto: rejestracja
+[ ] Konto: logowanie
+[ ] Konto: wylogowanie
+[ ] Konto na drugim urządzeniu
+[ ] Wolne korty BO5
+[ ] Mecze LIVE
+[ ] Matchmaking
+[ ] Zaproszenia
+[ ] Gotowość
+[ ] Edycja meczu
+[ ] Usunięcie gracza
+[ ] Anulowanie meczu
+[ ] Telefon
+
+PRZED INTERNETEM
+[ ] Nowe silne hasło PostgreSQL
+[ ] Managed PostgreSQL
+[ ] NODE_ENV=production
+[ ] ALLOWED_ORIGINS ustawione
+[ ] FRONTEND_URL ustawione
+[ ] VITE_API_URL ustawione
+[ ] HTTPS backend
+[ ] HTTPS frontend
+[ ] Domena
+[ ] Backup bazy
+[ ] Test poza Wi-Fi
+
+PO PUBLIKACJI
+[ ] 5 kont testowych
+[ ] Test 2 różnych telefonów
+[ ] Test zaproszeń
+[ ] Test meczu 4/4
+[ ] Test restartu backendu
+[ ] Test backup/restore

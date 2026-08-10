@@ -1,33 +1,12 @@
-﻿# Sekrety
+node_modules/
 .env
+.env.local
+dist/
+.DS_Store
+backend/data/community.json
 .env.*
 !.env.example
 !.env.production.example
 backend/.env
 frontend/.env
-
-# Dane lokalne / testowe
-backend/data/community.json
-backend/data/*.tmp
-
-# Node
-node_modules/
-backend/node_modules/
-frontend/node_modules/
-
-# Build
-frontend/dist/
-dist/
-
-# Logi
 *.log
-npm-debug.log*
-
-# System / IDE
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-
-# Docker / lokalne dane
-*.pid

@@ -1,4 +1,4 @@
-const CACHE = "padelalert-shell-v2";
+const CACHE = "padelalert-shell-v4";
 const SHELL = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
