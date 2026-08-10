@@ -1362,14 +1362,14 @@ function App() {
           )}
 
           {activeTab === "courts" && (
-            <div className="consumer-courts">
+            <div className="consumer-courts v8-courts">
               <header className="consumer-page-header">
                 <div>
                   <p>Szczecin</p>
-                  <h1>Wolne korty</h1>
+                  <h1>Znajdź wolny kort</h1>
                 </div>
                 <span className="consumer-refresh-status">
-                  <i /> aktualizacja za {countdown}s
+                  <i /> odświeżenie za {countdown}s
                 </span>
               </header>
 

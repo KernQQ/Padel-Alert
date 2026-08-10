@@ -15,139 +15,76 @@ function HomeDashboard({
   onSelectCourt,
   onInvitePlayer
 }) {
-  const firstName = nickname || "Gość";
-  const nextSlots = recommendations.slice(0, 4);
+  const nextSlots = recommendations.slice(0, 5);
   const activePlayers = players.slice(0, 3);
 
   return (
-    <div className="consumer-home">
-      <header className="consumer-home-header">
-        <div>
+    <div className="consumer-home v8-home">
+      <section className="v8-home-hero">
+        <div className="v8-home-hero-copy">
           <p className="consumer-location">Szczecin</p>
-          <h1>Graj w padla.</h1>
-          <p className="consumer-subtitle">
-            Kort, mecz albo partner — bez przeklikiwania kilku stron.
-          </p>
+          <h1>Znajdź. Zarezerwuj.<br/><strong>Graj.</strong></h1>
+          <p className="consumer-subtitle">Wolne korty, mecze i gracze w jednym miejscu.</p>
+          <div className="v8-hero-actions">
+            <button type="button" className="v8-primary-cta" onClick={onOpenCourts}>Znajdź wolny kort <span>→</span></button>
+            <button type="button" className="v8-secondary-cta" onClick={onOpenMatches}>Znajdź mecz <span>→</span></button>
+          </div>
         </div>
-      </header>
-
-      <section className="consumer-primary-actions">
-        <button className="consumer-action consumer-action-primary" type="button" onClick={onOpenCourts}>
-          <span className="consumer-action-label">Rezerwacja</span>
-          <strong>Znajdź wolny kort</strong>
-          <small>Porównaj terminy w klubach</small>
-          <b>→</b>
-        </button>
-
-        <button className="consumer-action" type="button" onClick={onOpenMatches}>
-          <span className="consumer-action-label">Społeczność</span>
-          <strong>Znajdź mecz</strong>
-          <small>Dołącz albo utwórz własny</small>
-          <b>→</b>
-        </button>
+        <div className="v8-home-photo" aria-hidden="true">
+          <div className="v8-net" />
+          <span className="v8-ball">PA</span>
+        </div>
       </section>
 
-      <section className="consumer-section">
+      <section className="consumer-section v8-section">
         <header className="consumer-section-header">
-          <div>
-            <h2>Najbliższe wolne terminy</h2>
-            <p>Na podstawie ostatniego wyszukiwania</p>
-          </div>
+          <div><h2>Najbliższe wolne terminy</h2><p>Aktualna dostępność w klubach</p></div>
           <button type="button" onClick={onOpenCourts}>Zobacz wszystkie</button>
         </header>
-
         {nextSlots.length > 0 ? (
-          <div className="consumer-slot-list">
+          <div className="v8-availability-list">
             {nextSlots.map((item) => (
-              <button
-                className="consumer-slot-row"
-                type="button"
-                key={`${item.courtKey}-${item.startHour}`}
-                onClick={() => onSelectCourt(item)}
-              >
+              <button className="v8-availability-row" type="button" key={`${item.courtKey}-${item.startHour}`} onClick={() => onSelectCourt(item)}>
                 <time>{item.startHour}</time>
-                <span className="consumer-slot-main">
-                  <strong>{item.clubName}</strong>
-                  <small>{item.courtName} · {duration} min</small>
-                </span>
-                <span className="consumer-slot-availability">Wolny</span>
-                <b>→</b>
+                <span className="v8-thumb">{item.clubName.slice(0,1)}</span>
+                <span className="v8-availability-main"><strong>{item.clubName}</strong><small>{item.courtName}</small></span>
+                <span>{duration} min</span>
+                <b>Wybierz →</b>
               </button>
             ))}
           </div>
         ) : (
-          <div className="consumer-empty">
-            <strong>Nie ma wyników dla ostatniego wyszukiwania.</strong>
-            <span>Wybierz inną godzinę albo sprawdź kolejny dzień.</span>
-            <button type="button" onClick={onOpenCourts}>Znajdź kort</button>
-          </div>
+          <div className="consumer-empty v8-empty"><strong>Brak wyników dla ostatniego wyszukiwania.</strong><span>Sprawdź inny przedział czasu albo następny dzień.</span><button type="button" onClick={onOpenCourts}>Znajdź kort</button></div>
         )}
       </section>
 
-      <section className="consumer-section">
-        <header className="consumer-section-header">
-          <div>
-            <h2>Kluby w Szczecinie</h2>
-            <p>Dostępność pobierana z BO5</p>
-          </div>
-        </header>
-
-        <div className="consumer-club-strip">
-          {clubStats.slice(0, 3).map((club) => (
-            <button type="button" key={club.slug} onClick={onOpenCourts}>
-              <span className="consumer-club-mark">
-                {club.name.slice(0, 1).toUpperCase()}
-              </span>
-              <span>
-                <strong>{club.name}</strong>
-                <small>
-                  {Object.keys(club.courts || {}).length} kortów
-                  {club.available > 0 ? ` · ${club.available} wolnych` : ""}
-                </small>
-              </span>
-              <b>→</b>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <section className="consumer-section">
-        <header className="consumer-section-header">
-          <div>
-            <h2>Gracze szukający gry</h2>
-            <p>Znajdź osoby o podobnym poziomie</p>
-          </div>
-          <button type="button" onClick={onOpenPlayers}>Wszyscy gracze</button>
-        </header>
-
-        {activePlayers.length > 0 ? (
-          <div className="consumer-player-list">
-            {activePlayers.map((player) => (
-              <article key={player.id}>
-                <span className="consumer-player-avatar">
-                  {player.nickname.slice(0, 1).toUpperCase()}
-                </span>
-                <div>
-                  <strong>{player.nickname}</strong>
-                  <small>{player.clubName} · {player.from}–{player.to}</small>
-                </div>
-                <LevelBadge level={player.level} compact />
-                <button type="button" onClick={() => onInvitePlayer(player)}>Zaproś</button>
-              </article>
+      <div className="v8-home-grid">
+        <section className="consumer-section v8-section">
+          <header className="consumer-section-header"><div><h2>Kluby</h2><p>Szczecin</p></div></header>
+          <div className="v8-clubs-list">
+            {clubStats.slice(0,3).map((club) => (
+              <button key={club.slug} type="button" onClick={onOpenCourts}>
+                <span className="v8-club-photo">{club.name.slice(0,1)}</span>
+                <span><strong>{club.name}</strong><small>{Object.keys(club.courts || {}).length} kortów{club.available > 0 ? ` · ${club.available} wolnych` : ""}</small></span>
+                <b>→</b>
+              </button>
             ))}
           </div>
-        ) : (
-          <div className="consumer-empty consumer-empty-small">
-            <strong>Na razie brak aktywnych zgłoszeń.</strong>
-            <button type="button" onClick={onOpenPlayers}>Dodaj zgłoszenie</button>
-          </div>
-        )}
-      </section>
+        </section>
 
-      <footer className="consumer-status">
-        <span><i /> Dane odświeżane automatycznie</span>
-        <small>następne odświeżenie za {countdown}s</small>
-      </footer>
+        <section className="consumer-section v8-section">
+          <header className="consumer-section-header"><div><h2>Kto szuka gry?</h2><p>Gracze o podobnym poziomie</p></div><button type="button" onClick={onOpenPlayers}>Wszyscy</button></header>
+          {activePlayers.length > 0 ? (
+            <div className="v8-players-list">
+              {activePlayers.map((player) => (
+                <article key={player.id}><span className="consumer-player-avatar">{player.nickname.slice(0,1).toUpperCase()}</span><div><strong>{player.nickname}</strong><small>{player.clubName} · {player.from}–{player.to}</small></div><LevelBadge level={player.level} compact /><button type="button" onClick={() => onInvitePlayer(player)}>Zaproś</button></article>
+              ))}
+            </div>
+          ) : (
+            <div className="consumer-empty consumer-empty-small"><strong>Na razie brak aktywnych zgłoszeń.</strong><button type="button" onClick={onOpenPlayers}>Dodaj zgłoszenie</button></div>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
