@@ -27,6 +27,47 @@ import AccountPanel from "./components/AccountPanel";
 import { useRealtime } from "./hooks/useRealtime";
 import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
 
+
+function buildBo5DeepLink(proposal, club) {
+  const base = String(
+    club?.sourceUrl ||
+    proposal?.sourceUrl ||
+    ""
+  ).split("?")[0];
+
+  if (!base) return "";
+
+  const url = new URL(base);
+
+  const clubId =
+    proposal?.clubId ||
+    club?.id ||
+    "";
+
+  const courtId =
+    proposal?.courtId ||
+    proposal?.blocks?.[0]?.courtId ||
+    "";
+
+  const date =
+    proposal?.date ||
+    proposal?.blocks?.[0]?.date ||
+    "";
+
+  const hour =
+    proposal?.startHour ||
+    proposal?.blocks?.[0]?.startHour ||
+    proposal?.blocks?.[0]?.time ||
+    "";
+
+  if (clubId) url.searchParams.set("cd", String(clubId));
+  if (hour) url.searchParams.set("hour", String(hour));
+  if (date) url.searchParams.set("date", String(date));
+  if (courtId) url.searchParams.set("court", String(courtId));
+
+  return url.toString();
+}
+
 function App() {
   const today = getToday();
 
@@ -386,15 +427,15 @@ function App() {
 
         proposalsByTime[key].courts.push({
           courtKey,
+          clubId: firstSlot.clubId,
           courtId: firstSlot.courtId,
           courtName: firstSlot.courtName,
           clubSlug: firstSlot.clubSlug,
           clubName: firstSlot.clubName,
           courtType: firstSlot.courtType,
-          reservationUrl:
-            firstSlot.reservationUrl ||
-            firstSlot.sourceUrl ||
-            "",
+          date: firstSlot.date,
+          startHour: firstSlot.time || firstSlot.startHour,
+          sourceUrl: firstSlot.sourceUrl || "",
           blocks: bookingBlocks
         });
       });
@@ -1444,6 +1485,11 @@ function App() {
                     </small>
                   </div>
 
+                  <div className="booking-hint">
+                    BO5 otworzy właściwy klub i termin. Na stronie BO5 kliknij
+                    wskazany kort o {selectedProposal.startHour}.
+                  </div>
+
                   <div className="booking-bar-actions">
                     <button onClick={() => setSelectedProposal(null)}>
                       Zmień
@@ -1464,30 +1510,32 @@ function App() {
 
                     <a
                       className="booking-bo5-button"
-                      href={
-                        selectedProposal.reservationUrl ||
-                        selectedProposal.blocks?.[0]?.reservationUrl ||
-                        selectedClub?.sourceUrl ||
-                        "#"
-                      }
+                      href={buildBo5DeepLink(
+                        selectedProposal,
+                        selectedClub
+                      ) || "#"}
                       target="_blank"
                       rel="noreferrer"
                       onClick={(event) => {
-                        const href =
-                          selectedProposal.reservationUrl ||
-                          selectedProposal.blocks?.[0]?.reservationUrl ||
-                          selectedClub?.sourceUrl ||
-                          "";
+                        const href = buildBo5DeepLink(
+                          selectedProposal,
+                          selectedClub
+                        );
 
                         if (!href) {
                           event.preventDefault();
                           setToast(
-                            "Nie udało się znaleźć linku rezerwacji dla tego kortu."
+                            "Nie udało się przygotować linku do BO5."
                           );
+                          return;
                         }
+
+                        setToast(
+                          `BO5 otworzy właściwy klub i termin. Kliknij tam ${selectedProposal.courtName} o ${selectedProposal.startHour}.`
+                        );
                       }}
                     >
-                      Rezerwuj w BO5 ↗
+                      Przejdź do BO5 ↗
                     </a>
                   </div>
                 </section>

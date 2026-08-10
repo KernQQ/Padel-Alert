@@ -6067,3 +6067,11 @@ textarea {
     width:100%;
   }
 }
+
+
+.booking-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
