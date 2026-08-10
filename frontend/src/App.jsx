@@ -40,6 +40,7 @@ const BO5_CLUB_URLS = {
 
 const BO5_CLUB_URLS_BY_ID = {
   "264": "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
+  "624": "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
   "595": "https://bo5.pl/padelclub/reservation",
   "528": "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
 };
@@ -108,6 +109,12 @@ function resolveBo5ClubBase(proposal, club) {
   return String(fallbackSource).split("?")[0];
 }
 
+const BO5_DISCIPLINE_IDS = {
+  "padel-arena-poludniowa": "624",
+  "padel-club": "595",
+  "fabryka-energii": "528"
+};
+
 function buildBo5DeepLink(proposal, club) {
   const base = resolveBo5ClubBase(proposal, club);
 
@@ -115,7 +122,14 @@ function buildBo5DeepLink(proposal, club) {
 
   const url = new URL(base);
 
+  const disciplineId =
+    BO5_DISCIPLINE_IDS[proposal?.clubSlug] ||
+    BO5_DISCIPLINE_IDS[proposal?.blocks?.[0]?.clubSlug] ||
+    BO5_DISCIPLINE_IDS[club?.slug] ||
+    "";
+
   const clubId =
+    disciplineId ||
     proposal?.clubId ||
     proposal?.blocks?.[0]?.clubId ||
     club?.id ||
