@@ -8286,3 +8286,219 @@ body{background:var(--v8-bg)!important}.main-shell::before{opacity:.06!important
 @media(min-width:901px){.v8-courts{max-width:1180px!important}.v8-courts .consumer-page-header{padding-bottom:10px;border-bottom:1px solid var(--v8-line)}.v8-courts .consumer-page-header h1{font-size:42px!important}.v8-courts .consumer-search-card{border-radius:5px!important;box-shadow:none!important;background:#fff!important}.v8-courts .consumer-date-pills button,.v8-courts .consumer-search-form input,.v8-courts .consumer-search-form select,.v8-courts .consumer-search-form .duration-picker button,.v8-courts .consumer-search-form .search-submit{border-radius:3px!important}.v8-courts .consumer-time-list{border-radius:3px!important}.v8-courts .consumer-court-options{grid-template-columns:repeat(3,minmax(0,1fr))}.v8-courts .consumer-booking-sheet{border-radius:5px!important}}
 @media(max-width:900px){.main-shell:before{display:none!important}.mobile-topbar{min-height:60px!important;padding-top:max(8px,env(safe-area-inset-top))!important}.mobile-brand .brand-mark{width:31px!important;height:31px!important;border-radius:6px!important}.mobile-brand strong{font-size:14px!important}.v8-home-hero{display:flex;flex-direction:column;min-height:0;background:transparent}.v8-home-hero-copy{order:1;padding:8px 0 18px}.v8-home-photo{order:2;height:150px;min-height:150px;margin:0 -12px 18px}.v8-home-photo:after{display:none}.v8-home-hero-copy h1{font-size:46px;line-height:.93}.v8-hero-actions{display:grid;grid-template-columns:1fr;margin-top:20px}.v8-primary-cta,.v8-secondary-cta{width:100%;min-height:52px;border-radius:7px;text-align:left}.v8-home-grid{grid-template-columns:1fr;gap:0}.v8-availability-row{grid-template-columns:58px 38px 1fr auto;gap:8px;min-height:64px}.v8-thumb{width:36px;height:36px}.v8-availability-row>span:nth-last-of-type(1){display:none}.v8-availability-row b{font-size:0}.v8-availability-row b:after{content:"→";font-size:15px}.mobile-bottom-nav{right:8px!important;left:8px!important;bottom:calc(4px + env(safe-area-inset-bottom))!important;min-height:58px!important;border-radius:14px!important;padding:4px!important}.mobile-bottom-nav button{min-height:48px!important;border-radius:10px!important}.page{padding-bottom:calc(90px + env(safe-area-inset-bottom))!important}.consumer-booking-sheet{bottom:calc(72px + env(safe-area-inset-bottom))!important}}
 :root[data-theme="dark"]{--v8-bg:#0d130f;--v8-paper:#151c17;--v8-ink:#f0f3f0;--v8-muted:#9ba49d;--v8-line:#2d352f;--v8-green:#4b9b68;--v8-acid:#a9d65a}:root[data-theme="dark"] .v8-home-hero{background:#151b16}:root[data-theme="dark"] .v8-home-photo:after{background:linear-gradient(90deg,#151b16,transparent)}:root[data-theme="dark"] .v8-secondary-cta{color:var(--v8-ink);border-color:#374139;background:#1b231d}:root[data-theme="dark"] .v8-availability-row,:root[data-theme="dark"] .v8-clubs-list>button,:root[data-theme="dark"] .v8-players-list article{color:var(--v8-ink)}:root[data-theme="dark"] .v8-availability-list,:root[data-theme="dark"] .v8-clubs-list,:root[data-theme="dark"] .v8-players-list{border-top-color:#89928b}
+
+
+/* =========================================================
+   PADELALERT v9 — DESKTOP HOTFIX / FULL-SCALE BOOKING UI
+   ========================================================= */
+@media (min-width: 901px) {
+  .app-shell {
+    grid-template-columns: 190px minmax(0,1fr) !important;
+  }
+
+  .page {
+    width: min(1440px, calc(100% - 52px)) !important;
+    max-width: none !important;
+    padding-top: 64px !important;
+  }
+
+  .v8-home {
+    max-width: none !important;
+  }
+
+  /* Kill the "portfolio hero" look and make it a compact product header */
+  .v8-home-hero {
+    grid-template-columns: 1fr 440px !important;
+    min-height: 245px !important;
+    border-radius: 14px !important;
+    border: 1px solid #dfe5df !important;
+    background: #fff !important;
+    box-shadow: 0 10px 30px rgba(15,35,23,.06) !important;
+  }
+
+  .v8-home-hero-copy {
+    padding: 34px 40px !important;
+  }
+
+  .v8-home-hero-copy h1 {
+    font-size: clamp(48px,4.2vw,68px) !important;
+    line-height: .92 !important;
+    letter-spacing: -.055em !important;
+  }
+
+  .v8-home-hero-copy .consumer-subtitle {
+    font-size: 14px !important;
+    margin-top: 15px !important;
+  }
+
+  .v8-hero-actions {
+    margin-top: 22px !important;
+  }
+
+  .v8-primary-cta,
+  .v8-secondary-cta {
+    min-height: 46px !important;
+    border-radius: 9px !important;
+    font-size: 12px !important;
+  }
+
+  .v8-home-photo {
+    min-height: 245px !important;
+    border-radius: 0 14px 14px 0 !important;
+    background:
+      linear-gradient(180deg,rgba(6,23,14,.05),rgba(6,23,14,.42)),
+      linear-gradient(135deg,#39714f 0%,#183c29 48%,#081c12 100%) !important;
+  }
+
+  .v8-home-photo::after {
+    display:none !important;
+  }
+
+  .v8-ball {
+    display:none !important;
+  }
+
+  /* Court geometry instead of fake PA balls */
+  .v8-home-photo::before {
+    opacity:.7 !important;
+    transform: perspective(560px) rotateX(54deg) rotateZ(-5deg) scale(1.22) !important;
+  }
+
+  /* Make the availability area feel like a real booking product */
+  .v8-section {
+    margin-top: 26px !important;
+  }
+
+  .consumer-section-header {
+    margin-bottom: 12px !important;
+  }
+
+  .consumer-section-header h2 {
+    font-size: 24px !important;
+    letter-spacing: -.035em !important;
+  }
+
+  .consumer-section-header p {
+    font-size: 11px !important;
+  }
+
+  .v8-availability-list {
+    display: grid !important;
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    gap: 12px !important;
+    border-top: 0 !important;
+  }
+
+  .v8-availability-row {
+    position:relative !important;
+    display:grid !important;
+    grid-template-columns: 62px 44px minmax(0,1fr) !important;
+    grid-template-rows:auto auto !important;
+    min-height:112px !important;
+    gap:8px 10px !important;
+    padding:16px !important;
+    border:1px solid #dde3dd !important;
+    border-radius:12px !important;
+    background:#fff !important;
+    box-shadow:0 7px 22px rgba(18,39,26,.045) !important;
+  }
+
+  .v8-availability-row:hover {
+    border-color:#aab9ad !important;
+    transform:translateY(-1px);
+  }
+
+  .v8-availability-row time {
+    grid-column:1 !important;
+    grid-row:1 !important;
+    font-size:20px !important;
+  }
+
+  .v8-thumb {
+    grid-column:2 !important;
+    grid-row:1 / span 2 !important;
+    width:42px !important;
+    height:42px !important;
+    border-radius:8px !important;
+  }
+
+  .v8-availability-main {
+    grid-column:3 !important;
+    grid-row:1 !important;
+  }
+
+  .v8-availability-main strong {
+    font-size:12px !important;
+  }
+
+  .v8-availability-main small {
+    font-size:10px !important;
+  }
+
+  .v8-availability-row > span:nth-last-of-type(1) {
+    grid-column:1 !important;
+    grid-row:2 !important;
+    font-size:9px !important;
+  }
+
+  .v8-availability-row b {
+    position:absolute !important;
+    right:15px !important;
+    bottom:14px !important;
+    padding:7px 10px !important;
+    border-radius:7px !important;
+    background:#eaf5ee !important;
+    font-size:10px !important;
+  }
+
+  .v8-home-grid {
+    grid-template-columns:1.15fr .85fr !important;
+    gap:18px !important;
+    margin-top:8px !important;
+  }
+
+  .v8-home-grid .v8-section {
+    padding:20px !important;
+    border:1px solid #dfe5df !important;
+    border-radius:14px !important;
+    background:#fff !important;
+  }
+
+  .v8-clubs-list,
+  .v8-players-list {
+    border-top:0 !important;
+  }
+
+  .v8-clubs-list > button,
+  .v8-players-list article {
+    min-height:68px !important;
+    border-bottom:1px solid #e7ebe7 !important;
+  }
+
+  /* Courts page: much larger / less empty */
+  .v8-courts .consumer-page-header h1 {
+    font-size:52px !important;
+  }
+
+  .v8-courts .consumer-search-card {
+    padding:18px !important;
+    border-radius:14px !important;
+    box-shadow:0 8px 26px rgba(18,39,26,.05) !important;
+  }
+
+  .v8-courts .consumer-time-list {
+    margin-top:18px !important;
+    border-radius:14px !important;
+    background:#fff !important;
+  }
+
+  .v8-courts .consumer-time-group {
+    min-height:88px !important;
+  }
+
+  .v8-courts .consumer-court-options button {
+    min-height:68px !important;
+  }
+}
+
+/* Preserve v8 mobile deliberately */
