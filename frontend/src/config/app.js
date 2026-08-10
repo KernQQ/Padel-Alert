@@ -12,9 +12,9 @@ export const DURATIONS = [
 ];
 
 export const NAVIGATION = [
-  { id: "home", label: "Start", icon: "⌂" },
-  { id: "courts", label: "Wolne korty", icon: "◫" },
-  { id: "matches", label: "Mecze", icon: "◉" },
-  { id: "partners", label: "Gracze", icon: "◎" },
-  { id: "saved", label: "Moje", icon: "♡" }
+  { id: "home", label: "Start", icon: "01" },
+  { id: "courts", label: "Wolne korty", icon: "02" },
+  { id: "matches", label: "Mecze", icon: "03" },
+  { id: "partners", label: "Gracze", icon: "04" },
+  { id: "saved", label: "Moje", icon: "05" }
 ];

@@ -1190,10 +1190,10 @@ function App() {
             <>
               <section className="welcome-row">
                 <div>
-                  <span className="eyebrow">PADELALERT DASHBOARD</span>
-                  <h1>Dzień dobry, {myProfile.nickname || "Graczu"}! 👋</h1>
+                  <span className="eyebrow">Dzisiaj</span>
+                  <h1>Cześć, {myProfile.nickname || "Graczu"}.</h1>
                   <p>
-                    Sprawdź wolne korty i zobacz, kto szuka dzisiaj meczu.
+                    Wolne korty, mecze i gracze w jednym miejscu.
                   </p>
                 </div>
 
@@ -1215,10 +1215,10 @@ function App() {
 
               <section className="hero-search-card">
                 <div className="hero-search-copy">
-                  <span>Znajdź kort</span>
-                  <h2>Zarezerwuj najlepszy termin.</h2>
+                  <span>Wolne korty</span>
+                  <h2>Znajdź termin.</h2>
                   <p>
-                    Porównujemy trzy kluby i pokazujemy tylko ciągłe bloki.
+                    Wybierz klub, dzień i długość gry.
                   </p>
                 </div>
 
@@ -1227,7 +1227,7 @@ function App() {
 
               <section className="metric-grid">
                 <article className="metric-card metric-green">
-                  <span className="metric-icon">🎾</span>
+                  <span className="metric-icon">K</span>
                   <div>
                     <strong>{ranked.length}</strong>
                     <small>wolnych możliwości</small>
@@ -1235,7 +1235,7 @@ function App() {
                 </article>
 
                 <article className="metric-card metric-blue">
-                  <span className="metric-icon">◎</span>
+                  <span className="metric-icon">M</span>
                   <div>
                     <strong>{posts.length}</strong>
                     <small>zgłoszeń graczy</small>
@@ -1243,7 +1243,7 @@ function App() {
                 </article>
 
                 <article className="metric-card metric-amber">
-                  <span className="metric-icon">♡</span>
+                  <span className="metric-icon">U</span>
                   <div>
                     <strong>{favorites.length}</strong>
                     <small>ulubionych kortów</small>
@@ -1251,7 +1251,7 @@ function App() {
                 </article>
 
                 <article className="metric-card metric-red">
-                  <span className="metric-icon">◉</span>
+                  <span className="metric-icon">A</span>
                   <div>
                     <strong>{alerts.length}</strong>
                     <small>aktywnych alertów</small>
@@ -1262,8 +1262,8 @@ function App() {
               <section className="section-block">
                 <div className="section-heading">
                   <div>
-                    <span className="section-kicker">Najlepsze teraz</span>
-                    <h2>Polecane terminy</h2>
+                    <span className="section-kicker">Dostępność</span>
+                    <h2>Najbliższe wolne terminy</h2>
                   </div>
 
                   <button onClick={() => setActiveTab("courts")}>
@@ -1278,7 +1278,7 @@ function App() {
                       key={`${item.courtKey}-${item.startHour}`}
                     >
                       <div className="recommendation-head">
-                        <span>#{index + 1} · {item.score}%</span>
+                        <span>Propozycja {index + 1}</span>
 
                         <button onClick={() => toggleFavorite(item.courtKey)}>
                           {favorites.includes(item.courtKey) ? "♥" : "♡"}
@@ -1317,7 +1317,7 @@ function App() {
 
               <section className="section-block v5-fade">
                 <div className="section-heading">
-                  <div><span className="section-kicker">Kluby premium</span><h2>Wybierz miejsce do gry</h2></div>
+                  <div><span className="section-kicker">Kluby</span><h2>Gdzie chcesz zagrać?</h2></div>
                 </div>
                 <div className="club-showcase">
                   {clubStats.slice(0, 3).map((club) => (
@@ -1333,7 +1333,7 @@ function App() {
 
               <section className="section-block v5-fade">
                 <div className="section-heading">
-                  <div><span className="section-kicker">Smart Match</span><h2>Najlepiej dopasowani partnerzy</h2></div>
+                  <div><span className="section-kicker">Gracze</span><h2>Osoby szukające gry</h2></div>
                   <button onClick={() => setActiveTab("partners")}>Wszyscy gracze →</button>
                 </div>
                 {smartMatches.length > 0 ? (
@@ -1493,7 +1493,7 @@ function App() {
                         key={`${item.courtKey}-${item.startHour}`}
                       >
                         <div className="recommendation-head">
-                          <span>#{index + 1} · {item.score}%</span>
+                          <span>Propozycja {index + 1}</span>
 
                           <button
                             onClick={() => toggleFavorite(item.courtKey)}
@@ -1687,7 +1687,7 @@ function App() {
 
               <section className="metric-grid partner-metrics">
                 <article className="metric-card metric-blue">
-                  <span className="metric-icon">◎</span>
+                  <span className="metric-icon">M</span>
                   <div>
                     <strong>{posts.length}</strong>
                     <small>aktywnych zgłoszeń</small>
