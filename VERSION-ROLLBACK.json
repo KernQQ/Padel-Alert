@@ -1,0 +1,5 @@
+{
+  "name": "PadelAlert",
+  "rollback_target": "v7-UI-UX-Polish",
+  "purpose": "restore last stable functional frontend before v8/v9/v10 visual rebuilds"
+}

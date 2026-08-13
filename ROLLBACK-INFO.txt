@@ -1,0 +1,33 @@
+PADELALERT — ROLLBACK DO OSTATNIEJ STABILNEJ BAZY
+
+Ta paczka to czysta wersja v7 sprzed przebudów v8/v9/v10.
+
+Wracamy do punktu, w którym:
+- działały Korty i pobieranie dostępności,
+- działały linki BO5,
+- działały konta/logowanie,
+- działały Mecze,
+- działali Gracze,
+- działało Moje,
+- działały alerty i zapisane wyszukiwania,
+- backend i PostgreSQL były spięte,
+- frontend nie zawiera zmian z v8/v9/v10.
+
+WAŻNE:
+Nie usuwaj swojego backend\.env.
+
+WDROŻENIE:
+1. Rozpakuj CAŁĄ paczkę do C:\PROJEKTY\Padel-Alert
+2. Nadpisz wszystkie pliki.
+3. Nie usuwaj backend\.env.
+4. Uruchom APPLY-ROLLBACK-STABLE.bat
+
+Po deployu sprawdź najpierw:
+- Korty
+- BO5
+- logowanie
+- Mecze
+- Gracze
+- Moje
+
+Dopiero po potwierdzeniu stabilności robimy nowy design od zera bez ruszania tej logiki.
