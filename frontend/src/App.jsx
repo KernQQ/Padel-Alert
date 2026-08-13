@@ -240,9 +240,7 @@ function App() {
   const [showMobileActions, setShowMobileActions] = useState(false);
   const [matchCreateSignal, setMatchCreateSignal] = useState(0);
   const [playNowSignal, setPlayNowSignal] = useState(0);
-  const [theme, setTheme] = useState(
-    () => readStorage("padelalert-theme", "dark")
-  );
+  const [theme, setTheme] = useState("dark");
 
   const [anonymousToken] = useState(() => {
     const savedToken = localStorage.getItem("padelalert-owner-token");
@@ -1349,6 +1347,8 @@ function App() {
               clubStats={clubStats}
               players={posts}
               duration={duration}
+              date={date}
+              from={from}
               onOpenCourts={() => setActiveTab("courts")}
               onOpenMatches={() => setActiveTab("matches")}
               onOpenPlayers={() => setActiveTab("partners")}

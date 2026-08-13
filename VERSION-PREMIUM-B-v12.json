@@ -1,0 +1,8 @@
+{
+  "name": "PadelAlert",
+  "version": "12.0.0-beta",
+  "base": "stable-v7",
+  "release": "Premium B drop-in",
+  "scope": "frontend visuals + HomeDashboard; backend untouched",
+  "date": "2026-08-13"
+}
