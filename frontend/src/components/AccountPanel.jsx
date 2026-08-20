@@ -16,6 +16,13 @@ export default function AccountPanel({
   const menuRef = useRef(null);
 
   useEffect(() => {
+    // Zamykanie kliknięciem poza element działa tylko dla menu
+    // zalogowanego użytkownika. Gdy user === null, open oznacza modal
+    // logowania/rejestracji i globalny pointerdown nie może go zamykać.
+    if (!user || !open) {
+      return undefined;
+    }
+
     function closeMenu(event) {
       if (!menuRef.current?.contains(event.target)) {
         setOpen(false);
@@ -24,7 +31,7 @@ export default function AccountPanel({
 
     document.addEventListener("pointerdown", closeMenu);
     return () => document.removeEventListener("pointerdown", closeMenu);
-  }, []);
+  }, [user, open]);
 
   async function submit(event) {
     event.preventDefault();
