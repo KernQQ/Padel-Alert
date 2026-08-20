@@ -23,6 +23,7 @@ import MyMatchesPanel from "./components/MyMatchesPanel";
 import MatchInvitationsPanel from "./components/MatchInvitationsPanel";
 import ConnectionBanner from "./components/ConnectionBanner";
 import AccountPanel from "./components/AccountPanel";
+import AdminPanel from "./components/AdminPanel";
 import { useRealtime } from "./hooks/useRealtime";
 import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
 
@@ -211,6 +212,10 @@ function NavGlyph({ id }) {
     return <svg {...common}><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3.5 20c.5-4 2.6-6 5.5-6s5 2 5.5 6M14.5 15c2.8 0 4.7 1.7 5 5"/></svg>;
   }
 
+  if (id === "admin") {
+    return <svg {...common}><path d="M12 3 19 6v5c0 4.4-2.8 8-7 10-4.2-2-7-5.6-7-10V6l7-3Z"/><path d="m9.5 12 1.6 1.6 3.6-3.8"/></svg>;
+  }
+
   return <svg {...common}><path d="M6 4h12v17l-6-4-6 4z"/></svg>;
 }
 
@@ -253,6 +258,12 @@ function App() {
   });
   const [ownerToken, setOwnerToken] = useState(anonymousToken);
   const [accountUser, setAccountUser] = useState(null);
+  const visibleNavigation = useMemo(() =>
+    accountUser?.role === "admin"
+      ? [...NAVIGATION, { id: "admin", label: "Admin", icon: "" }]
+      : NAVIGATION,
+    [accountUser]
+  );
 
   const [clubs, setClubs] = useState([]);
   const [slots, setSlots] = useState([]);
@@ -369,6 +380,7 @@ function App() {
     localStorage.removeItem("padelalert-session");
     setAccountUser(null);
     setOwnerToken(anonymousToken);
+    setActiveTab("home");
     setToast("Wylogowano.");
   }
 
@@ -1245,11 +1257,11 @@ function App() {
         <nav className="sidebar-nav">
           <span className="nav-caption">Menu</span>
 
-          {NAVIGATION.map((item) => (
+          {visibleNavigation.map((item) => (
             <button
               key={item.id}
               type="button"
-              className={activeTab === item.id ? "active" : ""}
+              className={`${activeTab === item.id ? "active" : ""} ${item.id === "admin" ? "nav-admin" : ""}`}
               onClick={() => setActiveTab(item.id)}
             >
               <span className="nav-icon"><NavGlyph id={item.id} /></span>
@@ -1993,6 +2005,10 @@ function App() {
             </>
           )}
 
+          {activeTab === "admin" && accountUser?.role === "admin" && (
+            <AdminPanel onChanged={loadCommunity} />
+          )}
+
           {activeTab === "saved" && (
             <>
               <section className="page-heading my-center-heading">
@@ -2140,10 +2156,10 @@ function App() {
         </main>
 
         <nav className="mobile-bottom-nav">
-          {NAVIGATION.map((item) => (
+          {visibleNavigation.map((item) => (
             <button
               key={item.id}
-              className={activeTab === item.id ? "active" : ""}
+              className={`${activeTab === item.id ? "active" : ""} ${item.id === "admin" ? "nav-admin" : ""}`}
               onClick={() => setActiveTab(item.id)}
             >
               <span className="mobile-nav-icon"><NavGlyph id={item.id} /></span>

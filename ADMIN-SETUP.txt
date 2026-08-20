@@ -1,0 +1,43 @@
+PADELALERT — ADMIN v1
+
+CO DODAJE:
+- rola ADMIN po stronie backendu,
+- Panel administratora widoczny tylko dla admina,
+- lista wszystkich użytkowników,
+- zmiana ról USER / CLUB_ADMIN / ADMIN,
+- lista wszystkich meczów,
+- edycja dowolnego meczu,
+- zmiana statusu meczu,
+- usuwanie dowolnego meczu,
+- usuwanie gracza z cudzego meczu,
+- autoryzacja panelu przez prawdziwą sesję Bearer, nie tylko frontend.
+
+JAK NADAĆ SOBIE ADMINA:
+1. W Render wejdź w usługę BACKEND PadelAlert.
+2. Environment -> Add Environment Variable.
+3. Dodaj:
+   ADMIN_EMAILS
+4. Jako wartość wpisz dokładny e-mail, którego używasz do logowania do PadelAlert.
+   Dla kilku administratorów:
+   email1@example.com,email2@example.com
+5. Save Changes / deploy backendu.
+6. Wyloguj się z PadelAlert i zaloguj ponownie.
+7. W menu pojawi się zakładka "Admin".
+
+LOCAL:
+Do backend\.env możesz dopisać:
+ADMIN_EMAILS=twoj-email@example.com
+
+WAŻNE:
+- Samo ukrywanie zakładki w React nie stanowi zabezpieczenia.
+- Każdy endpoint /admin jest dodatkowo sprawdzany na backendzie.
+- Administrator wskazany w ADMIN_EMAILS nie może przypadkiem odebrać sobie roli z panelu.
+
+INSTALACJA:
+1. Zrób kopię C:\PROJEKTY\Padel-Alert.
+2. Rozpakuj tę paczkę do C:\PROJEKTY\Padel-Alert i nadpisz pliki.
+3. NIE usuwaj backend\.env.
+4. Uruchom TEST-ADMIN-v1.bat.
+5. Jeśli build jest OK, uruchom DEPLOY-ADMIN-v1.bat.
+6. Ustaw ADMIN_EMAILS w Renderze.
+7. Po deployu wyloguj/zaloguj konto.

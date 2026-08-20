@@ -26,6 +26,7 @@ const config = {
   trustProxy: boolean(process.env.TRUST_PROXY, isProduction),
   allowedOrigins: csv(process.env.ALLOWED_ORIGINS),
   frontendUrl: String(process.env.FRONTEND_URL || "").trim(),
+  adminEmails: csv(process.env.ADMIN_EMAILS).map((item) => item.toLowerCase()),
   maxJsonSize: process.env.MAX_JSON_SIZE || "256kb",
   sessionDays: Math.max(
     1,

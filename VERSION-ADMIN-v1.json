@@ -1,0 +1,14 @@
+{
+  "name": "PadelAlert",
+  "feature": "Admin v1",
+  "version": "1.0",
+  "backend_protected": true,
+  "features": [
+    "admin role",
+    "user roles",
+    "all matches management",
+    "edit any match",
+    "delete any match",
+    "remove participant"
+  ]
+}

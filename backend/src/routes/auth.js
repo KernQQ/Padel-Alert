@@ -37,12 +37,22 @@ function sessionKey(token) {
     .digest("hex");
 }
 
+function userRole(user) {
+  if (!user) return "user";
+  const email = normalizeEmail(user.email);
+  if (config.adminEmails.includes(email)) return "admin";
+  return ["user", "club_admin", "admin"].includes(user.role)
+    ? user.role
+    : "user";
+}
+
 function publicUser(user) {
   if (!user) return null;
   return {
     id: user.id,
     email: user.email,
     nickname: user.nickname || "",
+    role: userRole(user),
     createdAt: user.createdAt
   };
 }
@@ -126,6 +136,7 @@ router.post("/register", async (req, res) => {
       id, email, nickname,
       passwordSalt: pass.salt,
       passwordHash: pass.hash,
+      role: config.adminEmails.includes(email) ? "admin" : "user",
       createdAt: new Date().toISOString()
     };
     data.users[id] = user;
