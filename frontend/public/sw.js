@@ -1,4 +1,4 @@
-const CACHE = "padelalert-shell-mobile-width-fix";
+const CACHE = "padelalert-shell-mobile-nav-root-fix";
 const SHELL = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {

@@ -9989,3 +9989,38 @@ body {
     padding-right: 0 !important;
   }
 }
+
+
+/* =========================================================
+   MOBILE ROOT FIX
+   Root cause: admin adds a 6th bottom-nav item, while old CSS
+   hard-coded repeat(5, 1fr). The implicit 6th grid column was
+   widening the whole mobile document and clipping every tab.
+   ========================================================= */
+@media (max-width: 900px) {
+  .mobile-bottom-nav {
+    grid-template-columns: none !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(0, 1fr) !important;
+    width: auto !important;
+    max-width: calc(100vw - 16px) !important;
+    left: 8px !important;
+    right: 8px !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-bottom-nav > button {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html,
+  body,
+  #root,
+  .app-shell,
+  .main-shell {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+}
