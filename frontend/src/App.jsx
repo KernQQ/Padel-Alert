@@ -1330,15 +1330,6 @@ function App() {
               )}
             </button>
 
-            <button
-              type="button"
-              className="mobile-icon-button"
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              aria-label={theme === "light" ? "Włącz tryb ciemny" : "Włącz tryb jasny"}
-            >
-              {theme === "light" ? "☾" : "☀"}
-            </button>
-
             <AccountPanel
               user={accountUser}
               anonymousToken={anonymousToken}
