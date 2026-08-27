@@ -9699,3 +9699,20 @@ body {
     font-size: 7px;
   }
 }
+
+
+/* RC2 — real club photography crop tuning */
+.pa-rc-club-card:nth-child(1) .pa-rc-club-photo {
+  background-position: 50% 48%;
+}
+.pa-rc-club-card:nth-child(2) .pa-rc-club-photo {
+  background-position: 50% 52%;
+}
+.pa-rc-club-card:nth-child(3) .pa-rc-club-photo {
+  background-position: 50% 43%;
+}
+@media (max-width: 900px) {
+  .pa-rc-club-card:nth-child(1) .pa-rc-club-photo { background-position: 52% 50%; }
+  .pa-rc-club-card:nth-child(2) .pa-rc-club-photo { background-position: 52% 50%; }
+  .pa-rc-club-card:nth-child(3) .pa-rc-club-photo { background-position: 48% 46%; }
+}
