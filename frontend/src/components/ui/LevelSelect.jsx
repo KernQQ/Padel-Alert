@@ -1,4 +1,4 @@
-import { LEVELS, getLevelMeta, normalizeLevel } from "../../utils/levels";
+import { LEVELS, normalizeLevel } from "../../utils/levels";
 
 function LevelSelect({
   value,
@@ -20,17 +20,10 @@ function LevelSelect({
 
         {LEVELS.map((level) => (
           <option key={level} value={level}>
-            {level} · {getLevelMeta(level).label}
+            {level}
           </option>
         ))}
       </select>
-
-      {normalized !== "all" && (
-        <span
-          className={`pa-level-dot level-${getLevelMeta(normalized).tone}`}
-          title={getLevelMeta(normalized).label}
-        />
-      )}
     </div>
   );
 }

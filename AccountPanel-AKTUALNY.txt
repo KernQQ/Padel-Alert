@@ -134,8 +134,14 @@ export default function AccountPanel({
       </button>
 
       {open && (
-        <div className="account-modal-backdrop">
-          <section className="account-modal">
+        <div
+          className="account-modal-backdrop"
+          onMouseDown={() => setOpen(false)}
+        >
+          <section
+            className="account-modal"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
             <button
               type="button"
               className="account-close"
