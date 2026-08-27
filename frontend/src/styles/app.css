@@ -10024,3 +10024,26 @@ body {
     overflow-x: hidden !important;
   }
 }
+
+
+/* =========================================================
+   DESKTOP GAP FIX — real root cause
+   The layout already uses a sidebar column in .app-shell.
+   An old rule also added margin-left:246px to .main-shell,
+   so the sidebar width was counted twice.
+   ========================================================= */
+@media (min-width: 901px) {
+  .main-shell {
+    margin-left: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+  }
+
+  .main-shell > .page {
+    width: calc(100% - 40px) !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
