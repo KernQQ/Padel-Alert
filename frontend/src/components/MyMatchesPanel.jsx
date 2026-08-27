@@ -186,7 +186,13 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
         ))}
 
         {matches.filter((match) => !isPastMatch(match)).length === 0 && (
-          <div className="empty-state">Brak nadchodzących meczów.</div>
+          <div className="empty-state my-matches-empty">
+            <span className="my-empty-icon">▣</span>
+            <div>
+              <strong>Brak nadchodzących meczów.</strong>
+              <p>Gdy utworzysz mecz, pojawi się tutaj.</p>
+            </div>
+          </div>
         )}
       </div>
 

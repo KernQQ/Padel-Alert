@@ -2093,7 +2093,15 @@ function App() {
                       </div>
                     </article>
                   ))}
-                  {ownerPosts.length === 0 && <div className="empty-state large">Nie masz jeszcze własnych zgłoszeń.</div>}
+                  {ownerPosts.length === 0 && (
+                    <div className="empty-state large my-empty-state">
+                      <span className="my-empty-icon">♧</span>
+                      <div>
+                        <strong>Nie masz jeszcze własnych ogłoszeń.</strong>
+                        <p>Dodaj ogłoszenie, aby znaleźć partnerów do gry.</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </section>
 
@@ -2112,7 +2120,18 @@ function App() {
                       </div>
                     </article>
                   ))}
-                  {savedSearches.length === 0 && <div className="empty-state">Nie masz zapisanych wyszukiwań.</div>}
+                  {savedSearches.length === 0 && (
+                    <div className="saved-empty-card">
+                      <span className="saved-empty-icon">⌕</span>
+                      <div>
+                        <strong>Nie masz zapisanych wyszukiwań.</strong>
+                        <p>Zapisane filtry i terminy pojawią się tutaj.</p>
+                      </div>
+                      <button type="button" onClick={() => setActiveTab("courts")}>
+                        Przeglądaj korty <span>→</span>
+                      </button>
+                    </div>
+                  )}
                 </section>
 
                 <section className="saved-panel">
@@ -2126,7 +2145,18 @@ function App() {
                       <button onClick={() => setAlerts((current) => current.filter((item) => item.id !== alert.id))}>Usuń</button>
                     </article>
                   ))}
-                  {alerts.length === 0 && <div className="empty-state">Nie masz aktywnych alertów.</div>}
+                  {alerts.length === 0 && (
+                    <div className="saved-empty-card">
+                      <span className="saved-empty-icon">♧</span>
+                      <div>
+                        <strong>Nie masz aktywnych alertów.</strong>
+                        <p>Ustaw alert, a PadelAlert przypomni Ci o wolnym korcie.</p>
+                      </div>
+                      <button type="button" onClick={() => setActiveTab("courts")}>
+                        Ustaw alerty <span>→</span>
+                      </button>
+                    </div>
+                  )}
                 </section>
 
                 <section className="saved-panel">
@@ -2139,7 +2169,18 @@ function App() {
                       </div>
                     </article>
                   ))}
-                  {outgoingRequests.length === 0 && <div className="empty-state">Nie wysłano jeszcze zgłoszeń.</div>}
+                  {outgoingRequests.length === 0 && (
+                    <div className="saved-empty-card">
+                      <span className="saved-empty-icon">➤</span>
+                      <div>
+                        <strong>Nie wysłano jeszcze zgłoszeń.</strong>
+                        <p>Znajdź gracza i wyślij zaproszenie do wspólnej gry.</p>
+                      </div>
+                      <button type="button" onClick={() => setActiveTab("players")}>
+                        Zobacz graczy <span>→</span>
+                      </button>
+                    </div>
+                  )}
                 </section>
               </div>
             </>

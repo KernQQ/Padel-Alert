@@ -1,4 +1,4 @@
-const CACHE = "padelalert-shell-desktop-spacing-final";
+const CACHE = "padelalert-shell-moje-polish";
 const SHELL = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
