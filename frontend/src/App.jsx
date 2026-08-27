@@ -243,6 +243,8 @@ function App() {
 
   const [activeTab, setActiveTab] = useState("home");
   const [showMobileActions, setShowMobileActions] = useState(false);
+  const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
+  const [showProfileEditor, setShowProfileEditor] = useState(false);
   const [matchCreateSignal, setMatchCreateSignal] = useState(0);
   const [playNowSignal, setPlayNowSignal] = useState(0);
   const [theme, setTheme] = useState("dark");
@@ -1222,7 +1224,7 @@ function App() {
         <button
           className="top-icon-button"
           type="button"
-          onClick={() => setActiveTab("saved")}
+          onClick={() => setShowNotificationsPanel(true)}
           title="Powiadomienia"
           aria-label="Powiadomienia"
         >
@@ -1319,7 +1321,7 @@ function App() {
             <button
               type="button"
               className="mobile-icon-button"
-              onClick={() => setActiveTab("saved")}
+              onClick={() => setShowNotificationsPanel(true)}
               aria-label="Powiadomienia"
             >
               <BellIcon />
@@ -2008,55 +2010,52 @@ function App() {
                 <p>Profil, mecze, alerty i zapisane wyszukiwania.</p>
               </section>
 
-              <div className="my-center-grid">
-                <form className="profile-editor-panel" onSubmit={saveProfile}>
-                  <div className="profile-editor-head">
-                    <span
-                      className="profile-editor-avatar colorful-avatar"
-                      style={{ "--avatar-hue": getAvatarHue(myProfile.nickname) }}
-                    >
-                      {(myProfile.nickname || "G").slice(0, 1).toUpperCase()}
-                    </span>
-                    <div>
-                      <span className="section-kicker">Twój profil</span>
+              <section className="account-summary-card">
+                <div className="account-summary-main">
+                  <span
+                    className="profile-editor-avatar colorful-avatar"
+                    style={{ "--avatar-hue": getAvatarHue(myProfile.nickname) }}
+                  >
+                    {(myProfile.nickname || "G").slice(0, 1).toUpperCase()}
+                  </span>
+                  <div>
+                    <div className="account-summary-name">
                       <h2>{myProfile.nickname || "Gość"}</h2>
+                      <LevelBadge level={myProfile.level || "3.0"} />
                     </div>
+                    <p>{myProfile.city || "Szczecin"} · {myProfile.preferredSide || "Dowolna"}</p>
                   </div>
+                </div>
+                <button className="account-edit-button" type="button" onClick={() => setShowProfileEditor(true)}>
+                  Edytuj profil
+                </button>
+              </section>
 
-                  <div className="profile-form-grid">
-                    <label><span>Pseudonim</span><input value={myProfile.nickname || ""} onChange={(e) => setMyProfile({ ...myProfile, nickname: e.target.value })} /></label>
-                    <label><span>Miasto</span><input value={myProfile.city || ""} onChange={(e) => setMyProfile({ ...myProfile, city: e.target.value })} /></label>
-                    <label><span>Poziom</span><LevelSelect value={myProfile.level || "3.0"} onChange={(value) => setMyProfile({ ...myProfile, level: value })} /></label>
-                    <label><span>Strona</span><select value={myProfile.preferredSide || "Dowolna"} onChange={(e) => setMyProfile({ ...myProfile, preferredSide: e.target.value })}><option>Dowolna</option><option>Lewa</option><option>Prawa</option></select></label>
-                    <label className="profile-wide"><span>Ulubiony klub</span><select value={myProfile.favoriteClubSlug || "all"} onChange={(e) => setMyProfile({ ...myProfile, favoriteClubSlug: e.target.value })}><option value="all">Brak / dowolny</option>{clubs.map((club) => <option key={club.slug} value={club.slug}>{club.name}</option>)}</select></label>
-                    <label className="profile-wide"><span>O mnie</span><textarea value={myProfile.bio || ""} onChange={(e) => setMyProfile({ ...myProfile, bio: e.target.value })} placeholder="Np. gram rekreacyjnie po pracy." /></label>
-                  </div>
-                  {profileMessage && <div className="form-message">{profileMessage}</div>}
-                  <button className="profile-save-button" type="submit">Zapisz profil</button>
-                </form>
-
-                <section className="notifications-panel">
-                  <div className="notifications-head">
-                    <div><span className="section-kicker">Powiadomienia</span><h2>{unreadNotificationsCount} nowych</h2></div>
-                    <div className="notification-head-actions">
-                      <button onClick={enableSystemNotifications}>Włącz powiadomienia</button>
-                      <button onClick={markAllNotificationsRead}>Oznacz jako przeczytane</button>
-                    </div>
-                  </div>
-                  <div className="notification-list">
-                    {notifications.slice(0, 8).map((notification) => (
-                      <article
-                        className={notification.read ? "read" : ""}
-                        key={notification.id}
-                        onClick={markAllNotificationsRead}
-                      >
-                        <span className="notification-dot" />
-                        <div><strong>{notification.title}</strong><p>{notification.message}</p><small>{new Date(notification.createdAt).toLocaleString("pl-PL")}</small></div>
-                      </article>
-                    ))}
-                    {notifications.length === 0 && <div className="empty-state">Brak powiadomień.</div>}
-                  </div>
-                </section>
+              <div className="account-quick-grid">
+                <button type="button" onClick={() => setActiveTab("matches")}>
+                  <span className="account-quick-icon">▣</span>
+                  <strong>Moje mecze</strong>
+                  <small>Przejdź do meczów</small>
+                  <b>→</b>
+                </button>
+                <button type="button" onClick={() => setShowNotificationsPanel(true)}>
+                  <span className="account-quick-icon"><BellIcon /></span>
+                  <strong>Powiadomienia</strong>
+                  <small>{unreadNotificationsCount} nieprzeczytanych</small>
+                  <b>→</b>
+                </button>
+                <button type="button" onClick={openNewPlayerListing}>
+                  <span className="account-quick-icon">＋</span>
+                  <strong>Moje zgłoszenia</strong>
+                  <small>{ownerPosts.length} wszystkich</small>
+                  <b>→</b>
+                </button>
+                <button type="button" onClick={() => setActiveTab("courts")}>
+                  <span className="account-quick-icon">⌕</span>
+                  <strong>Zapisane wyszukiwania</strong>
+                  <small>{savedSearches.length} zapisanych</small>
+                  <b>→</b>
+                </button>
               </div>
 
               <MatchInvitationsPanel
@@ -2208,12 +2207,71 @@ function App() {
         </nav>
       </div>
 
+      {showNotificationsPanel && (
+        <div className="notification-drawer-backdrop" onClick={() => setShowNotificationsPanel(false)}>
+          <aside className="notification-drawer" onClick={(event) => event.stopPropagation()}>
+            <header>
+              <h2>Powiadomienia</h2>
+              <button type="button" onClick={() => setShowNotificationsPanel(false)} aria-label="Zamknij">×</button>
+            </header>
+            <div className="notification-drawer-tabs">
+              <strong>Wszystkie</strong>
+              <span>Nieprzeczytane ({unreadNotificationsCount})</span>
+            </div>
+            <div className="notification-list notification-drawer-list">
+              {notifications.map((notification) => (
+                <article className={notification.read ? "read" : ""} key={notification.id}>
+                  <span className="notification-dot" />
+                  <div>
+                    <strong>{notification.title}</strong>
+                    <p>{notification.message}</p>
+                    <small>{new Date(notification.createdAt).toLocaleString("pl-PL")}</small>
+                  </div>
+                </article>
+              ))}
+              {notifications.length === 0 && <div className="empty-state">Brak powiadomień.</div>}
+            </div>
+            <div className="notification-drawer-actions">
+              <button type="button" onClick={enableSystemNotifications}>Włącz powiadomienia systemowe</button>
+              <button type="button" onClick={markAllNotificationsRead}>Oznacz wszystkie jako przeczytane</button>
+            </div>
+          </aside>
+        </div>
+      )}
+
+      {showProfileEditor && (
+        <div className="profile-modal-backdrop" onClick={() => setShowProfileEditor(false)}>
+          <form className="profile-editor-panel profile-editor-modal" onSubmit={async (event) => {
+            await saveProfile(event);
+            setShowProfileEditor(false);
+          }} onClick={(event) => event.stopPropagation()}>
+            <div className="profile-modal-head">
+              <div>
+                <span className="section-kicker">Twój profil</span>
+                <h2>Edytuj profil</h2>
+              </div>
+              <button type="button" onClick={() => setShowProfileEditor(false)} aria-label="Zamknij">×</button>
+            </div>
+            <div className="profile-form-grid">
+              <label><span>Pseudonim</span><input value={myProfile.nickname || ""} onChange={(e) => setMyProfile({ ...myProfile, nickname: e.target.value })} /></label>
+              <label><span>Miasto</span><input value={myProfile.city || ""} onChange={(e) => setMyProfile({ ...myProfile, city: e.target.value })} /></label>
+              <label><span>Poziom</span><LevelSelect value={myProfile.level || "3.0"} onChange={(value) => setMyProfile({ ...myProfile, level: value })} /></label>
+              <label><span>Strona</span><select value={myProfile.preferredSide || "Dowolna"} onChange={(e) => setMyProfile({ ...myProfile, preferredSide: e.target.value })}><option>Dowolna</option><option>Lewa</option><option>Prawa</option></select></label>
+              <label className="profile-wide"><span>Ulubiony klub</span><select value={myProfile.favoriteClubSlug || "all"} onChange={(e) => setMyProfile({ ...myProfile, favoriteClubSlug: e.target.value })}><option value="all">Brak / dowolny</option>{clubs.map((club) => <option key={club.slug} value={club.slug}>{club.name}</option>)}</select></label>
+              <label className="profile-wide"><span>O mnie</span><textarea value={myProfile.bio || ""} onChange={(e) => setMyProfile({ ...myProfile, bio: e.target.value })} placeholder="Np. gram rekreacyjnie po pracy." /></label>
+            </div>
+            {profileMessage && <div className="form-message">{profileMessage}</div>}
+            <button className="profile-save-button" type="submit">Zapisz profil</button>
+          </form>
+        </div>
+      )}
+
       {toast && (
         <button
           type="button"
           className="app-toast"
           onClick={() => {
-            setActiveTab("saved");
+            setShowNotificationsPanel(true);
             setToast("");
           }}
         >

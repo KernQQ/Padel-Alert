@@ -10247,3 +10247,88 @@ body {
     font-size: 20px;
   }
 }
+
+
+/* =========================================================
+   ACCOUNT CENTER + NOTIFICATIONS DRAWER
+   ========================================================= */
+.account-summary-card {
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:22px; margin-bottom:18px; border:1px solid var(--line);
+  border-radius:16px; background:var(--surface);
+}
+.account-summary-main { display:flex; align-items:center; gap:16px; min-width:0; }
+.account-summary-name { display:flex; align-items:center; gap:10px; }
+.account-summary-name h2 { margin:0; font-size:24px; }
+.account-summary-main p { margin:5px 0 0; color:var(--muted); }
+.account-edit-button {
+  min-height:42px; padding:0 18px; border:1px solid #6FAF18 !important;
+  border-radius:10px !important; background:transparent !important; color:#7DBE24 !important;
+  font-weight:800 !important;
+}
+.account-quick-grid {
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:22px;
+}
+.account-quick-grid > button {
+  position:relative; display:grid; grid-template-columns:auto 1fr auto;
+  grid-template-rows:auto auto; column-gap:12px; align-items:center;
+  min-height:92px; padding:16px !important; text-align:left;
+  border:1px solid var(--line) !important; border-radius:14px !important;
+  background:var(--surface) !important; color:var(--text) !important;
+}
+.account-quick-icon {
+  grid-row:1/3; display:grid; width:42px; height:42px; place-items:center;
+  border-radius:11px; color:#7DBE24; background:color-mix(in srgb,#6FAF18 12%,var(--surface));
+  font-size:20px; font-weight:900;
+}
+.account-quick-grid strong { font-size:14px; }
+.account-quick-grid small { color:var(--muted); font-size:11px; }
+.account-quick-grid b { grid-column:3; grid-row:1/3; color:var(--muted); font-size:18px; }
+
+.notification-drawer-backdrop,
+.profile-modal-backdrop {
+  position:fixed; inset:0; z-index:250; background:rgba(0,0,0,.48);
+}
+.notification-drawer-backdrop { display:flex; justify-content:flex-end; }
+.notification-drawer {
+  display:flex; width:min(430px,100%); height:100%; flex-direction:column;
+  padding:20px; border-left:1px solid var(--line); background:var(--surface); box-shadow:-20px 0 60px rgba(0,0,0,.25);
+}
+.notification-drawer header,
+.profile-modal-head { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.notification-drawer header h2, .profile-modal-head h2 { margin:0; }
+.notification-drawer header button,
+.profile-modal-head > button {
+  width:38px; height:38px; padding:0 !important; border:0 !important;
+  background:transparent !important; color:var(--text) !important; font-size:28px !important;
+}
+.notification-drawer-tabs {
+  display:flex; gap:24px; margin:18px 0 12px; padding-bottom:12px; border-bottom:1px solid var(--line);
+  color:var(--muted); font-size:13px;
+}
+.notification-drawer-tabs strong { color:#7DBE24; }
+.notification-drawer-list { flex:1; overflow:auto; }
+.notification-drawer-actions { display:grid; gap:8px; padding-top:14px; }
+.notification-drawer-actions button {
+  min-height:44px; border:1px solid var(--line) !important; border-radius:10px !important;
+  background:transparent !important; color:var(--text) !important;
+}
+.notification-drawer-actions button:last-child { border-color:#6FAF18 !important; color:#7DBE24 !important; }
+
+.profile-modal-backdrop { display:grid; place-items:center; padding:20px; }
+.profile-editor-modal { width:min(720px,100%); max-height:90vh; overflow:auto; margin:0 !important; }
+
+@media (max-width:900px) {
+  .account-quick-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:620px) {
+  .account-summary-card { padding:14px; }
+  .account-summary-name h2 { font-size:18px; }
+  .account-summary-main .profile-editor-avatar { width:46px; height:46px; }
+  .account-edit-button { padding:0 11px; font-size:12px; }
+  .account-quick-grid { grid-template-columns:1fr; gap:8px; }
+  .account-quick-grid > button { min-height:70px; padding:12px !important; }
+  .notification-drawer { width:100%; padding:16px 14px calc(86px + env(safe-area-inset-bottom)); border-left:0; }
+  .notification-drawer-backdrop { background:var(--bg); }
+  .profile-modal-backdrop { padding:10px; }
+}
