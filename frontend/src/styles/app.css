@@ -8288,7 +8288,7 @@ body {
   --pa-line: #24372c;
   --pa-text: #f4f7f4;
   --pa-muted: #8e9a92;
-  --pa-acid: #b8f51b;
+  --pa-acid: #86c91a;
 
   --bg: #050a07;
   --surface: #0b1510;
@@ -8297,7 +8297,7 @@ body {
   --text: #f4f7f4;
   --muted: #9aa69e;
   --line: #26392e;
-  --primary: #b8f51b;
+  --primary: #86c91a;
   --primary-dark: #90c514;
   --sidebar: #06110c;
 }
@@ -8343,7 +8343,7 @@ body {
 
 .sidebar-nav button.active {
   color: #071009 !important;
-  background: linear-gradient(90deg, #aee413, #d1f632) !important;
+  background: linear-gradient(90deg, #79b918, #d1f632) !important;
   box-shadow: none !important;
 }
 
@@ -9178,17 +9178,17 @@ body {
 .admin-message { margin-bottom:14px; padding:11px 13px; border:1px solid #34513d; border-radius:9px; background:#102016; font-size:10px; }
 .admin-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:18px; }
 .admin-metrics article { padding:17px; border:1px solid #26372e; border-radius:12px; background:linear-gradient(180deg,#0d1712,#09110d); }
-.admin-metrics strong { display:block; color:#b8f51b; font-size:25px; }
+.admin-metrics strong { display:block; color:#86c91a; font-size:25px; }
 .admin-metrics small { display:block; margin-top:3px; color:#859189; font-size:8px; }
 .admin-tabs { display:flex; gap:5px; margin-bottom:12px; }
 .admin-tabs button { min-height:38px; padding:0 15px; font-size:9px; font-weight:800; }
-.admin-tabs button.active { color:#071009; border-color:#b8f51b; background:#b8f51b; }
+.admin-tabs button.active { color:#071009; border-color:#86c91a; background:#86c91a; }
 .admin-list, .admin-user-list { display:grid; gap:10px; }
 .admin-match-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:15px; padding:16px; border:1px solid #26372e; border-radius:13px; background:linear-gradient(180deg,#0d1712,#09110d); }
 .admin-match-title { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
 .admin-match-title strong { display:block; font-size:14px; }
 .admin-match-title small { display:block; margin-top:4px; color:#859189; font-size:8px; }
-.admin-match-title > span { color:#b8f51b; font-size:11px; font-weight:900; }
+.admin-match-title > span { color:#86c91a; font-size:11px; font-weight:900; }
 .admin-match-owner { margin-top:10px; color:#c9d1cc; font-size:9px; }
 .admin-match-owner small { margin-left:8px; color:#77847c; }
 .admin-participants { display:flex; flex-wrap:wrap; gap:6px; margin-top:11px; }
@@ -9213,7 +9213,7 @@ body {
 .admin-modal textarea { resize:vertical; }
 .admin-modal-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
 .admin-modal-close { position:absolute; top:12px; right:13px; width:34px; height:34px; border:0; border-radius:8px; color:#c8d0ca; background:#142119; font-size:20px; cursor:pointer; }
-.admin-save { width:100%; min-height:44px; border:0; border-radius:9px; color:#071009; background:#b8f51b; font-size:10px; font-weight:900; cursor:pointer; }
+.admin-save { width:100%; min-height:44px; border:0; border-radius:9px; color:#071009; background:#86c91a; font-size:10px; font-weight:900; cursor:pointer; }
 @media(max-width:900px){
   .admin-page{padding:18px 14px 10px}.admin-heading{align-items:flex-start}.admin-heading h1{font-size:28px}.admin-metrics{grid-template-columns:1fr 1fr}.admin-match-card{grid-template-columns:1fr}.admin-match-actions{display:grid;grid-template-columns:1fr 1fr 1fr}.admin-user-list article{align-items:flex-start}.admin-modal-grid{grid-template-columns:1fr 1fr}
 }
@@ -9251,7 +9251,7 @@ body {
   --text: #f4f7f4;
   --muted: #9aa69e;
   --line: #26392e;
-  --primary: #b8f51b;
+  --primary: #86c91a;
   --primary-dark: #90c514;
   --sidebar: #06110c;
 }
@@ -9277,7 +9277,7 @@ body {
   --text: #111813;
   --muted: #68736c;
   --line: #d7e1d9;
-  --primary: #9bdc18;
+  --primary: #86c91a;
   --primary-dark: #197144;
   --sidebar: #ffffff;
 }
@@ -9299,7 +9299,7 @@ body {
 
 .sidebar-nav button.active {
   color: #071009 !important;
-  background: linear-gradient(90deg, #aee413, #d1f632) !important;
+  background: linear-gradient(90deg, #79b918, #d1f632) !important;
 }
 
 .sidebar-profile,
@@ -9715,4 +9715,80 @@ body {
   .pa-rc-club-card:nth-child(1) .pa-rc-club-photo { background-position: 52% 50%; }
   .pa-rc-club-card:nth-child(2) .pa-rc-club-photo { background-position: 52% 50%; }
   .pa-rc-club-card:nth-child(3) .pa-rc-club-photo { background-position: 48% 46%; }
+}
+
+
+/* =========================================================
+   PADELALERT RC3 FINAL — approved release polish
+   ========================================================= */
+:root,
+:root[data-theme="dark"],
+:root[data-theme="light"] {
+  --pa-acid: #86c91a !important;
+  --primary: #86c91a !important;
+}
+
+/* Desktop: remove the oversized dead gap after the sidebar. */
+@media (min-width: 901px) {
+  .pa-premium-shell .pa-premium-main,
+  .pa-premium-main {
+    width: auto !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    padding-left: 36px !important;
+    padding-right: 28px !important;
+  }
+
+  .pa-premium-content,
+  .pa-premium-home,
+  .pa-rc-home {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Mobile: header cleanup — hide standalone theme/sun control.
+   Theme remains available elsewhere; geometry is preserved. */
+@media (max-width: 900px) {
+  .pa-premium-mobile-header [data-theme-toggle],
+  .pa-premium-mobile-header .theme-toggle,
+  .pa-premium-mobile-header .pa-theme-toggle,
+  .pa-premium-mobile-header button[aria-label*="jasn" i],
+  .pa-premium-mobile-header button[aria-label*="ciemn" i],
+  .pa-premium-mobile-header button[title*="jasn" i],
+  .pa-premium-mobile-header button[title*="ciemn" i] {
+    display: none !important;
+  }
+
+  /* Cleaner login/account control */
+  .pa-premium-mobile-header .pa-auth-button,
+  .pa-premium-mobile-header .pa-login-button,
+  .pa-premium-mobile-header [data-auth-button] {
+    min-width: 88px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+    padding: 0 13px !important;
+    background: transparent !important;
+    border: 1px solid rgba(134, 201, 26, .42) !important;
+    color: var(--pa-text, #f4f7f2) !important;
+    font-weight: 800 !important;
+  }
+
+  /* Padel Club only: move mobile crop toward the building logo/name. */
+  .pa-rc-club-card:nth-child(2) .pa-rc-club-photo {
+    background-position: 28% 50% !important;
+  }
+  .pa-rc-club-card:nth-child(2) img.pa-rc-club-photo,
+  .pa-rc-club-card:nth-child(2) .pa-rc-club-photo img {
+    object-position: 28% 50% !important;
+  }
+}
+
+/* Accent consistency */
+.pa-premium-search-button,
+.pa-rc-nearest-mark,
+.pa-premium-nav-item.is-active,
+.pa-premium-mobile-nav .is-active {
+  --pa-accent-local: #86c91a;
 }
