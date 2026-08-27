@@ -10047,3 +10047,30 @@ body {
     padding-right: 0 !important;
   }
 }
+
+
+/* =========================================================
+   DESKTOP SPACING FINAL — approved preview
+   Small, balanced breathing room between sidebar/content
+   and content/right edge. Mobile remains untouched.
+   ========================================================= */
+@media (min-width: 901px) {
+  .main-shell {
+    margin-left: 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+    box-sizing: border-box !important;
+  }
+
+  .main-shell > .page {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
