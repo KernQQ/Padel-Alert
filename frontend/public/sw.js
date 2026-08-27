@@ -1,4 +1,4 @@
-const CACHE = "padelalert-shell-rc3-hotfix-real";
+const CACHE = "padelalert-shell-mobile-width-fix";
 const SHELL = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {

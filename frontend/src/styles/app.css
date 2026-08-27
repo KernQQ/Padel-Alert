@@ -9873,3 +9873,119 @@ body {
 .pa-premium-tabs button.active {
   color: #6FAF18 !important;
 }
+
+
+/* =========================================================
+   MOBILE WIDTH FIX — global horizontal overflow kill
+   Fixes clipped left/right edges on every mobile tab.
+   ========================================================= */
+@media (max-width: 900px) {
+  html,
+  body,
+  #root,
+  .app-shell,
+  .main-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow-x: clip !important;
+  }
+
+  .main-shell {
+    display: block !important;
+  }
+
+  .main-shell > .page,
+  .page {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    box-sizing: border-box !important;
+    overflow-x: clip !important;
+  }
+
+  /* Start is intentionally edge-to-edge in hero/search. */
+  .page:has(.pa-premium-home) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Every regular screen must fit inside the phone viewport. */
+  .page-heading,
+  .partners-heading,
+  .match-page,
+  .partners-page,
+  .my-center-heading,
+  .my-center-grid,
+  .owner-posts-section,
+  .matchmaker-panel,
+  .match-invitations-panel,
+  .saved-grid,
+  .panel,
+  .saved-panel,
+  .profile-editor-panel,
+  .notifications-panel,
+  .owner-post-card,
+  .partner-filter-panel,
+  .partner-content-layout,
+  .partner-results,
+  .match-card,
+  .partner-card,
+  .admin-panel,
+  .admin-page {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Prevent grid/flex children from forcing viewport wider. */
+  .page *,
+  .main-shell * {
+    min-width: 0;
+  }
+
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  /* Horizontal rows that are meant to scroll do it inside themselves,
+     never by widening the whole document. */
+  .consumer-date-pills,
+  .pa-rc-nearest,
+  .pa-premium-tabs {
+    max-width: 100% !important;
+  }
+
+  /* Bottom navigation stays exactly inside viewport. */
+  .mobile-bottom-nav {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: calc(100% - 16px) !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .main-shell > .page,
+  .page {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .page:has(.pa-premium-home) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
