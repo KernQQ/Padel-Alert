@@ -10332,3 +10332,65 @@ body {
   .notification-drawer-backdrop { background:var(--bg); }
   .profile-modal-backdrop { padding:10px; }
 }
+
+
+/* =========================================================
+   MOBILE PROFILE LEVEL — FINAL COMPACT FIX
+   Accepted preview: nickname + small numeric level only.
+   ========================================================= */
+@media (max-width: 620px) {
+  .account-summary-name {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .account-summary-name h2 {
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .account-summary-name .level-badge {
+    flex: 0 0 auto;
+    width: auto !important;
+    min-width: 38px !important;
+    max-width: 48px !important;
+    min-height: 30px;
+    padding: 4px 8px !important;
+    border-radius: 9px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px !important;
+    line-height: 1 !important;
+  }
+
+  /* Hide any descriptive/decorative content that makes the level badge too wide.
+     The numeric value remains visible. */
+  .account-summary-name .level-badge .level-label,
+  .account-summary-name .level-badge .level-description,
+  .account-summary-name .level-badge .level-name,
+  .account-summary-name .level-badge svg,
+  .account-summary-name .level-badge img {
+    display: none !important;
+  }
+
+  .account-summary-card {
+    gap: 10px;
+  }
+
+  .account-summary-main {
+    gap: 12px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .account-edit-button {
+    flex: 0 0 auto;
+    width: auto !important;
+    min-width: 88px;
+    padding-inline: 12px !important;
+  }
+}
