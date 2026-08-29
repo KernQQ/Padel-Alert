@@ -224,14 +224,31 @@ function buildArenaBo5TestUrl(proposal) {
 
   if (!courtId || !date || !hour) return "";
 
-  // Eksperymentalny bezpośredni endpoint, którego BO5 używa
-  // do pobrania formularza dla konkretnej komórki grafiku.
-  const url = new URL("https://bo5.pl/clubs/ajax.php");
-  url.searchParams.set("namespace", "reservation");
-  url.searchParams.set("cid", "264");
+  // TEST V2:
+  // Nie otwieramy już /clubs/ajax.php bezpośrednio.
+  // Najpierw wchodzimy na normalną stronę rezerwacji Areny
+  // i przekazujemy wybrany slot w query + hash.
+  //
+  // Jeśli frontend BO5 rozpoznaje którykolwiek z tych parametrów,
+  // powinien ustawić datę/kort/godzinę na swojej stronie.
+  const url = new URL(
+    "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel"
+  );
+
   url.searchParams.set("court", String(courtId));
   url.searchParams.set("date", String(date));
   url.searchParams.set("hour", String(hour));
+
+  // Dodajemy również nazwy spotykane w mechanizmie rezerwacji BO5.
+  url.searchParams.set("cid", "264");
+  url.searchParams.set("cd", "624");
+
+  url.hash = new URLSearchParams({
+    pa_test: "1",
+    court: String(courtId),
+    date: String(date),
+    hour: String(hour)
+  }).toString();
 
   return url.toString();
 }
@@ -1627,7 +1644,7 @@ function App() {
 
                           window.open(href, "_blank", "noopener,noreferrer");
                         }}
-                        title="Eksperymentalny test konkretnego slotu BO5 — normalny przycisk rezerwacji pozostaje bez zmian."
+                        title="TEST V2: normalna strona Areny BO5 z przekazaną datą, godziną i kortem. Produkcyjny przycisk pozostaje bez zmian."
                       >
                         TEST BO5
                       </button>
