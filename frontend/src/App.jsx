@@ -116,6 +116,19 @@ const BO5_DISCIPLINE_IDS = {
 };
 
 function buildBo5DeepLink(proposal, club) {
+  const directReservationUrl =
+    proposal?.reservationUrl ||
+    proposal?.blocks?.find((block) => block?.reservationUrl)?.reservationUrl ||
+    "";
+
+  if (directReservationUrl) {
+    try {
+      return new URL(directReservationUrl, window.location.origin).toString();
+    } catch {
+      return String(directReservationUrl);
+    }
+  }
+
   const base = resolveBo5ClubBase(proposal, club);
 
   if (!base) return "";
@@ -1544,20 +1557,22 @@ function App() {
                     >
                       Utwórz mecz
                     </button>
-                    <a
-                      href={buildBo5DeepLink(selectedProposal, selectedClub) || "#"}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(event) => {
+                    <button
+                      type="button"
+                      className="consumer-booking-link"
+                      onClick={() => {
                         const href = buildBo5DeepLink(selectedProposal, selectedClub);
+
                         if (!href) {
-                          event.preventDefault();
-                          setToast("Nie udało się przygotować linku do BO5.");
+                          setToast("Nie udało się przygotować linku do rezerwacji.");
+                          return;
                         }
+
+                        window.location.assign(href);
                       }}
                     >
                       Przejdź do rezerwacji
-                    </a>
+                    </button>
                   </div>
                 </section>
               )}
@@ -2021,7 +2036,7 @@ function App() {
                   <div>
                     <div className="account-summary-name">
                       <h2>{myProfile.nickname || "Gość"}</h2>
-                      <LevelBadge level={myProfile.level || "3.0"} compact plain />
+                      <LevelBadge level={myProfile.level || "3.0"} />
                     </div>
                     <p>{myProfile.city || "Szczecin"} · {myProfile.preferredSide || "Dowolna"}</p>
                   </div>
