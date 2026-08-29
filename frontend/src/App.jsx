@@ -222,17 +222,39 @@ function getArenaBo5TestPayload(proposal) {
     proposal?.blocks?.[0]?.time ||
     "";
 
+  const endHour =
+    proposal?.endHour ||
+    proposal?.blocks?.[proposal?.blocks?.length - 1]?.endHour ||
+    "";
+
   if (!courtId || !date || !hour) return null;
+
+  const toMinutes = (value) => {
+    const [h, m] = String(value || "").split(":").map(Number);
+    if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
+    return h * 60 + m;
+  };
+
+  const startMinutes = toMinutes(hour);
+  const endMinutes = toMinutes(endHour);
+
+  let duration = 60;
+  if (startMinutes !== null && endMinutes !== null && endMinutes > startMinutes) {
+    duration = endMinutes - startMinutes;
+  } else if (Array.isArray(proposal?.blocks) && proposal.blocks.length) {
+    duration = proposal.blocks.length * 30;
+  }
 
   return {
     cd: "624",
     court: String(courtId),
     date: String(date),
     hour: String(hour),
+    duration: String(duration),
   };
 }
 
-function buildArenaBo5ModalCommand(proposal) {
+function buildArenaBo5V5Command(proposal) {
   const payload = getArenaBo5TestPayload(proposal);
   if (!payload) return "";
 
@@ -245,28 +267,47 @@ function buildArenaBo5ModalCommand(proposal) {
   });
 
   const endpoint = `/clubs/ajax.php?${query.toString()}`;
+  const duration = Number(payload.duration);
 
-  // To polecenie ma być uruchomione JUŻ NA bo5.pl.
-  // Najpierw próbujemy natywnej funkcji ajaxModal używanej przez BO5.
-  // Jeśli nie jest globalna, test pokaże nam to od razu.
-  return `typeof ajaxModal==="function"?ajaxModal(${JSON.stringify(endpoint)}):console.error("BO5: ajaxModal nie jest dostępne globalnie")`;
+  // V5:
+  // 1) otwiera natywny modal właściwego slotu przez ajaxModal()
+  // 2) czeka aż BO5 wstawi formularz do DOM
+  // 3) znajduje dropdown czasu trwania
+  // 4) ustawia czas dokładnie taki jak wybrany w PadelAlert
+  // 5) wywołuje "change", żeby BO5 samo przeliczyło cenę przez swój getPrice POST
+  return `(async()=>{` +
+    `if(typeof ajaxModal!=="function"){console.error("BO5: ajaxModal nie jest dostępne globalnie");return;}` +
+    `ajaxModal(${JSON.stringify(endpoint)});` +
+    `const wanted=${JSON.stringify(String(duration))};` +
+    `const deadline=Date.now()+5000;` +
+    `let sel=null;` +
+    `while(Date.now()<deadline&&!sel){` +
+      `await new Promise(r=>setTimeout(r,100));` +
+      `sel=[...document.querySelectorAll("select")].find(s=>[...s.options].some(o=>String(o.value)===wanted));` +
+    `}` +
+    `if(!sel){console.error("BO5: nie znaleziono dropdownu czasu dla",wanted,"min");return;}` +
+    `sel.value=wanted;` +
+    `sel.dispatchEvent(new Event("change",{bubbles:true}));` +
+    `if(window.jQuery){window.jQuery(sel).trigger("change");}` +
+    `console.log("BO5 V5: ustawiono czas",wanted,"min");` +
+  `})()`;
 }
 
-async function runArenaBo5V4Test(proposal) {
+async function runArenaBo5V5Test(proposal) {
   const payload = getArenaBo5TestPayload(proposal);
   if (!payload) return { ok: false, reason: "missing" };
 
-  const command = buildArenaBo5ModalCommand(proposal);
+  const command = buildArenaBo5V5Command(proposal);
   const pageUrl = "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel";
 
   try {
     await navigator.clipboard.writeText(command);
   } catch {
-    // Clipboard może być zablokowany; nadal otwieramy BO5.
+    return { ok: false, reason: "clipboard" };
   }
 
   window.open(pageUrl, "_blank", "noopener,noreferrer");
-  return { ok: true, command };
+  return { ok: true, duration: payload.duration };
 }
 
 
@@ -1651,16 +1692,20 @@ function App() {
                       <button
                         type="button"
                         onClick={async () => {
-                          const result = await runArenaBo5V4Test(selectedProposal);
+                          const result = await runArenaBo5V5Test(selectedProposal);
 
                           if (!result?.ok) {
-                            setToast("TEST BO5 V4: brakuje ID kortu, daty albo godziny.");
+                            setToast(
+                              result?.reason === "clipboard"
+                                ? "TEST BO5 V5: przeglądarka nie pozwoliła skopiować komendy."
+                                : "TEST BO5 V5: brakuje ID kortu, daty albo godziny."
+                            );
                             return;
                           }
 
-                          setToast("V4: otworzyłem BO5 i skopiowałem komendę do schowka. Na BO5: F12 → Console → Ctrl+V → Enter.");
+                          setToast(`V5: BO5 otwarte. Komenda skopiowana — po Ctrl+V w konsoli ustawi też ${result.duration} min.`);
                         }}
-                        title="TEST V4: otwiera normalną stronę Areny i kopiuje komendę wywołującą natywny ajaxModal BO5 dla konkretnego slotu."
+                        title="TEST V5: otwiera właściwy modal BO5 i automatycznie ustawia czas rezerwacji wybrany w PadelAlert."
                       >
                         TEST BO5
                       </button>
