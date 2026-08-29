@@ -232,9 +232,9 @@ function getArenaBo5TestPayload(proposal) {
   };
 }
 
-function runArenaBo5PostTest(proposal) {
+function buildArenaBo5ModalCommand(proposal) {
   const payload = getArenaBo5TestPayload(proposal);
-  if (!payload) return false;
+  if (!payload) return "";
 
   const query = new URLSearchParams({
     namespace: "reservation",
@@ -244,23 +244,29 @@ function runArenaBo5PostTest(proposal) {
     court: payload.court,
   });
 
-  // TEST V3:
-  // Odtwarzamy dokładnie to, co zobaczyliśmy w DevTools:
-  // POST /clubs/ajax.php?... z pustym body.
-  //
-  // Używamy zwykłego formularza HTML POST do nowej karty,
-  // bo fetch/XHR z domeny PadelAlert zostałby zablokowany przez CORS.
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = `https://bo5.pl/clubs/ajax.php?${query.toString()}`;
-  form.target = "_blank";
-  form.style.display = "none";
+  const endpoint = `/clubs/ajax.php?${query.toString()}`;
 
-  document.body.appendChild(form);
-  form.submit();
-  form.remove();
+  // To polecenie ma być uruchomione JUŻ NA bo5.pl.
+  // Najpierw próbujemy natywnej funkcji ajaxModal używanej przez BO5.
+  // Jeśli nie jest globalna, test pokaże nam to od razu.
+  return `typeof ajaxModal==="function"?ajaxModal(${JSON.stringify(endpoint)}):console.error("BO5: ajaxModal nie jest dostępne globalnie")`;
+}
 
-  return true;
+async function runArenaBo5V4Test(proposal) {
+  const payload = getArenaBo5TestPayload(proposal);
+  if (!payload) return { ok: false, reason: "missing" };
+
+  const command = buildArenaBo5ModalCommand(proposal);
+  const pageUrl = "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel";
+
+  try {
+    await navigator.clipboard.writeText(command);
+  } catch {
+    // Clipboard może być zablokowany; nadal otwieramy BO5.
+  }
+
+  window.open(pageUrl, "_blank", "noopener,noreferrer");
+  return { ok: true, command };
 }
 
 
@@ -1644,14 +1650,17 @@ function App() {
                     {selectedProposal?.clubSlug === "padel-arena-poludniowa" && (
                       <button
                         type="button"
-                        onClick={() => {
-                          const ok = runArenaBo5PostTest(selectedProposal);
+                        onClick={async () => {
+                          const result = await runArenaBo5V4Test(selectedProposal);
 
-                          if (!ok) {
-                            setToast("TEST BO5 V3: brakuje ID kortu, daty albo godziny.");
+                          if (!result?.ok) {
+                            setToast("TEST BO5 V4: brakuje ID kortu, daty albo godziny.");
+                            return;
                           }
+
+                          setToast("V4: otworzyłem BO5 i skopiowałem komendę do schowka. Na BO5: F12 → Console → Ctrl+V → Enter.");
                         }}
-                        title="TEST V3: prawdziwy POST do endpointu formularza BO5 z cd=624, kortem, datą i godziną. Produkcyjny przycisk pozostaje bez zmian."
+                        title="TEST V4: otwiera normalną stronę Areny i kopiuje komendę wywołującą natywny ajaxModal BO5 dla konkretnego slotu."
                       >
                         TEST BO5
                       </button>
