@@ -196,15 +196,15 @@ function buildBo5DeepLink(proposal, club) {
 }
 
 
-function buildArenaBo5TestUrl(proposal) {
-  if (!proposal) return "";
+function getArenaBo5TestPayload(proposal) {
+  if (!proposal) return null;
 
   const clubSlug =
     proposal?.clubSlug ||
     proposal?.blocks?.[0]?.clubSlug ||
     "";
 
-  if (clubSlug !== "padel-arena-poludniowa") return "";
+  if (clubSlug !== "padel-arena-poludniowa") return null;
 
   const courtId =
     proposal?.courtId ||
@@ -222,35 +222,45 @@ function buildArenaBo5TestUrl(proposal) {
     proposal?.blocks?.[0]?.time ||
     "";
 
-  if (!courtId || !date || !hour) return "";
+  if (!courtId || !date || !hour) return null;
 
-  // TEST V2:
-  // Nie otwieramy już /clubs/ajax.php bezpośrednio.
-  // Najpierw wchodzimy na normalną stronę rezerwacji Areny
-  // i przekazujemy wybrany slot w query + hash.
-  //
-  // Jeśli frontend BO5 rozpoznaje którykolwiek z tych parametrów,
-  // powinien ustawić datę/kort/godzinę na swojej stronie.
-  const url = new URL(
-    "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel"
-  );
-
-  url.searchParams.set("court", String(courtId));
-  url.searchParams.set("date", String(date));
-  url.searchParams.set("hour", String(hour));
-
-  // Dodajemy również nazwy spotykane w mechanizmie rezerwacji BO5.
-  url.searchParams.set("cid", "264");
-  url.searchParams.set("cd", "624");
-
-  url.hash = new URLSearchParams({
-    pa_test: "1",
+  return {
+    cd: "624",
     court: String(courtId),
     date: String(date),
-    hour: String(hour)
-  }).toString();
+    hour: String(hour),
+  };
+}
 
-  return url.toString();
+function runArenaBo5PostTest(proposal) {
+  const payload = getArenaBo5TestPayload(proposal);
+  if (!payload) return false;
+
+  const query = new URLSearchParams({
+    namespace: "reservation",
+    cd: payload.cd,
+    hour: payload.hour,
+    date: payload.date,
+    court: payload.court,
+  });
+
+  // TEST V3:
+  // Odtwarzamy dokładnie to, co zobaczyliśmy w DevTools:
+  // POST /clubs/ajax.php?... z pustym body.
+  //
+  // Używamy zwykłego formularza HTML POST do nowej karty,
+  // bo fetch/XHR z domeny PadelAlert zostałby zablokowany przez CORS.
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = `https://bo5.pl/clubs/ajax.php?${query.toString()}`;
+  form.target = "_blank";
+  form.style.display = "none";
+
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+
+  return true;
 }
 
 
@@ -1635,16 +1645,13 @@ function App() {
                       <button
                         type="button"
                         onClick={() => {
-                          const href = buildArenaBo5TestUrl(selectedProposal);
+                          const ok = runArenaBo5PostTest(selectedProposal);
 
-                          if (!href) {
-                            setToast("TEST BO5: brakuje ID kortu, daty albo godziny.");
-                            return;
+                          if (!ok) {
+                            setToast("TEST BO5 V3: brakuje ID kortu, daty albo godziny.");
                           }
-
-                          window.open(href, "_blank", "noopener,noreferrer");
                         }}
-                        title="TEST V2: normalna strona Areny BO5 z przekazaną datą, godziną i kortem. Produkcyjny przycisk pozostaje bez zmian."
+                        title="TEST V3: prawdziwy POST do endpointu formularza BO5 z cd=624, kortem, datą i godziną. Produkcyjny przycisk pozostaje bez zmian."
                       >
                         TEST BO5
                       </button>
