@@ -196,6 +196,47 @@ function buildBo5DeepLink(proposal, club) {
 }
 
 
+function buildArenaBo5TestUrl(proposal) {
+  if (!proposal) return "";
+
+  const clubSlug =
+    proposal?.clubSlug ||
+    proposal?.blocks?.[0]?.clubSlug ||
+    "";
+
+  if (clubSlug !== "padel-arena-poludniowa") return "";
+
+  const courtId =
+    proposal?.courtId ||
+    proposal?.blocks?.[0]?.courtId ||
+    "";
+
+  const date =
+    proposal?.date ||
+    proposal?.blocks?.[0]?.date ||
+    "";
+
+  const hour =
+    proposal?.startHour ||
+    proposal?.blocks?.[0]?.startHour ||
+    proposal?.blocks?.[0]?.time ||
+    "";
+
+  if (!courtId || !date || !hour) return "";
+
+  // Eksperymentalny bezpośredni endpoint, którego BO5 używa
+  // do pobrania formularza dla konkretnej komórki grafiku.
+  const url = new URL("https://bo5.pl/clubs/ajax.php");
+  url.searchParams.set("namespace", "reservation");
+  url.searchParams.set("cid", "264");
+  url.searchParams.set("court", String(courtId));
+  url.searchParams.set("date", String(date));
+  url.searchParams.set("hour", String(hour));
+
+  return url.toString();
+}
+
+
 function NavGlyph({ id }) {
   const common = {
     width: 20,
@@ -1573,6 +1614,24 @@ function App() {
                     >
                       Przejdź do rezerwacji
                     </button>
+                    {selectedProposal?.clubSlug === "padel-arena-poludniowa" && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const href = buildArenaBo5TestUrl(selectedProposal);
+
+                          if (!href) {
+                            setToast("TEST BO5: brakuje ID kortu, daty albo godziny.");
+                            return;
+                          }
+
+                          window.open(href, "_blank", "noopener,noreferrer");
+                        }}
+                        title="Eksperymentalny test konkretnego slotu BO5 — normalny przycisk rezerwacji pozostaje bez zmian."
+                      >
+                        TEST BO5
+                      </button>
+                    )}
                   </div>
                 </section>
               )}
