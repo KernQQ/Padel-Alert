@@ -116,23 +116,6 @@ const BO5_DISCIPLINE_IDS = {
 };
 
 function buildBo5DeepLink(proposal, club) {
-  const directReservationUrl =
-    proposal?.reservationUrl ||
-    proposal?.blocks?.find((block) => block?.reservationUrl)?.reservationUrl ||
-    "";
-
-  if (directReservationUrl) {
-    try {
-      return new URL(directReservationUrl, window.location.origin).toString();
-    } catch {
-      return String(directReservationUrl);
-    }
-  }
-
-  const base = resolveBo5ClubBase(proposal, club);
-
-  if (!base) return "";
-
   const clubKey =
     proposal?.clubSlug ||
     proposal?.blocks?.[0]?.clubSlug ||
@@ -155,6 +138,23 @@ function buildBo5DeepLink(proposal, club) {
   ) {
     return "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel";
   }
+
+  const directReservationUrl =
+    proposal?.reservationUrl ||
+    proposal?.blocks?.find((block) => block?.reservationUrl)?.reservationUrl ||
+    "";
+
+  if (directReservationUrl) {
+    try {
+      return new URL(directReservationUrl, window.location.origin).toString();
+    } catch {
+      return String(directReservationUrl);
+    }
+  }
+
+  const base = resolveBo5ClubBase(proposal, club);
+
+  if (!base) return "";
 
   const url = new URL(base);
 
