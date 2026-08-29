@@ -129,9 +129,10 @@ function buildBo5DeepLink(proposal, club) {
     ""
   );
 
-  // Padel Arena Południowa redirects incorrectly when BO5 query
-  // parameters are appended to its public Padel URL.
-  // Always open the clean Padel tab for this club.
+  // Release-safe BO5 redirects.
+  // After the V1–V5 experiments we deliberately do NOT use the
+  // backend reservationUrl for these three production clubs.
+  // Each club always opens its known, stable public BO5 Padel page.
   if (
     clubKey === "padel-arena-poludniowa" ||
     clubName.includes("padel-arena-poludniowa")
@@ -139,6 +140,22 @@ function buildBo5DeepLink(proposal, club) {
     return "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel";
   }
 
+  if (
+    clubKey === "padel-club" ||
+    clubName === "padel-club" ||
+    clubName.includes("padel-club")
+  ) {
+    return "https://bo5.pl/padelclub/reservation/595/Padel";
+  }
+
+  if (
+    clubKey === "fabryka-energii" ||
+    clubName.includes("fabryka-energii")
+  ) {
+    return "https://bo5.pl/fabrykaenergii/reservation/528/Padel";
+  }
+
+  // Fallback for any future/unknown BO5 club.
   const directReservationUrl =
     proposal?.reservationUrl ||
     proposal?.blocks?.find((block) => block?.reservationUrl)?.reservationUrl ||
@@ -153,50 +170,10 @@ function buildBo5DeepLink(proposal, club) {
   }
 
   const base = resolveBo5ClubBase(proposal, club);
-
   if (!base) return "";
 
-  const url = new URL(base);
-
-  const disciplineId =
-    BO5_DISCIPLINE_IDS[proposal?.clubSlug] ||
-    BO5_DISCIPLINE_IDS[proposal?.blocks?.[0]?.clubSlug] ||
-    BO5_DISCIPLINE_IDS[club?.slug] ||
-    "";
-
-  const clubId =
-    disciplineId ||
-    proposal?.clubId ||
-    proposal?.blocks?.[0]?.clubId ||
-    club?.id ||
-    "";
-
-  const courtId =
-    proposal?.courtId ||
-    proposal?.blocks?.[0]?.courtId ||
-    "";
-
-  const date =
-    proposal?.date ||
-    proposal?.blocks?.[0]?.date ||
-    "";
-
-  const hour =
-    proposal?.startHour ||
-    proposal?.blocks?.[0]?.startHour ||
-    proposal?.blocks?.[0]?.time ||
-    "";
-
-  if (clubId) url.searchParams.set("cd", String(clubId));
-  if (hour) url.searchParams.set("hour", String(hour));
-  if (date) url.searchParams.set("date", String(date));
-  if (courtId) url.searchParams.set("court", String(courtId));
-
-  return url.toString();
+  return base;
 }
-
-
-
 
 function NavGlyph({ id }) {
   const common = {
