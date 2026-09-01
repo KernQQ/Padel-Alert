@@ -200,6 +200,40 @@ router.delete("/matches/:id/participants/:participantKey", async (req, res) => {
   res.json({ ok: true, match: result.match });
 });
 
+router.get("/chat", async (req, res) => {
+  const data = await readStore();
+  const messages = [];
+  for (const [matchId, items] of Object.entries(data.matchMessages || {})) {
+    const match = (data.matches || []).find((item) => item.id === matchId);
+    for (const message of items || []) {
+      messages.push({
+        id: message.id,
+        matchId,
+        nickname: message.nickname,
+        text: message.text,
+        createdAt: message.createdAt,
+        clubName: match?.clubName || "Usunięty mecz",
+        matchDate: match?.date || ""
+      });
+    }
+  }
+  messages.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  res.json({ ok: true, messages: messages.slice(0, 500) });
+});
+
+router.delete("/chat/:matchId/:messageId", async (req, res) => {
+  const result = await updateStore((data) => {
+    const items = data.matchMessages?.[req.params.matchId] || [];
+    const exists = items.some((item) => item.id === req.params.messageId);
+    if (!exists) return { error: [404, "Nie znaleziono wiadomości."] };
+    data.matchMessages[req.params.matchId] = items.filter((item) => item.id !== req.params.messageId);
+    return { ok: true };
+  });
+  if (result.error) return res.status(result.error[0]).json({ ok: false, message: result.error[1] });
+  broadcast("matches.changed", { method: "ADMIN_CHAT_DELETE", matchId: req.params.matchId });
+  res.json({ ok: true });
+});
+
 router.delete("/matches/:id", async (req, res) => {
   const result = await updateStore((data) => {
     const index = (data.matches || []).findIndex((item) => item.id === req.params.id);
@@ -207,6 +241,8 @@ router.delete("/matches/:id", async (req, res) => {
 
     data.matches.splice(index, 1);
     data.matchInvitations = (data.matchInvitations || []).filter((invitation) => invitation.matchId !== req.params.id);
+    if (data.matchMessages) delete data.matchMessages[req.params.id];
+    if (data.matchChatReads) delete data.matchChatReads[req.params.id];
     return { ok: true };
   });
 

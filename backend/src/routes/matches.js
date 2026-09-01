@@ -615,6 +615,121 @@ router.patch("/invitations/:invitationId", async (req, res) => {
   });
 });
 
+function canUseMatchChat(match, requester) {
+  return Boolean(
+    requester &&
+    (match.ownerToken === requester ||
+      (match.participants || []).some((participant) => participant.ownerToken === requester))
+  );
+}
+
+function publicChatMessage(message, requester, match) {
+  return {
+    id: message.id,
+    matchId: message.matchId,
+    nickname: message.nickname,
+    text: message.text,
+    createdAt: message.createdAt,
+    editedAt: message.editedAt || null,
+    isMe: message.ownerToken === requester,
+    canDelete: message.ownerToken === requester || match.ownerToken === requester
+  };
+}
+
+router.get("/chat-unread", async (req, res) => {
+  const requester = requireToken(req, res);
+  if (!requester) return;
+  const data = await readStore();
+  const counts = {};
+  for (const match of data.matches || []) {
+    if (!canUseMatchChat(match, requester)) continue;
+    const readAt = data.matchChatReads?.[match.id]?.[requester] || "";
+    counts[match.id] = (data.matchMessages?.[match.id] || []).filter(
+      (message) => message.ownerToken !== requester && (!readAt || String(message.createdAt) > String(readAt))
+    ).length;
+  }
+  res.json({ ok: true, counts });
+});
+
+router.get("/:id/chat", async (req, res) => {
+  const requester = requireToken(req, res);
+  if (!requester) return;
+
+  const result = await updateStore((data) => {
+    const match = (data.matches || []).find((item) => item.id === req.params.id);
+    if (!match) return { error: [404, "Nie znaleziono meczu."] };
+    if (!canUseMatchChat(match, requester)) return { error: [403, "Czat jest dostępny tylko dla uczestników meczu."] };
+    data.matchChatReads ||= {};
+    data.matchChatReads[match.id] ||= {};
+    data.matchChatReads[match.id][requester] = new Date().toISOString();
+    return { messages: (data.matchMessages?.[match.id] || []).slice(-200).map((message) => publicChatMessage(message, requester, match)) };
+  });
+  if (result.error) return res.status(result.error[0]).json({ ok: false, message: result.error[1] });
+  res.json({ ok: true, messages: result.messages });
+});
+
+router.post("/:id/chat", async (req, res) => {
+  const requester = requireToken(req, res);
+  if (!requester) return;
+  const text = clean(req.body?.text, 1000);
+  if (!text) return res.status(400).json({ ok: false, message: "Wiadomość nie może być pusta." });
+
+  const result = await updateStore((data) => {
+    const match = (data.matches || []).find((item) => item.id === req.params.id);
+    if (!match) return { error: [404, "Nie znaleziono meczu."] };
+    if (!canUseMatchChat(match, requester)) return { error: [403, "Czat jest dostępny tylko dla uczestników meczu."] };
+
+    data.matchMessages ||= {};
+    data.matchMessages[match.id] ||= [];
+    const profile = getProfile(data, requester);
+    const message = {
+      id: randomUUID(),
+      matchId: match.id,
+      ownerToken: requester,
+      nickname: clean(profile.nickname || "Gracz", 50),
+      text,
+      createdAt: new Date().toISOString()
+    };
+    data.matchMessages[match.id].push(message);
+    data.matchMessages[match.id] = data.matchMessages[match.id].slice(-500);
+
+    for (const participant of match.participants || []) {
+      if (participant.ownerToken === requester) continue;
+      notify(data, participant.ownerToken, `Nowa wiadomość · ${match.clubName}`, `${message.nickname}: ${text.slice(0, 120)}`, "match-chat");
+    }
+
+    return { message: publicChatMessage(message, requester, match) };
+  });
+
+  if (result.error) return res.status(result.error[0]).json({ ok: false, message: result.error[1] });
+  broadcast("matches.changed", { method: "CHAT_MESSAGE", matchId: req.params.id });
+  res.status(201).json({ ok: true, message: result.message });
+});
+
+router.delete("/:id/chat/:messageId", async (req, res) => {
+  const requester = requireToken(req, res);
+  if (!requester) return;
+
+  const result = await updateStore((data) => {
+    const match = (data.matches || []).find((item) => item.id === req.params.id);
+    if (!match) return { error: [404, "Nie znaleziono meczu."] };
+    if (!canUseMatchChat(match, requester)) return { error: [403, "Brak dostępu do czatu."] };
+
+    const messages = data.matchMessages?.[match.id] || [];
+    const message = messages.find((item) => item.id === req.params.messageId);
+    if (!message) return { error: [404, "Nie znaleziono wiadomości."] };
+    if (message.ownerToken !== requester && match.ownerToken !== requester) {
+      return { error: [403, "Możesz usunąć tylko własną wiadomość."] };
+    }
+    data.matchMessages[match.id] = messages.filter((item) => item.id !== message.id);
+    return { ok: true };
+  });
+
+  if (result.error) return res.status(result.error[0]).json({ ok: false, message: result.error[1] });
+  broadcast("matches.changed", { method: "CHAT_DELETE", matchId: req.params.id });
+  res.json({ ok: true });
+});
+
 router.get("/:id", async (req, res) => {
   const requester = token(req);
   const data = await readStore();

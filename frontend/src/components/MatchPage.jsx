@@ -28,6 +28,7 @@ function MatchPage({
 
   const [matches, setMatches] = useState([]);
   const [nowPlayers, setNowPlayers] = useState([]);
+  const [chatUnread, setChatUnread] = useState({});
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [showWizard, setShowWizard] = useState(false);
   const [matchmakerPrefill, setMatchmakerPrefill] = useState(null);
@@ -49,13 +50,15 @@ function MatchPage({
   const load = useCallback(async () => {
     try {
       const headers = { "x-owner-token": ownerToken };
-      const [matchesResponse, nowResponse] = await Promise.all([
+      const [matchesResponse, nowResponse, chatUnreadResponse] = await Promise.all([
         apiFetch("/matches?status=all", { headers }),
-        apiFetch("/matches/now", { headers })
+        apiFetch("/matches/now", { headers }),
+        apiFetch("/matches/chat-unread", { headers })
       ]);
 
       const matchesData = await matchesResponse.json();
       const nowData = await nowResponse.json();
+      const chatUnreadData = await chatUnreadResponse.json();
 
       if (!matchesResponse.ok) {
         throw new Error(matchesData.message || "Nie udało się pobrać meczów.");
@@ -63,6 +66,7 @@ function MatchPage({
 
       setMatches(matchesData.matches || []);
       setNowPlayers(nowData.players || []);
+      if (chatUnreadResponse.ok) setChatUnread(chatUnreadData.counts || {});
 
       if (selectedMatch) {
         const fresh = (matchesData.matches || []).find(
@@ -644,6 +648,9 @@ function MatchPage({
                     onClick={() => setSelectedMatch(match)}
                   >
                     Centrum meczu
+                    {chatUnread[match.id] > 0 && (
+                      <span className="match-chat-unread-badge">{chatUnread[match.id] > 9 ? "9+" : chatUnread[match.id]}</span>
+                    )}
                   </button>
 
                   {!match.isJoined &&
@@ -736,6 +743,7 @@ function MatchPage({
             setReadiness(selectedMatch, ready)
           }
           onEdit={() => editMatch(selectedMatch)}
+          onChatRead={() => setChatUnread((current) => ({ ...current, [selectedMatch.id]: 0 }))}
         />
       )}
     </>

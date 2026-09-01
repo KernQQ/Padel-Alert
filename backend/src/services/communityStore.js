@@ -12,6 +12,8 @@ const DEFAULT_DATA = {
   matches: [],
   nowPlayers: [],
   matchInvitations: [],
+  matchMessages: {},
+  matchChatReads: {},
   users: {},
   sessions: {}
 };
