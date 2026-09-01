@@ -2015,7 +2015,7 @@ function App() {
                   <div>
                     <div className="account-summary-name">
                       <h2>{myProfile.nickname || "Gość"}</h2>
-                      <LevelBadge level={myProfile.level || "3.0"} />
+                      <LevelBadge level={myProfile.level || "3.0"} compact plain />
                     </div>
                     <p>{myProfile.city || "Szczecin"} · {myProfile.preferredSide || "Dowolna"}</p>
                   </div>
