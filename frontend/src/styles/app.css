@@ -10617,3 +10617,24 @@ body {
 .match-chat-empty,.match-chat-locked{display:grid;min-height:180px;place-items:center;align-content:center;gap:5px;padding:24px;text-align:center;color:var(--muted)}.match-chat-empty strong,.match-chat-locked strong{color:var(--text);font-size:13px}.match-chat-empty span,.match-chat-locked p{margin:0;font-size:10px}.match-chat-error{padding:8px 14px;border-top:1px solid var(--line);color:#eaa;font-size:9px}.match-chat-compose{display:grid;grid-template-columns:1fr 42px;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--surface-soft)}.match-chat-compose input{min-width:0;height:42px;padding:0 13px;border:1px solid var(--line);border-radius:10px;outline:0;background:var(--surface);color:var(--text);font:inherit;font-size:11px}.match-chat-compose input:focus{border-color:var(--primary)}.match-chat-compose button{width:42px;height:42px;border:0;border-radius:10px;background:var(--primary-dark);color:#fff;cursor:pointer;font-size:15px}.match-chat-compose button:disabled{opacity:.4;cursor:default}
 @media(max-width:700px){.match-center-tabs{position:sticky;top:0;z-index:2;margin:12px 0}.match-chat-messages{height:42vh;padding:12px}.match-chat-messages article>div{max-width:82%}.match-chat-head{padding:12px}.match-chat-head>span{display:none}.match-chat-compose{position:sticky;bottom:0}}
 .match-details-button{position:relative}.match-chat-unread-badge{display:inline-grid;min-width:18px;height:18px;place-items:center;margin-left:7px;padding:0 5px;border-radius:999px;background:var(--primary);color:#081008;font-size:9px;font-weight:950}
+
+/* PADELALERT MOBILE MECZE FIX V2 */
+@media (max-width: 900px) {
+  .my-matches-panel .section-heading {
+    padding-top: 4px !important;
+    overflow: visible !important;
+  }
+
+  .my-matches-panel .section-heading .section-kicker {
+    display: block !important;
+    line-height: 1.35 !important;
+    padding-top: 1px !important;
+    overflow: visible !important;
+  }
+
+  .my-matches-panel .my-matches-count {
+    flex: 0 0 auto !important;
+    align-self: flex-start !important;
+    margin-top: 2px !important;
+  }
+}

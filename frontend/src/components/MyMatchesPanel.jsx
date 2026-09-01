@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
 import { apiFetch } from "../services/api";
 import LevelBadge from "./ui/LevelBadge";
 import { useRealtime } from "../hooks/useRealtime";
@@ -6,7 +6,7 @@ import { useRealtime } from "../hooks/useRealtime";
 function statusLabel(status) {
   if (status === "full") return "Komplet";
   if (status === "confirmed") return "Potwierdzony";
-  if (status === "completed") return "Zakończony";
+  if (status === "completed") return "ZakoĹ„czony";
   if (status === "cancelled") return "Anulowany";
   return "Szukamy graczy";
 }
@@ -30,7 +30,7 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Nie udało się pobrać meczów.");
+        throw new Error(data.message || "Nie udaĹ‚o siÄ™ pobraÄ‡ meczĂłw.");
       }
 
       setMatches(
@@ -59,7 +59,7 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
   async function cancelMatch(match) {
     if (
       !window.confirm(
-        `Anulować cały mecz w ${match.clubName} (${match.date}, ${match.from})?`
+        `AnulowaÄ‡ caĹ‚y mecz w ${match.clubName} (${match.date}, ${match.from})?`
       )
     ) {
       return;
@@ -80,10 +80,10 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Nie udało się anulować meczu.");
+        throw new Error(data.message || "Nie udaĹ‚o siÄ™ anulowaÄ‡ meczu.");
       }
 
-      setMessage("Mecz anulowany — uczestnicy dostali powiadomienie.");
+      setMessage("Mecz anulowany â€” uczestnicy dostali powiadomienie.");
       await load();
     } catch (error) {
       setMessage(error.message);
@@ -93,7 +93,7 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
   }
 
   async function deleteMatch(match) {
-    if (!window.confirm("Usunąć ten mecz na stałe z Twojej listy?")) {
+    if (!window.confirm("UsunÄ…Ä‡ ten mecz na staĹ‚e z Twojej listy?")) {
       return;
     }
 
@@ -110,10 +110,10 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Nie udało się usunąć meczu.");
+        throw new Error(data.message || "Nie udaĹ‚o siÄ™ usunÄ…Ä‡ meczu.");
       }
 
-      setMessage("Mecz został usunięty.");
+      setMessage("Mecz zostaĹ‚ usuniÄ™ty.");
       await load();
     } catch (error) {
       setMessage(error.message);
@@ -129,7 +129,7 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
           <span className="section-kicker">Mecze</span>
           <h2>Moje mecze</h2>
         </div>
-        <span className="my-matches-count">{matches.length}</span>
+        {matches.length > 0 && <span className="my-matches-count">{matches.length}</span>}
       </div>
 
       {message && (
@@ -139,13 +139,13 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
           onClick={() => setMessage("")}
         >
           {message}
-          <span>×</span>
+          <span>Ă—</span>
         </button>
       )}
 
       <div className="v6-match-summary">
-        <span><strong>{matches.filter((match) => !isPastMatch(match)).length}</strong> nadchodzących</span>
-        <span><strong>{matches.filter((match) => match.status === "completed").length}</strong> zakończonych</span>
+        <span><strong>{matches.filter((match) => !isPastMatch(match)).length}</strong> nadchodzÄ…cych</span>
+        <span><strong>{matches.filter((match) => match.status === "completed").length}</strong> zakoĹ„czonych</span>
       </div>
 
       <div className="my-match-list">
@@ -187,10 +187,10 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
 
         {matches.filter((match) => !isPastMatch(match)).length === 0 && (
           <div className="empty-state my-matches-empty">
-            <span className="my-empty-icon">▣</span>
+            <span className="my-empty-icon">â–Ł</span>
             <div>
-              <strong>Brak nadchodzących meczów.</strong>
-              <p>Gdy utworzysz mecz, pojawi się tutaj.</p>
+              <strong>Brak nadchodzÄ…cych meczĂłw.</strong>
+              <p>Gdy utworzysz mecz, pojawi siÄ™ tutaj.</p>
             </div>
           </div>
         )}
@@ -198,7 +198,7 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
 
       {matches.some(isPastMatch) && (
         <details className="v6-match-history">
-          <summary>Historia meczów ({matches.filter(isPastMatch).length})</summary>
+          <summary>Historia meczĂłw ({matches.filter(isPastMatch).length})</summary>
           <div className="my-match-list">
             {matches.filter(isPastMatch).map((match) => (
               <article
@@ -227,7 +227,7 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
                     disabled={busyId === match.id}
                     onClick={() => deleteMatch(match)}
                   >
-                    Usuń
+                    UsuĹ„
                   </button>
                 </div>
               </article>
@@ -240,3 +240,4 @@ function MyMatchesPanel({ ownerToken, refreshSignal = 0 }) {
 }
 
 export default MyMatchesPanel;
+
