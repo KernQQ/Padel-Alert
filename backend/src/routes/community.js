@@ -90,5 +90,6 @@ router.delete("/posts/:id", async (req, res) => { const owner=requireToken(req,r
 
 router.get("/notifications", async (req, res) => { const owner=requireToken(req,res); if(!owner)return; const data=await updateStore(store=>{ cleanupCommunity(store); return store; }); res.json({ok:true,notifications:data.notifications.filter(n=>n.ownerToken===owner).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)))}); });
 router.patch("/notifications/read-all", async (req, res) => { const owner=requireToken(req,res); if(!owner)return; await updateStore(data=>data.notifications.forEach(n=>{if(n.ownerToken===owner)n.read=true;})); res.json({ok:true}); });
+router.delete("/notifications", async (req, res) => { const owner=requireToken(req,res); if(!owner)return; await updateStore(data=>{ data.notifications=(data.notifications||[]).filter(n=>n.ownerToken!==owner); }); res.json({ok:true}); });
 
 module.exports = router;

@@ -1132,6 +1132,23 @@ function App() {
     loadCommunity();
   }
 
+  async function clearAllNotifications() {
+    if (notifications.length === 0) return;
+    if (!window.confirm("Usunąć wszystkie powiadomienia? Tej operacji nie można cofnąć.")) return;
+
+    const response = await apiFetch(`/community/notifications`, {
+      method: "DELETE",
+      headers: { "x-owner-token": ownerToken }
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      setToast(data.message || "Nie udało się wyczyścić powiadomień.");
+      return;
+    }
+    setNotifications([]);
+    setToast("Lista powiadomień została wyczyszczona.");
+  }
+
   async function copyPlayerContact(post) {
     openJoinRequest(post);
   }
@@ -2228,6 +2245,7 @@ function App() {
             <div className="notification-drawer-actions">
               <button type="button" onClick={enableSystemNotifications}>Włącz powiadomienia systemowe</button>
               <button type="button" onClick={markAllNotificationsRead}>Oznacz wszystkie jako przeczytane</button>
+              <button type="button" onClick={clearAllNotifications} disabled={notifications.length === 0}>Wyczyść wszystkie</button>
             </div>
           </aside>
         </div>
