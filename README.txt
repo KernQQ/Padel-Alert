@@ -1,10 +1,18 @@
-PadelAlert 1.1 — czyszczenie powiadomień
+PADLETIC REBRAND
 
-Zmiana:
-- dodaje przycisk „Wyczyść wszystkie” w szufladzie powiadomień,
-- przed usunięciem pokazuje potwierdzenie,
-- usuwa powiadomienia trwale po stronie backendu,
-- po odświeżeniu powiadomienia nie wracają,
-- nie zmienia chatu ani logiki BO5.
+Zmienia wyłącznie branding frontendu:
+- PadelAlert -> PADLETIC w widocznych tekstach
+- znak PA -> P w istniejącym layoucie
+- nazwa PWA / manifest
+- tytuł i opis strony
+- favicon + ikony PWA w obecnej zielonej stylistyce
 
-Uruchom APPLY-POWIADOMIENIA-CLEAR.bat.
+NIE zmienia:
+- BO5
+- API / endpointów
+- logiki meczów, czatu, powiadomień
+- localStorage keys (celowo zostają padelalert-* dla kompatybilności)
+- eventów realtime i bazy danych
+
+Uruchom APPLY-PADLETIC-REBRAND.bat.
+Skrypt robi backup i automatyczny rollback, jeśli lokalny npm run build nie przejdzie.
