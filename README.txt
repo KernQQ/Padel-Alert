@@ -1,6 +1,10 @@
-Poprawka tylko dla badge poziomu w Moje.
-Zmienia wywołanie LevelBadge na compact + plain, czyli np. 3.6 bez ikonki i opisu.
-Nie zmienia rezerwacji BO5 ani UI innych ekranów.
+PadelAlert 1.1 — czyszczenie powiadomień
 
-Rozpakuj do C:\PROJEKTY\Padel-Alert i uruchom:
-.\DEPLOY-MOJE-BADGE-FIX.bat
+Zmiana:
+- dodaje przycisk „Wyczyść wszystkie” w szufladzie powiadomień,
+- przed usunięciem pokazuje potwierdzenie,
+- usuwa powiadomienia trwale po stronie backendu,
+- po odświeżeniu powiadomienia nie wracają,
+- nie zmienia chatu ani logiki BO5.
+
+Uruchom APPLY-POWIADOMIENIA-CLEAR.bat.
