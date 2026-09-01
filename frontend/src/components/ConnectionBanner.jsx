@@ -22,7 +22,7 @@ function ConnectionBanner() {
   return (
     <div className="connection-banner">
       <span>●</span>
-      Brak internetu. PadelAlert wróci do trybu LIVE po odzyskaniu połączenia.
+      Brak internetu. PADLETIC wróci do trybu LIVE po odzyskaniu połączenia.
     </div>
   );
 }

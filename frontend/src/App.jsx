@@ -578,7 +578,7 @@ function App() {
         "Notification" in window &&
         Notification.permission === "granted"
       ) {
-        new Notification("PadelAlert — znaleziono termin", {
+        new Notification("PADLETIC — znaleziono termin", {
           body: message
         });
       }
@@ -879,7 +879,7 @@ function App() {
     ]);
 
     setToast(
-      "Alert zapisany. Gdy PadelAlert zobaczy pasujący wolny termin podczas odświeżania, dostaniesz komunikat."
+      "Alert zapisany. Gdy PADLETIC zobaczy pasujący wolny termin podczas odświeżania, dostaniesz komunikat."
     );
   }
 
@@ -1257,10 +1257,10 @@ function App() {
           className="brand"
           onClick={() => setActiveTab("home")}
         >
-          <span className="brand-mark">PA</span>
+          <span className="brand-mark">P</span>
 
           <span>
-            <strong>PadelAlert</strong>
+            <strong>PADLETIC</strong>
             <small>Padel w jednym miejscu</small>
           </span>
         </button>
@@ -1322,8 +1322,8 @@ function App() {
             className="mobile-brand"
             onClick={() => setActiveTab("home")}
           >
-            <span className="brand-mark">PA</span>
-            <strong>PadelAlert</strong>
+            <span className="brand-mark">P</span>
+            <strong>PADLETIC</strong>
           </button>
 
           <div className="mobile-topbar-actions">
@@ -2160,7 +2160,7 @@ function App() {
                       <span className="saved-empty-icon">♧</span>
                       <div>
                         <strong>Nie masz aktywnych alertów.</strong>
-                        <p>Ustaw alert, a PadelAlert przypomni Ci o wolnym korcie.</p>
+                        <p>Ustaw alert, a PADLETIC przypomni Ci o wolnym korcie.</p>
                       </div>
                       <button type="button" onClick={() => setActiveTab("courts")}>
                         Ustaw alerty <span>→</span>

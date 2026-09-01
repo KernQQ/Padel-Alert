@@ -74,7 +74,7 @@ function MatchCenter({ match, ownerToken, onClose, onJoin, onLeave, onStatus, on
 
   async function share() {
     const text = `${match.clubName}\n${match.date}, ${match.from}–${match.to}\n${match.playersCount}/${match.maxPlayers} graczy\nPoziom: ${match.level}`;
-    if (navigator.share) { await navigator.share({ title: "PadelAlert - mecz", text }); return; }
+    if (navigator.share) { await navigator.share({ title: "PADLETIC - mecz", text }); return; }
     await navigator.clipboard.writeText(text); window.alert("Szczegóły meczu skopiowane.");
   }
 

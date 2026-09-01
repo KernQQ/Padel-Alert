@@ -18,7 +18,7 @@ class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    console.error("PadelAlert UI error:", error, info);
+    console.error("PADLETIC UI error:", error, info);
   }
 
   reload = () => {
@@ -39,7 +39,7 @@ class ErrorBoundary extends Component {
       <main className="fatal-error-screen">
         <section>
           <div className="fatal-error-logo">PA</div>
-          <span className="section-kicker">PADELALERT</span>
+          <span className="section-kicker">PADLETIC</span>
           <h1>Coś poszło nie tak.</h1>
           <p>
             Dane nie zostały usunięte. Spróbuj przeładować aplikację.

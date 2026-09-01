@@ -117,7 +117,7 @@ function MatchmakerPanel({
           </span>
           <h2>Złóż mi mecz.</h2>
           <p>
-            PadelAlert łączy teraz trzy rzeczy naraz:
+            PADLETIC łączy teraz trzy rzeczy naraz:
             Twój poziom, dostępnych graczy oraz prawdziwe
             wolne korty z BO5.
           </p>

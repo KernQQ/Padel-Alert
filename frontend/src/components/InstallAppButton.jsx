@@ -72,7 +72,7 @@ function InstallAppButton({ compact = false }) {
         type="button"
         className={compact ? "install-app-button compact" : "install-app-button"}
         onClick={install}
-        title="Dodaj PadelAlert do ekranu głównego"
+        title="Dodaj PADLETIC do ekranu głównego"
       >
         <span>⬇</span>
         {!compact && "Zainstaluj aplikację"}
@@ -97,7 +97,7 @@ function InstallAppButton({ compact = false }) {
             </button>
 
             <span className="install-hint-icon">📲</span>
-            <h3>Dodaj PadelAlert do ekranu głównego</h3>
+            <h3>Dodaj PADLETIC do ekranu głównego</h3>
             <p>
               W Safari wybierz <strong>Udostępnij</strong>, a następnie
               <strong> „Do ekranu początkowego”</strong>.

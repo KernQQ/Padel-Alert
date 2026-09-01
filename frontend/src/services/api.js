@@ -27,7 +27,7 @@ export async function apiFetch(path, options = {}) {
     }
 
     throw new Error(
-      "Brak połączenia z PadelAlert. Sprawdź backend i połączenie sieciowe."
+      "Brak połączenia z PADLETIC. Sprawdź backend i połączenie sieciowe."
     );
   } finally {
     window.clearTimeout(timeout);

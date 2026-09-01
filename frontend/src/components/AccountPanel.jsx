@@ -144,7 +144,7 @@ export default function AccountPanel({
               ×
             </button>
 
-            <span className="section-kicker">Konto PadelAlert</span>
+            <span className="section-kicker">Konto PADLETIC</span>
             <h2>{mode === "login" ? "Zaloguj się" : "Załóż konto"}</h2>
             <p>
               Zachowaj mecze, profil, alerty i zapisane wyszukiwania na każdym

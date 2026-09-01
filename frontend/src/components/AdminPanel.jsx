@@ -133,7 +133,7 @@ export default function AdminPanel({ onChanged }) {
         <div>
           <span className="eyebrow">Administrator</span>
           <h1>Panel administratora</h1>
-          <p>Zarządzaj użytkownikami i wszystkimi meczami w PadelAlert.</p>
+          <p>Zarządzaj użytkownikami i wszystkimi meczami w PADLETIC.</p>
         </div>
         <button type="button" onClick={load}>Odśwież</button>
       </header>

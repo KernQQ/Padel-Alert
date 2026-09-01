@@ -1,6 +1,6 @@
 {
-  "name": "PadelAlert",
-  "short_name": "PadelAlert",
+  "name": "PADLETIC",
+  "short_name": "PADLETIC",
   "description": "Znajdź kort, mecz i graczy do padla.",
   "start_url": "/",
   "scope": "/",
