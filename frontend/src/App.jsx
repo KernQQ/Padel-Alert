@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import "./styles/app.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
@@ -1528,7 +1529,7 @@ function App() {
                 </section>
               )}
 
-              {selectedProposal && (
+              {selectedProposal && createPortal((
                 <section className="consumer-booking-sheet">
                   <div>
                     <small>Wybrany termin</small>
@@ -1571,7 +1572,7 @@ function App() {
                     </button>
                   </div>
                 </section>
-              )}
+              ), document.body)}
             </div>
           )}
 
