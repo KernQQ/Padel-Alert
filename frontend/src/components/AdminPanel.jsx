@@ -109,6 +109,24 @@ export default function AdminPanel({ onChanged }) {
     }
   }
 
+
+  async function deleteUser(user) {
+    if (!window.confirm(`Usunąć konto ${user.nickname || user.email}? Zostaną usunięte także jego dane profilu i treści powiązane z kontem.`)) return;
+    try {
+      const response = await apiFetch(`/admin/users/${user.id}`, {
+        method: "DELETE",
+        headers: sessionHeaders()
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Nie udało się usunąć użytkownika.");
+      setMessage(`Użytkownik ${user.nickname || user.email} został usunięty.`);
+      await load();
+      onChanged?.();
+    } catch (error) {
+      setMessage(error.message);
+    }
+  }
+
   async function changeRole(userId, role) {
     try {
       const response = await apiFetch(`/admin/users/${userId}`, {
@@ -207,11 +225,14 @@ export default function AdminPanel({ onChanged }) {
                 <small>{user.email}</small>
                 <small>Poziom {user.level} · {user.city}</small>
               </div>
-              <select value={user.role} onChange={(e) => changeRole(user.id, e.target.value)}>
-                <option value="user">USER</option>
-                <option value="club_admin">CLUB_ADMIN</option>
-                <option value="admin">ADMIN</option>
-              </select>
+              <div className="admin-user-actions">
+                <select value={user.role} onChange={(e) => changeRole(user.id, e.target.value)}>
+                  <option value="user">USER</option>
+                  <option value="club_admin">CLUB_ADMIN</option>
+                  <option value="admin">ADMIN</option>
+                </select>
+                <button type="button" className="admin-user-delete" onClick={() => deleteUser(user)}>Usuń użytkownika</button>
+              </div>
             </article>
           ))}
         </section>

@@ -104,6 +104,67 @@ router.patch("/users/:id", async (req, res) => {
   res.json({ ok: true, user: result.user });
 });
 
+
+router.delete("/users/:id", async (req, res) => {
+  const userId = clean(req.params.id, 120);
+  if (!userId) return res.status(400).json({ ok:false, message:"Brak identyfikatora użytkownika." });
+  if (req.adminUser?.id === userId) {
+    return res.status(400).json({ ok:false, message:"Nie możesz usunąć własnego konta administratora." });
+  }
+
+  const result = await updateStore((data) => {
+    const user = data.users?.[userId];
+    if (!user) return { error:[404, "Nie znaleziono użytkownika."] };
+    if (config.adminEmails.includes(normalizeEmail(user.email))) {
+      return { error:[400, "Konta administratora z ADMIN_EMAILS nie można usunąć z panelu."] };
+    }
+
+    // Remove sessions belonging to this account.
+    for (const [key, session] of Object.entries(data.sessions || {})) {
+      if (session?.userId === userId) delete data.sessions[key];
+    }
+
+    // Remove content owned by the deleted account and references to it.
+    const ownedPostIds = new Set((data.posts || []).filter((item) => item.ownerToken === userId).map((item) => item.id));
+    data.posts = (data.posts || []).filter((item) => item.ownerToken !== userId);
+    data.requests = (data.requests || []).filter((item) => item.requesterToken !== userId && !ownedPostIds.has(item.postId));
+    data.notifications = (data.notifications || []).filter((item) => item.ownerToken !== userId);
+    data.nowPlayers = (data.nowPlayers || []).filter((item) => item.ownerToken !== userId);
+    data.matchInvitations = (data.matchInvitations || []).filter((item) => item.ownerToken !== userId && item.invitedOwnerToken !== userId && item.fromOwnerToken !== userId && item.toOwnerToken !== userId);
+
+    const ownedMatchIds = new Set((data.matches || []).filter((match) => match.ownerToken === userId).map((match) => match.id));
+    data.matches = (data.matches || [])
+      .filter((match) => match.ownerToken !== userId)
+      .map((match) => {
+        match.participants = (match.participants || []).filter((participant) => participant.ownerToken !== userId);
+        match.waitlist = (match.waitlist || []).filter((participant) => participant.ownerToken !== userId);
+        if (match.readiness) delete match.readiness[userId];
+        match.status = match.participants.length >= Number(match.maxPlayers || 4) ? "full" : "open";
+        return match;
+      });
+
+    for (const matchId of ownedMatchIds) {
+      if (data.matchMessages) delete data.matchMessages[matchId];
+      if (data.matchChatReads) delete data.matchChatReads[matchId];
+    }
+    for (const [matchId, messages] of Object.entries(data.matchMessages || {})) {
+      data.matchMessages[matchId] = (messages || []).filter((message) => message.ownerToken !== userId);
+    }
+    for (const reads of Object.values(data.matchChatReads || {})) {
+      if (reads && typeof reads === "object") delete reads[userId];
+    }
+
+    if (data.profiles) delete data.profiles[userId];
+    delete data.users[userId];
+    return { ok:true, deletedUser:{ id:userId, email:user.email, nickname:user.nickname || "" } };
+  });
+
+  if (result.error) return res.status(result.error[0]).json({ ok:false, message:result.error[1] });
+  broadcast("community.changed", { method:"ADMIN_DELETE_USER", userId });
+  broadcast("matches.changed", { method:"ADMIN_DELETE_USER", userId });
+  res.json({ ok:true, user:result.deletedUser });
+});
+
 function adminMatch(data, match) {
   const owner = data.users?.[match.ownerToken];
   return {

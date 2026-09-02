@@ -1,4 +1,4 @@
-const CACHE = "padelalert-shell-moje-polish";
+const CACHE = "padletic-shell-widget-v2";
 const SHELL = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {

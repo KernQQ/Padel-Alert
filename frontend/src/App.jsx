@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./styles/app.css";
 import "./styles/padletic-update.css";
+import "./styles/widget-theme.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
@@ -54,6 +55,42 @@ function normalizeClubKey(value) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+
+async function prepareProfilePhoto(file) {
+  if (!file) return "";
+  if (!/^image\/(jpeg|png|webp)$/i.test(file.type || "")) {
+    throw new Error("Wybierz zdjęcie JPG, PNG lub WEBP.");
+  }
+  if (file.size > 8 * 1024 * 1024) {
+    throw new Error("Zdjęcie źródłowe może mieć maksymalnie 8 MB.");
+  }
+
+  const source = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(new Error("Nie udało się odczytać zdjęcia."));
+    reader.readAsDataURL(file);
+  });
+
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Nie udało się otworzyć zdjęcia."));
+    img.src = source;
+  });
+
+  const size = 320;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const scale = Math.max(size / image.width, size / image.height);
+  const width = image.width * scale;
+  const height = image.height * scale;
+  ctx.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+  return canvas.toDataURL("image/jpeg", 0.78);
 }
 
 function resolveBo5ClubBase(proposal, club) {
@@ -428,7 +465,15 @@ function App() {
 
       setProfiles(profilesData.profiles || []);
       setPosts(postsData.posts || []);
-      if (profileData.profile) setMyProfile(profileData.profile);
+      if (profileData.profile) {
+        setMyProfile(profileData.profile);
+        if (Object.prototype.hasOwnProperty.call(profileData.profile, "avatarDataUrl")) {
+          const nextPhoto = profileData.profile.avatarDataUrl || "";
+          setProfilePhoto(nextPhoto);
+          if (nextPhoto) localStorage.setItem("padelalert-profile-photo", nextPhoto);
+          else localStorage.removeItem("padelalert-profile-photo");
+        }
+      }
       setOwnerPosts(ownerData.posts || []);
       setOutgoingRequests(outgoingData.requests || []);
 
@@ -1097,7 +1142,7 @@ function App() {
         "Content-Type": "application/json",
         "x-owner-token": ownerToken
       },
-      body: JSON.stringify(myProfile)
+      body: JSON.stringify({ ...myProfile, avatarDataUrl: profilePhoto })
     });
     const data = await response.json();
     if (!response.ok) {
@@ -1298,7 +1343,7 @@ function App() {
         </nav>
 
         <div className="sidebar-profile">
-          <span className="profile-avatar">{(myProfile.nickname || "G").slice(0, 1).toUpperCase()}</span>
+          <span className={`profile-avatar ${profilePhoto ? "has-photo" : ""}`}>{profilePhoto ? <img src={profilePhoto} alt="" /> : (myProfile.nickname || "G").slice(0, 1).toUpperCase()}</span>
 
           <div>
             <strong>{myProfile.nickname || "Gość"}</strong>
@@ -1307,7 +1352,7 @@ function App() {
         </div>
 
         <div className="sidebar-actions">
-          <InstallAppButton />
+          <InstallAppButton variant="sidebar" />
 
           <button
             type="button"
@@ -2072,12 +2117,7 @@ function App() {
                   <small>{savedSearches.length} zapisanych</small>
                   <b>→</b>
                 </button>
-                <div className="account-install-tile">
-                  <span className="account-quick-icon">↧</span>
-                  <strong>Zainstaluj PADLETIC</strong>
-                  <small>Dodaj aplikację do ekranu głównego</small>
-                  <InstallAppButton compact />
-                </div>
+                <InstallAppButton variant="tile" />
               </div>
 
               <MatchInvitationsPanel
@@ -2281,15 +2321,21 @@ function App() {
               </span>
               <div>
                 <strong>Zdjęcie profilowe</strong>
-                <small>JPG, PNG lub WEBP. Zdjęcie zostaje zapisane na tym urządzeniu.</small>
+                <small>JPG, PNG lub WEBP. Zdjęcie zapisze się na Twoim koncie i będzie dostępne na innych urządzeniach.</small>
                 <div className="profile-photo-actions">
-                  <label className="profile-photo-pick">Wybierz zdjęcie<input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => {
+                  <label className="profile-photo-pick">Wybierz zdjęcie<input type="file" accept="image/png,image/jpeg,image/webp" onChange={async (event) => {
                     const file = event.target.files?.[0];
                     if (!file) return;
-                    if (file.size > 2 * 1024 * 1024) { setProfileMessage("Zdjęcie może mieć maksymalnie 2 MB."); return; }
-                    const reader = new FileReader();
-                    reader.onload = () => { const value = String(reader.result || ""); setProfilePhoto(value); localStorage.setItem("padelalert-profile-photo", value); };
-                    reader.readAsDataURL(file);
+                    setProfileMessage("Przygotowuję zdjęcie…");
+                    try {
+                      const value = await prepareProfilePhoto(file);
+                      setProfilePhoto(value);
+                      localStorage.setItem("padelalert-profile-photo", value);
+                      setProfileMessage("Zdjęcie gotowe. Kliknij „Zapisz profil”.");
+                    } catch (error) {
+                      setProfileMessage(error.message || "Nie udało się przygotować zdjęcia.");
+                    }
+                    event.target.value = "";
                   }} /></label>
                   {profilePhoto && <button type="button" onClick={() => { setProfilePhoto(""); localStorage.removeItem("padelalert-profile-photo"); }}>Usuń</button>}
                 </div>

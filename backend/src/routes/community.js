@@ -70,7 +70,27 @@ function cleanupCommunity(data) {
 
 router.get("/profiles", async (req, res) => { const data=await readStore(); res.json({ok:true,profiles:[...demoProfiles,...Object.values(data.profiles)]}); });
 router.get("/me", async (req, res) => { const id=requireToken(req,res); if(!id)return; const data=await readStore(); res.json({ok:true,profile:data.profiles[id] || { nickname:"Gość", level:"3.0", preferredSide:"Dowolna", favoriteClubSlug:"all", city:"Szczecin", bio:"" }}); });
-router.patch("/me", async (req, res) => { const id=requireToken(req,res); if(!id)return; const profile=await updateStore(data => { const current=data.profiles[id]||{}; const next={...current,id,nickname:clean(req.body.nickname||"Gość",50),level:clean(req.body.level||"3.0",40),preferredSide:clean(req.body.preferredSide||"Dowolna",20),favoriteClubSlug:clean(req.body.favoriteClubSlug||"all",80),city:clean(req.body.city||"Szczecin",60),bio:clean(req.body.bio,300),updatedAt:new Date().toISOString()}; data.profiles[id]=next; return next; }); res.json({ok:true,profile}); });
+router.patch("/me", async (req, res) => {
+  const id=requireToken(req,res); if(!id)return;
+  const profile=await updateStore(data => {
+    const current=data.profiles[id]||{};
+    let avatarDataUrl = current.avatarDataUrl || "";
+    if (Object.prototype.hasOwnProperty.call(req.body || {}, "avatarDataUrl")) {
+      const candidate = String(req.body.avatarDataUrl || "");
+      if (candidate && !/^data:image\/(jpeg|png|webp);base64,/i.test(candidate)) {
+        return { error:[400,"Nieprawidłowy format zdjęcia profilowego."] };
+      }
+      if (candidate.length > 180000) {
+        return { error:[413,"Zdjęcie profilowe jest za duże."] };
+      }
+      avatarDataUrl = candidate;
+    }
+    const next={...current,id,nickname:clean(req.body.nickname||"Gość",50),level:clean(req.body.level||"3.0",40),preferredSide:clean(req.body.preferredSide||"Dowolna",20),favoriteClubSlug:clean(req.body.favoriteClubSlug||"all",80),city:clean(req.body.city||"Szczecin",60),bio:clean(req.body.bio,300),avatarDataUrl,updatedAt:new Date().toISOString()};
+    data.profiles[id]=next; return { profile: next };
+  });
+  if (profile?.error) return res.status(profile.error[0]).json({ok:false,message:profile.error[1]});
+  res.json({ok:true,profile:profile.profile});
+});
 
 router.get("/posts", async (req, res) => { const data=await updateStore(store=>{ cleanupCommunity(store); return store; }); const requester=token(req); const {clubSlug,date,level,kind,status="open"}=req.query; let posts=data.posts.map(p=>publicPost(p,requester,data.requests)); if(status!=="all")posts=posts.filter(p=>p.status===status); if(clubSlug&&clubSlug!=="all")posts=posts.filter(p=>p.clubSlug===clubSlug||p.clubSlug==="all"); if(date)posts=posts.filter(p=>p.date===date); if(level&&level!=="all")posts=posts.filter(p=>p.level===level); if(kind&&kind!=="all")posts=posts.filter(p=>p.kind===kind); posts.sort((a,b)=>`${a.date}T${a.from}`.localeCompare(`${b.date}T${b.from}`)); res.json({ok:true,count:posts.length,posts}); });
 
