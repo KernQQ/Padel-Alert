@@ -1,0 +1,87 @@
+/* PADLETIC — Android mobile scroll fix
+   Imported last. Keeps document scrolling on the browser viewport while
+   preserving the fixed bottom navigation and floating booking sheet. */
+
+@media (max-width: 900px) {
+  html {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: auto !important;
+    touch-action: pan-y pinch-zoom !important;
+  }
+
+  body {
+    position: static !important;
+    height: auto !important;
+    min-height: 100% !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: auto !important;
+    touch-action: pan-y pinch-zoom !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #root,
+  .app-shell,
+  .main-shell,
+  .main-shell > .page,
+  .page {
+    position: relative;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    overscroll-behavior-y: auto !important;
+    touch-action: pan-y pinch-zoom !important;
+  }
+
+  #root,
+  .app-shell,
+  .main-shell {
+    overflow-x: hidden !important;
+  }
+
+  /* Let a vertical drag started on normal UI elements continue scrolling
+     the page in Android Chromium/Samsung Internet. */
+  .page,
+  .page section,
+  .page article,
+  .page div,
+  .consumer-results,
+  .consumer-slot-list,
+  .consumer-slot-group,
+  .consumer-court-options {
+    touch-action: pan-y pinch-zoom !important;
+  }
+
+  /* Interactive controls still support taps, but do not capture vertical
+     scrolling when the user drags over them. */
+  button,
+  a,
+  label,
+  input,
+  select,
+  textarea {
+    touch-action: pan-y pinch-zoom !important;
+  }
+
+  /* These elements intentionally remain viewport-fixed. */
+  .mobile-bottom-nav,
+  body > .consumer-booking-sheet,
+  .notification-drawer,
+  .install-hint-backdrop,
+  .account-modal-backdrop,
+  .admin-modal-backdrop {
+    touch-action: auto !important;
+  }
+
+  /* Leave enough real document space below the list so Android never ends
+     underneath the fixed bottom bar. */
+  .main-shell > .page,
+  .page {
+    padding-bottom: calc(118px + env(safe-area-inset-bottom)) !important;
+  }
+}

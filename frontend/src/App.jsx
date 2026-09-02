@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import "./styles/app.css";
 import "./styles/padletic-update.css";
 import "./styles/widget-theme.css";
+import "./styles/android-scroll-fix.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
