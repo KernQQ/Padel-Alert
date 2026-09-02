@@ -125,7 +125,7 @@ function MatchmakerPanel({
 
         <div className="matchmaker-my-level">
           <small>Twój poziom</small>
-          <LevelBadge level={profile?.level} compact />
+          <LevelBadge level={profile?.level} compact plain />
         </div>
       </div>
 

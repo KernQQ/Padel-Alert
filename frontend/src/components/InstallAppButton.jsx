@@ -14,6 +14,7 @@ function isStandalone() {
 function InstallAppButton({ compact = false }) {
   const [installPrompt, setInstallPrompt] = useState(null);
   const [showIosHint, setShowIosHint] = useState(false);
+  const [showAndroidHint, setShowAndroidHint] = useState(false);
   const [installed, setInstalled] = useState(() => isStandalone());
 
   useEffect(() => {
@@ -44,10 +45,6 @@ function InstallAppButton({ compact = false }) {
   const canPrompt = Boolean(installPrompt);
   const ios = isIosDevice();
 
-  if (!canPrompt && !ios) {
-    return null;
-  }
-
   async function install() {
     if (installPrompt) {
       await installPrompt.prompt();
@@ -63,7 +60,10 @@ function InstallAppButton({ compact = false }) {
 
     if (ios) {
       setShowIosHint(true);
+      return;
     }
+
+    setShowAndroidHint(true);
   }
 
   return (
@@ -78,11 +78,11 @@ function InstallAppButton({ compact = false }) {
         {!compact && "Zainstaluj aplikację"}
       </button>
 
-      {showIosHint && (
+      {(showIosHint || showAndroidHint) && (
         <div
           className="install-hint-backdrop"
           role="presentation"
-          onClick={() => setShowIosHint(false)}
+          onClick={() => { setShowIosHint(false); setShowAndroidHint(false); }}
         >
           <section
             className="install-hint-card"
@@ -91,22 +91,19 @@ function InstallAppButton({ compact = false }) {
             <button
               type="button"
               className="install-hint-close"
-              onClick={() => setShowIosHint(false)}
+              onClick={() => { setShowIosHint(false); setShowAndroidHint(false); }}
             >
               ×
             </button>
 
             <span className="install-hint-icon">📲</span>
             <h3>Dodaj PADLETIC do ekranu głównego</h3>
-            <p>
-              W Safari wybierz <strong>Udostępnij</strong>, a następnie
-              <strong> „Do ekranu początkowego”</strong>.
-            </p>
+            <p>{showIosHint ? <>W Safari wybierz <strong>Udostępnij</strong>, a następnie <strong>„Do ekranu początkowego”</strong>.</> : <>W Chrome otwórz menu <strong>⋮</strong> i wybierz <strong>„Zainstaluj aplikację”</strong> lub <strong>„Dodaj do ekranu głównego”</strong>.</>}</p>
 
             <button
               type="button"
               className="install-hint-ok"
-              onClick={() => setShowIosHint(false)}
+              onClick={() => { setShowIosHint(false); setShowAndroidHint(false); }}
             >
               Rozumiem
             </button>

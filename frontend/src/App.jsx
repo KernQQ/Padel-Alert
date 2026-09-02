@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./styles/app.css";
-import "./styles/court-fix.css";
+import "./styles/padletic-update.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
@@ -239,6 +239,7 @@ function App() {
   const [showMobileActions, setShowMobileActions] = useState(false);
   const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
   const [showProfileEditor, setShowProfileEditor] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(() => localStorage.getItem("padelalert-profile-photo") || "");
   const [matchCreateSignal, setMatchCreateSignal] = useState(0);
   const [playNowSignal, setPlayNowSignal] = useState(0);
   const [theme, setTheme] = useState("dark");
@@ -1251,6 +1252,7 @@ function App() {
           onAuthenticated={handleAuthenticated}
           onLogout={handleLogout}
           onOpenProfile={() => setActiveTab("saved")}
+          avatarUrl={profilePhoto}
         />
       </div>
       <aside className="sidebar">
@@ -1349,6 +1351,7 @@ function App() {
               onAuthenticated={handleAuthenticated}
               onLogout={handleLogout}
               onOpenProfile={() => setActiveTab("saved")}
+              avatarUrl={profilePhoto}
             />
           </div>
         </header>
@@ -2026,10 +2029,10 @@ function App() {
               <section className="account-summary-card">
                 <div className="account-summary-main">
                   <span
-                    className="profile-editor-avatar colorful-avatar"
+                    className={`profile-editor-avatar colorful-avatar ${profilePhoto ? "has-photo" : ""}`}
                     style={{ "--avatar-hue": getAvatarHue(myProfile.nickname) }}
                   >
-                    {(myProfile.nickname || "G").slice(0, 1).toUpperCase()}
+                    {profilePhoto ? <img src={profilePhoto} alt="Zdjęcie profilowe" /> : (myProfile.nickname || "G").slice(0, 1).toUpperCase()}
                   </span>
                   <div>
                     <div className="account-summary-name">
@@ -2069,6 +2072,12 @@ function App() {
                   <small>{savedSearches.length} zapisanych</small>
                   <b>→</b>
                 </button>
+                <div className="account-install-tile">
+                  <span className="account-quick-icon">↧</span>
+                  <strong>Zainstaluj PADLETIC</strong>
+                  <small>Dodaj aplikację do ekranu głównego</small>
+                  <InstallAppButton compact />
+                </div>
               </div>
 
               <MatchInvitationsPanel
@@ -2265,6 +2274,26 @@ function App() {
                 <h2>Edytuj profil</h2>
               </div>
               <button type="button" onClick={() => setShowProfileEditor(false)} aria-label="Zamknij">×</button>
+            </div>
+            <div className="profile-photo-editor">
+              <span className={`profile-editor-avatar colorful-avatar ${profilePhoto ? "has-photo" : ""}`} style={{ "--avatar-hue": getAvatarHue(myProfile.nickname) }}>
+                {profilePhoto ? <img src={profilePhoto} alt="Zdjęcie profilowe" /> : (myProfile.nickname || "G").slice(0, 1).toUpperCase()}
+              </span>
+              <div>
+                <strong>Zdjęcie profilowe</strong>
+                <small>JPG, PNG lub WEBP. Zdjęcie zostaje zapisane na tym urządzeniu.</small>
+                <div className="profile-photo-actions">
+                  <label className="profile-photo-pick">Wybierz zdjęcie<input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    if (file.size > 2 * 1024 * 1024) { setProfileMessage("Zdjęcie może mieć maksymalnie 2 MB."); return; }
+                    const reader = new FileReader();
+                    reader.onload = () => { const value = String(reader.result || ""); setProfilePhoto(value); localStorage.setItem("padelalert-profile-photo", value); };
+                    reader.readAsDataURL(file);
+                  }} /></label>
+                  {profilePhoto && <button type="button" onClick={() => { setProfilePhoto(""); localStorage.removeItem("padelalert-profile-photo"); }}>Usuń</button>}
+                </div>
+              </div>
             </div>
             <div className="profile-form-grid">
               <label><span>Pseudonim</span><input value={myProfile.nickname || ""} onChange={(e) => setMyProfile({ ...myProfile, nickname: e.target.value })} /></label>

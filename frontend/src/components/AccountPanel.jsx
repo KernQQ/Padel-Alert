@@ -6,7 +6,8 @@ export default function AccountPanel({
   anonymousToken,
   onAuthenticated,
   onLogout,
-  onOpenProfile
+  onOpenProfile,
+  avatarUrl = ""
 }) {
   const [mode, setMode] = useState("login");
   const [open, setOpen] = useState(false);
@@ -75,8 +76,8 @@ export default function AccountPanel({
           aria-expanded={open}
           aria-label="Menu konta"
         >
-          <span className="account-avatar">
-            {(user.nickname || user.email || "P").slice(0, 1).toUpperCase()}
+          <span className={`account-avatar ${avatarUrl ? "has-photo" : ""}`}>
+            {avatarUrl ? <img src={avatarUrl} alt="" /> : (user.nickname || user.email || "P").slice(0, 1).toUpperCase()}
           </span>
           <span className="account-trigger-copy">
             <strong>{user.nickname || "Gracz"}</strong>
@@ -88,8 +89,8 @@ export default function AccountPanel({
         {open && (
           <div className="account-dropdown">
             <div className="account-dropdown-user">
-              <span className="account-avatar large">
-                {(user.nickname || user.email || "P").slice(0, 1).toUpperCase()}
+              <span className={`account-avatar large ${avatarUrl ? "has-photo" : ""}`}>
+                {avatarUrl ? <img src={avatarUrl} alt="" /> : (user.nickname || user.email || "P").slice(0, 1).toUpperCase()}
               </span>
               <div>
                 <strong>{user.nickname || "Gracz"}</strong>
