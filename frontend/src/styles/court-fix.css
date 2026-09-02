@@ -1,0 +1,85 @@
+/* PADLETIC — isolated final court-selection UI layer. */
+.consumer-court-options {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.consumer-court-options > button {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+}
+
+.consumer-court-options > button > span {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.consumer-court-options > button > b {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  white-space: nowrap !important;
+}
+
+/* The JSX portals this element directly into document.body. */
+body > .consumer-booking-sheet {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: 22px !important;
+  transform: translateX(-50%) !important;
+  z-index: 2147483000 !important;
+  width: min(760px, calc(100vw - 40px)) !important;
+  max-width: 760px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 900px) {
+  .consumer-court-options > button {
+    width: 100% !important;
+    padding-right: 14px !important;
+  }
+
+  .consumer-court-options > button > b {
+    margin-left: auto !important;
+    min-width: 76px !important;
+    text-align: center !important;
+  }
+
+  body > .consumer-booking-sheet {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: auto !important;
+    bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+    transform: none !important;
+    z-index: 2147483000 !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: min(46dvh, 350px) !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  body > .consumer-booking-sheet .consumer-booking-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 7px !important;
+    width: 100% !important;
+  }
+
+  body > .consumer-booking-sheet .consumer-booking-link {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
