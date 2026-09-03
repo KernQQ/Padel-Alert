@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./styles/app.css";
-import "./styles/padletic-update.css";
-import "./styles/widget-theme.css";
-import "./styles/android-scroll-fix.css";
-import "./styles/padletic-12.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
@@ -29,7 +25,6 @@ import MatchInvitationsPanel from "./components/MatchInvitationsPanel";
 import ConnectionBanner from "./components/ConnectionBanner";
 import AccountPanel from "./components/AccountPanel";
 import AdminPanel from "./components/AdminPanel";
-import ProfilePhotoCropper from "./components/ProfilePhotoCropper";
 import { useRealtime } from "./hooks/useRealtime";
 import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
 
@@ -58,42 +53,6 @@ function normalizeClubKey(value) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-}
-
-
-async function prepareProfilePhoto(file) {
-  if (!file) return "";
-  if (!/^image\/(jpeg|png|webp)$/i.test(file.type || "")) {
-    throw new Error("Wybierz zdjęcie JPG, PNG lub WEBP.");
-  }
-  if (file.size > 8 * 1024 * 1024) {
-    throw new Error("Zdjęcie źródłowe może mieć maksymalnie 8 MB.");
-  }
-
-  const source = await new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result || ""));
-    reader.onerror = () => reject(new Error("Nie udało się odczytać zdjęcia."));
-    reader.readAsDataURL(file);
-  });
-
-  const image = await new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error("Nie udało się otworzyć zdjęcia."));
-    img.src = source;
-  });
-
-  const size = 320;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  const scale = Math.max(size / image.width, size / image.height);
-  const width = image.width * scale;
-  const height = image.height * scale;
-  ctx.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
-  return canvas.toDataURL("image/jpeg", 0.78);
 }
 
 function resolveBo5ClubBase(proposal, club) {
@@ -279,10 +238,7 @@ function App() {
   const [showMobileActions, setShowMobileActions] = useState(false);
   const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
   const [showProfileEditor, setShowProfileEditor] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState(() => localStorage.getItem("padelalert-profile-photo") || "");
-  const [profileCropSource, setProfileCropSource] = useState("");
   const [matchCreateSignal, setMatchCreateSignal] = useState(0);
-  const [matchCreatePrefill, setMatchCreatePrefill] = useState(null);
   const [playNowSignal, setPlayNowSignal] = useState(0);
   const [theme, setTheme] = useState("dark");
 
@@ -346,7 +302,7 @@ function App() {
   const [contactPost, setContactPost] = useState(null);
   const [joinPost, setJoinPost] = useState(null);
   const [joinForm, setJoinForm] = useState({ nickname: "", contact: "", message: "" });
-  const [myProfile, setMyProfile] = useState({ nickname: "Gość", level: "3.0", preferredSide: "Dowolna", favoriteClubSlug: "all", favoriteClubSlugs: [], availabilityPeriods: [], city: "Szczecin", bio: "" });
+  const [myProfile, setMyProfile] = useState({ nickname: "Gość", level: "3.0", preferredSide: "Dowolna", favoriteClubSlug: "all", city: "Szczecin", bio: "" });
   const [profileMessage, setProfileMessage] = useState("");
   const [ownerPosts, setOwnerPosts] = useState([]);
   const [outgoingRequests, setOutgoingRequests] = useState([]);
@@ -470,15 +426,7 @@ function App() {
 
       setProfiles(profilesData.profiles || []);
       setPosts(postsData.posts || []);
-      if (profileData.profile) {
-        setMyProfile(profileData.profile);
-        if (Object.prototype.hasOwnProperty.call(profileData.profile, "avatarDataUrl")) {
-          const nextPhoto = profileData.profile.avatarDataUrl || "";
-          setProfilePhoto(nextPhoto);
-          if (nextPhoto) localStorage.setItem("padelalert-profile-photo", nextPhoto);
-          else localStorage.removeItem("padelalert-profile-photo");
-        }
-      }
+      if (profileData.profile) setMyProfile(profileData.profile);
       setOwnerPosts(ownerData.posts || []);
       setOutgoingRequests(outgoingData.requests || []);
 
@@ -1147,7 +1095,7 @@ function App() {
         "Content-Type": "application/json",
         "x-owner-token": ownerToken
       },
-      body: JSON.stringify({ ...myProfile, avatarDataUrl: profilePhoto })
+      body: JSON.stringify(myProfile)
     });
     const data = await response.json();
     if (!response.ok) {
@@ -1302,7 +1250,6 @@ function App() {
           onAuthenticated={handleAuthenticated}
           onLogout={handleLogout}
           onOpenProfile={() => setActiveTab("saved")}
-          avatarUrl={profilePhoto}
         />
       </div>
       <aside className="sidebar">
@@ -1348,7 +1295,7 @@ function App() {
         </nav>
 
         <div className="sidebar-profile">
-          <span className={`profile-avatar ${profilePhoto ? "has-photo" : ""}`}>{profilePhoto ? <img src={profilePhoto} alt="" /> : (myProfile.nickname || "G").slice(0, 1).toUpperCase()}</span>
+          <span className="profile-avatar">{(myProfile.nickname || "G").slice(0, 1).toUpperCase()}</span>
 
           <div>
             <strong>{myProfile.nickname || "Gość"}</strong>
@@ -1357,7 +1304,7 @@ function App() {
         </div>
 
         <div className="sidebar-actions">
-          <InstallAppButton variant="sidebar" />
+          <InstallAppButton />
 
           <button
             type="button"
@@ -1401,7 +1348,6 @@ function App() {
               onAuthenticated={handleAuthenticated}
               onLogout={handleLogout}
               onOpenProfile={() => setActiveTab("saved")}
-              avatarUrl={profilePhoto}
             />
           </div>
         </header>
@@ -1585,6 +1531,16 @@ function App() {
 
               {selectedProposal && createPortal((
                 <section className="consumer-booking-sheet">
+                  <button
+                    type="button"
+                    className="consumer-booking-close"
+                    onClick={() => setSelectedProposal(null)}
+                    aria-label="Zamknij wybrany termin"
+                    title="Zamknij"
+                  >
+                    ×
+                  </button>
+
                   <div>
                     <small>Wybrany termin</small>
                     <strong>
@@ -1602,19 +1558,6 @@ function App() {
                     <button
                       type="button"
                       onClick={() => {
-                        setMatchCreatePrefill({
-                          clubSlug: selectedProposal.clubSlug,
-                          date: selectedProposal.date || activeSearch.date,
-                          from: selectedProposal.startHour,
-                          to: selectedProposal.endHour,
-                          courtId: selectedProposal.courtId,
-                          courtName: selectedProposal.courtName,
-                          courtType: selectedProposal.courtType,
-                          reservationUrl: selectedProposal.reservationUrl || "",
-                          level: myProfile.level || "3.0",
-                          gameType: "Szukamy pary"
-                        });
-                        setSelectedProposal(null);
                         setActiveTab("matches");
                         setMatchCreateSignal((value) => value + 1);
                       }}
@@ -1650,7 +1593,6 @@ function App() {
               profile={myProfile}
               onChanged={loadCommunity}
               createSignal={matchCreateSignal}
-              createPrefill={matchCreatePrefill}
               playNowSignal={playNowSignal}
             />
           )}
@@ -1659,10 +1601,10 @@ function App() {
             <>
               <section className="partners-heading partners-heading-premium">
                 <div>
-                  <span className="eyebrow">Szukam partnera</span>
-                  <h1>Znajdź osobę do gry</h1>
+                  <span className="eyebrow">Gracze</span>
+                  <h1>Znajdź graczy</h1>
                   <p>
-                    Wybierz poziom, klub i termin. Gdy ktoś pasuje, kliknij „Zagram”.
+                    Wybierz poziom, klub i termin. Napisz do osoby, z którą chcesz zagrać.
                   </p>
                 </div>
 
@@ -1870,22 +1812,20 @@ function App() {
                         <div className="player-body">
                           <div className="player-identity">
                             <span
-                              className={`large-avatar colorful-avatar ${post.avatarDataUrl ? "has-photo" : ""}`}
+                              className="large-avatar colorful-avatar"
                               style={{
                                 "--avatar-hue": getAvatarHue(post.nickname)
                               }}
                             >
-                              {post.avatarDataUrl ? <img src={post.avatarDataUrl} alt="" /> : post.nickname.slice(0, 1).toUpperCase()}
+                              {post.nickname.slice(0, 1).toUpperCase()}
                             </span>
 
                             <div>
                               <h3>{post.nickname}</h3>
                               <p>
-                                {post.city || "Szczecin"} · strona {post.preferredSide || "Dowolna"}
+                                Preferowana strona:{" "}
+                                {post.preferredSide || "Dowolna"}
                               </p>
-                              <div className="player-card-profileline">
-                                {(post.availabilityPeriods || []).map((period) => <span key={period}>{period}</span>)}
-                              </div>
                             </div>
 
                             {post.canDelete && (
@@ -1964,14 +1904,12 @@ function App() {
                               </>
                             )}
 
-                            {!post.canDelete && (
-                              <button
-                                className="primary-action"
-                                onClick={() => copyPlayerContact(post)}
-                              >
-                                Zagram
-                              </button>
-                            )}
+                            <button
+                              className="primary-action"
+                              onClick={() => copyPlayerContact(post)}
+                            >
+                              Zaproś do meczu
+                            </button>
                           </div>
                         </div>
                       </article>
@@ -2033,12 +1971,12 @@ function App() {
                       {profiles.slice(0, 5).map((profile) => (
                         <article key={profile.id}>
                           <span
-                            className={`small-avatar colorful-avatar ${profile.avatarDataUrl ? "has-photo" : ""}`}
+                            className="small-avatar colorful-avatar"
                             style={{
                               "--avatar-hue": getAvatarHue(profile.nickname)
                             }}
                           >
-                            {profile.avatarDataUrl ? <img src={profile.avatarDataUrl} alt="" /> : profile.nickname.slice(0, 1).toUpperCase()}
+                            {profile.nickname.slice(0, 1).toUpperCase()}
                           </span>
 
                           <div>
@@ -2097,10 +2035,10 @@ function App() {
               <section className="account-summary-card">
                 <div className="account-summary-main">
                   <span
-                    className={`profile-editor-avatar colorful-avatar ${profilePhoto ? "has-photo" : ""}`}
+                    className="profile-editor-avatar colorful-avatar"
                     style={{ "--avatar-hue": getAvatarHue(myProfile.nickname) }}
                   >
-                    {profilePhoto ? <img src={profilePhoto} alt="Zdjęcie profilowe" /> : (myProfile.nickname || "G").slice(0, 1).toUpperCase()}
+                    {(myProfile.nickname || "G").slice(0, 1).toUpperCase()}
                   </span>
                   <div>
                     <div className="account-summary-name">
@@ -2140,7 +2078,6 @@ function App() {
                   <small>{savedSearches.length} zapisanych</small>
                   <b>→</b>
                 </button>
-                <InstallAppButton variant="tile" />
               </div>
 
               <MatchInvitationsPanel
@@ -2338,94 +2275,18 @@ function App() {
               </div>
               <button type="button" onClick={() => setShowProfileEditor(false)} aria-label="Zamknij">×</button>
             </div>
-            <div className="profile-photo-editor">
-              <span className={`profile-editor-avatar colorful-avatar ${profilePhoto ? "has-photo" : ""}`} style={{ "--avatar-hue": getAvatarHue(myProfile.nickname) }}>
-                {profilePhoto ? <img src={profilePhoto} alt="Zdjęcie profilowe" /> : (myProfile.nickname || "G").slice(0, 1).toUpperCase()}
-              </span>
-              <div>
-                <strong>Zdjęcie profilowe</strong>
-                <small>JPG, PNG lub WEBP. Zdjęcie zapisze się na Twoim koncie i będzie dostępne na innych urządzeniach.</small>
-                <div className="profile-photo-actions">
-                  <label className="profile-photo-pick">Wybierz zdjęcie<input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    if (!file) return;
-                    if (!/^image\/(jpeg|png|webp)$/i.test(file.type || "")) {
-                      setProfileMessage("Wybierz zdjęcie JPG, PNG lub WEBP.");
-                      event.target.value = "";
-                      return;
-                    }
-                    if (file.size > 20 * 1024 * 1024) {
-                      setProfileMessage("Zdjęcie z galerii może mieć maksymalnie 20 MB.");
-                      event.target.value = "";
-                      return;
-                    }
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                      setProfileCropSource(String(reader.result || ""));
-                      setProfileMessage("");
-                    };
-                    reader.onerror = () => setProfileMessage("Nie udało się odczytać zdjęcia.");
-                    reader.readAsDataURL(file);
-                    event.target.value = "";
-                  }} /></label>
-                  {profilePhoto && <button type="button" onClick={() => { setProfilePhoto(""); localStorage.removeItem("padelalert-profile-photo"); }}>Usuń</button>}
-                </div>
-              </div>
-            </div>
             <div className="profile-form-grid">
               <label><span>Pseudonim</span><input value={myProfile.nickname || ""} onChange={(e) => setMyProfile({ ...myProfile, nickname: e.target.value })} /></label>
               <label><span>Miasto</span><input value={myProfile.city || ""} onChange={(e) => setMyProfile({ ...myProfile, city: e.target.value })} /></label>
               <label><span>Poziom</span><LevelSelect value={myProfile.level || "3.0"} onChange={(value) => setMyProfile({ ...myProfile, level: value })} /></label>
               <label><span>Strona</span><select value={myProfile.preferredSide || "Dowolna"} onChange={(e) => setMyProfile({ ...myProfile, preferredSide: e.target.value })}><option>Dowolna</option><option>Lewa</option><option>Prawa</option></select></label>
-              <div className="profile-preference-block">
-                <span>Najczęściej gram</span>
-                <div className="profile-chip-row">
-                  {["Rano", "Popołudnie", "Wieczór"].map((period) => {
-                    const selected = (myProfile.availabilityPeriods || []).includes(period);
-                    return (
-                      <button key={period} type="button" className={selected ? "active" : ""} onClick={() => {
-                        const current = myProfile.availabilityPeriods || [];
-                        const next = selected ? current.filter((item) => item !== period) : [...current, period];
-                        setMyProfile({ ...myProfile, availabilityPeriods: next });
-                      }}>{period}</button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="profile-preference-block">
-                <span>Ulubione kluby</span>
-                <div className="profile-chip-row">
-                  {clubs.map((club) => {
-                    const selected = (myProfile.favoriteClubSlugs || (myProfile.favoriteClubSlug && myProfile.favoriteClubSlug !== "all" ? [myProfile.favoriteClubSlug] : [])).includes(club.slug);
-                    return (
-                      <button key={club.slug} type="button" className={selected ? "active" : ""} onClick={() => {
-                        const current = myProfile.favoriteClubSlugs || (myProfile.favoriteClubSlug && myProfile.favoriteClubSlug !== "all" ? [myProfile.favoriteClubSlug] : []);
-                        const next = selected ? current.filter((slug) => slug !== club.slug) : [...current, club.slug];
-                        setMyProfile({ ...myProfile, favoriteClubSlugs: next, favoriteClubSlug: next[0] || "all" });
-                      }}>{club.name}</button>
-                    );
-                  })}
-                </div>
-              </div>
-              <label className="profile-wide"><span>O mnie</span><textarea value={myProfile.bio || ""} onChange={(e) => setMyProfile({ ...myProfile, bio: e.target.value })} placeholder="Np. lubię dynamiczną grę i dobrą atmosferę." /></label>
+              <label className="profile-wide"><span>Ulubiony klub</span><select value={myProfile.favoriteClubSlug || "all"} onChange={(e) => setMyProfile({ ...myProfile, favoriteClubSlug: e.target.value })}><option value="all">Brak / dowolny</option>{clubs.map((club) => <option key={club.slug} value={club.slug}>{club.name}</option>)}</select></label>
+              <label className="profile-wide"><span>O mnie</span><textarea value={myProfile.bio || ""} onChange={(e) => setMyProfile({ ...myProfile, bio: e.target.value })} placeholder="Np. gram rekreacyjnie po pracy." /></label>
             </div>
             {profileMessage && <div className="form-message">{profileMessage}</div>}
             <button className="profile-save-button" type="submit">Zapisz profil</button>
           </form>
         </div>
-      )}
-
-      {profileCropSource && (
-        <ProfilePhotoCropper
-          source={profileCropSource}
-          onCancel={() => setProfileCropSource("")}
-          onSave={(value) => {
-            setProfilePhoto(value);
-            localStorage.setItem("padelalert-profile-photo", value);
-            setProfileCropSource("");
-            setProfileMessage("Zdjęcie przycięte i skompresowane. Kliknij „Zapisz profil”.");
-          }}
-        />
       )}
 
       {toast && (
