@@ -5,6 +5,7 @@ const { broadcast } = require("../services/realtimeHub");
 
 const router = express.Router();
 
+const { sendPush } = require("../services/pushService");
 router.use((req, res, next) => {
   const mutating = ["POST", "PATCH", "PUT", "DELETE"].includes(req.method);
 
@@ -21,10 +22,7 @@ router.use((req, res, next) => {
 
   next();
 });
-const demoProfiles = [
-  { id: "demo-mariusz", nickname: "Mariusz", level: "Średniozaawansowany", preferredSide: "Lewa", city: "Szczecin", gamesPlayed: 28, rating: 4.8 },
-  { id: "demo-kasia", nickname: "Kasia", level: "3.0", preferredSide: "Prawa", city: "Szczecin", gamesPlayed: 12, rating: 4.9 }
-];
+
 
 function clean(value, maxLength = 200) { return String(value || "").trim().slice(0, maxLength); }
 function isValidTime(value) { return /^\d{2}:\d{2}$/.test(String(value || "")); }
@@ -46,7 +44,7 @@ function publicPost(post, requester, requests, profiles = {}) {
     requestsCount: requests.filter(r => r.postId === post.id).length
   };
 }
-function notify(data, ownerToken, title, message, type="info") { data.notifications.unshift({ id:randomUUID(), ownerToken, title, message, type, read:false, createdAt:new Date().toISOString() }); }
+function notify(data, ownerToken, title, message, type="info") { data.notifications.unshift({ id:randomUUID(), ownerToken, title, message, type, read:false, createdAt:new Date().toISOString() }); sendPush(data, ownerToken, { title, body: message, url: "/" }); }
 
 function postEndTimestamp(post) {
   if (!post?.date || !post?.to) return NaN;
@@ -83,7 +81,32 @@ function cleanupCommunity(data) {
   });
 }
 
-router.get("/profiles", async (req, res) => { const data=await readStore(); res.json({ok:true,profiles:[...demoProfiles,...Object.values(data.profiles)]}); });
+router.get("/profiles", async (req, res) => {
+  const data = await readStore();
+  const now = Date.now();
+  const cutoff = now - 3 * 60 * 1000;
+  const profiles = Object.entries(data.profiles || {})
+    .filter(([id]) => {
+      const seen = new Date(data.presence?.[id]?.lastSeenAt || 0).getTime();
+      return Number.isFinite(seen) && seen >= cutoff;
+    })
+    .map(([id, profile]) => ({ ...profile, id, online: true, lastSeenAt: data.presence?.[id]?.lastSeenAt }))
+    .sort((a,b) => String(b.lastSeenAt).localeCompare(String(a.lastSeenAt)));
+  res.json({ ok:true, profiles });
+});
+
+router.post("/presence", async (req, res) => {
+  const id = requireToken(req, res);
+  if (!id) return;
+  const result = await updateStore((data) => {
+    if (!data.users?.[id]) return { error:[401, "Zaloguj się ponownie."] };
+    data.presence ||= {};
+    data.presence[id] = { lastSeenAt: new Date().toISOString() };
+    return { ok:true };
+  });
+  if (result?.error) return res.status(result.error[0]).json({ ok:false, message:result.error[1] });
+  res.json({ ok:true });
+});
 router.get("/me", async (req, res) => { const id=requireToken(req,res); if(!id)return; const data=await readStore(); res.json({ok:true,profile:data.profiles[id] || { nickname:"Gość", level:"3.0", preferredSide:"Dowolna", favoriteClubSlug:"all", favoriteClubSlugs:[], availabilityPeriods:[], city:"Szczecin", bio:"" }}); });
 router.patch("/me", async (req, res) => {
   const id=requireToken(req,res); if(!id)return;

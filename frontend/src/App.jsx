@@ -6,6 +6,7 @@ import "./styles/widget-theme.css";
 import "./styles/android-scroll-fix.css";
 import "./styles/padletic-12.css";
 import "./styles/mobile-stability.css";
+import "./styles/full-update.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
@@ -35,6 +36,18 @@ import { useRealtime } from "./hooks/useRealtime";
 import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
 
 
+
+
+const TIME_OPTIONS_START = Array.from({ length: 36 }, (_, index) => {
+  const total = 6 * 60 + index * 30;
+  const h = String(Math.floor(total / 60)).padStart(2, "0");
+  const m = String(total % 60).padStart(2, "0");
+  return `${h}:${m}`;
+});
+const TIME_OPTIONS_END = [
+  ...TIME_OPTIONS_START.filter((value) => value > "06:00").map((value) => ({ value, label: value })),
+  { value: "23:59", label: "00:00" }
+];
 
 const BO5_CLUB_URLS = {
   "padel-arena-poludniowa":
@@ -298,6 +311,7 @@ function App() {
   });
   const [ownerToken, setOwnerToken] = useState(anonymousToken);
   const [accountUser, setAccountUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const visibleNavigation = useMemo(() =>
     accountUser?.role === "admin"
       ? [...NAVIGATION, { id: "admin", label: "Admin", icon: "" }]
@@ -312,16 +326,16 @@ function App() {
 
   const [clubSlug, setClubSlug] = useState("all");
   const [date, setDate] = useState(today);
-  const [from, setFrom] = useState("18:00");
-  const [to, setTo] = useState("22:00");
+  const [from, setFrom] = useState("08:00");
+  const [to, setTo] = useState("23:59");
   const [duration, setDuration] = useState(120);
   const [courtType, setCourtType] = useState("all");
 
   const [activeSearch, setActiveSearch] = useState({
     club: "all",
     date: today,
-    from: "18:00",
-    to: "22:00",
+    from: "08:00",
+    to: "23:59",
     courtType: "all"
   });
 
@@ -381,29 +395,47 @@ function App() {
 
   useEffect(() => {
     const session = localStorage.getItem("padelalert-session");
-    if (!session) return;
+    if (!session) {
+      setAuthChecked(true);
+      return;
+    }
 
-    apiFetch("/auth/me", {
-      headers: { Authorization: `Bearer ${session}` }
-    })
-      .then(async response => {
-        if (!response.ok) throw new Error("session");
+    apiFetch("/auth/me", { headers: { Authorization: `Bearer ${session}` } })
+      .then(async (response) => {
+        if (response.status === 401) {
+          localStorage.removeItem("padelalert-session");
+          localStorage.removeItem("padelalert-account-user");
+          setAccountUser(null);
+          setOwnerToken(anonymousToken);
+          return null;
+        }
+        if (!response.ok) throw new Error("temporary-auth-check");
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
+        if (!data) return;
         setAccountUser(data.user);
         setOwnerToken(data.ownerToken);
+        localStorage.setItem("padelalert-account-user", JSON.stringify(data.user));
       })
       .catch(() => {
-        localStorage.removeItem("padelalert-session");
-        setAccountUser(null);
-        setOwnerToken(anonymousToken);
-      });
+        // Chwilowy błąd sieci nie usuwa zapisanej sesji ani użytkownika.
+        try {
+          const cached = JSON.parse(localStorage.getItem("padelalert-account-user") || "null");
+          if (cached?.id) {
+            setAccountUser(cached);
+            setOwnerToken(cached.id);
+          }
+        } catch {}
+      })
+      .finally(() => setAuthChecked(true));
   }, [anonymousToken]);
 
   async function handleAuthenticated(user) {
+    setAuthChecked(true);
     setAccountUser(user);
     setOwnerToken(user.id);
+    localStorage.setItem("padelalert-account-user", JSON.stringify(user));
     setToast(`Witaj, ${user.nickname || "Graczu"}!`);
   }
 
@@ -418,11 +450,37 @@ function App() {
       } catch {}
     }
     localStorage.removeItem("padelalert-session");
+    localStorage.removeItem("padelalert-account-user");
     setAccountUser(null);
     setOwnerToken(anonymousToken);
     setActiveTab("home");
     setToast("Wylogowano.");
   }
+
+  useEffect(() => {
+    if (!accountUser || !ownerToken) return undefined;
+    const beat = async () => {
+      try {
+        await apiFetch("/community/presence", {
+          method: "POST",
+          headers: { "x-owner-token": ownerToken }
+        });
+        const response = await apiFetch("/community/profiles");
+        if (response.ok) {
+          const data = await response.json();
+          setProfiles(data.profiles || []);
+        }
+      } catch {}
+    };
+    beat();
+    const interval = window.setInterval(beat, 60000);
+    const onVisible = () => { if (document.visibilityState === "visible") beat(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [accountUser, ownerToken]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -1160,22 +1218,50 @@ function App() {
   }
 
   async function enableSystemNotifications() {
-    if (!("Notification" in window)) {
-      setToast("Ta przeglądarka nie obsługuje powiadomień systemowych.");
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      setToast("Ta przeglądarka nie obsługuje powiadomień push.");
       return;
     }
 
-    if (Notification.permission === "granted") {
-      setToast("Powiadomienia systemowe są już włączone.");
+    const permission = Notification.permission === "granted"
+      ? "granted"
+      : await Notification.requestPermission();
+    if (permission !== "granted") {
+      setToast("Powiadomienia nie zostały włączone.");
       return;
     }
 
-    const permission = await Notification.requestPermission();
-    setToast(
-      permission === "granted"
-        ? "Powiadomienia systemowe zostały włączone."
-        : "Powiadomienia systemowe nie zostały włączone."
-    );
+    try {
+      const configResponse = await apiFetch("/push/config");
+      const pushConfig = await configResponse.json();
+      if (!pushConfig.enabled || !pushConfig.publicKey) {
+        setToast("Push jest gotowy w aplikacji, ale wymaga konfiguracji VAPID na backendzie.");
+        return;
+      }
+
+      const registration = await navigator.serviceWorker.ready;
+      const base64 = pushConfig.publicKey.replace(/-/g, "+").replace(/_/g, "/");
+      const padded = base64 + "=".repeat((4 - base64.length % 4) % 4);
+      const raw = atob(padded);
+      const applicationServerKey = Uint8Array.from(raw, (char) => char.charCodeAt(0));
+      let subscription = await registration.pushManager.getSubscription();
+      if (!subscription) {
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey
+        });
+      }
+
+      const response = await apiFetch("/push/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-owner-token": ownerToken },
+        body: JSON.stringify({ subscription: subscription.toJSON() })
+      });
+      if (!response.ok) throw new Error("subscribe");
+      setToast("Powiadomienia push są włączone na tym urządzeniu.");
+    } catch {
+      setToast("Nie udało się włączyć push. Spróbuj ponownie po wdrożeniu backendu.");
+    }
   }
 
   async function markAllNotificationsRead() {
@@ -1238,20 +1324,20 @@ function App() {
 
         <label>
           <span>Od</span>
-          <input
-            type="time"
-            value={from}
-            onChange={(event) => setFrom(event.target.value)}
-          />
+          <select value={from} onChange={(event) => setFrom(event.target.value)}>
+            {TIME_OPTIONS_START.map((value) => (
+              <option key={value} value={value}>{value}</option>
+            ))}
+          </select>
         </label>
 
         <label>
           <span>Do</span>
-          <input
-            type="time"
-            value={to}
-            onChange={(event) => setTo(event.target.value)}
-          />
+          <select value={to} onChange={(event) => setTo(event.target.value)}>
+            {TIME_OPTIONS_END.map((item) => (
+              <option key={item.value} value={item.value}>{item.label}</option>
+            ))}
+          </select>
         </label>
 
         <div className="duration-picker">
@@ -1276,6 +1362,29 @@ function App() {
           <span>→</span>
         </button>
       </form>
+    );
+  }
+
+  if (!authChecked) {
+    return <div className="auth-gate-loading">PADLETIC</div>;
+  }
+
+  if (!accountUser) {
+    return (
+      <div className="auth-gate">
+        <div className="auth-gate-brand">
+          <span className="brand-mark">P</span>
+          <strong>PADLETIC</strong>
+          <small>Graj, kiedy chcesz.</small>
+        </div>
+        <AccountPanel
+          required
+          user={null}
+          anonymousToken={anonymousToken}
+          onAuthenticated={handleAuthenticated}
+          onLogout={handleLogout}
+        />
+      </div>
     );
   }
 
@@ -1660,6 +1769,7 @@ function App() {
               onChanged={loadCommunity}
               createSignal={matchCreateSignal}
               createPrefill={matchCreatePrefill}
+              onCreateConsumed={() => setMatchCreateSignal(0)}
               playNowSignal={playNowSignal}
             />
           )}

@@ -181,16 +181,28 @@ router.post("/login", async (req, res) => {
 
 router.get("/me", async (req, res) => {
   const token = clean(req.headers.authorization || "", 300).replace(/^Bearer\s+/i, "");
-  const data = await readStore();
-  const session =
-    data.sessions?.[sessionKey(token)] ||
-    data.sessions?.[token];
-  if (!session || new Date(session.expiresAt).getTime() <= Date.now()) {
-    return res.status(401).json({ok:false,message:"Sesja wygasła."});
-  }
-  const user = data.users?.[session.userId];
-  if (!user) return res.status(401).json({ok:false,message:"Nie znaleziono użytkownika."});
-  res.json({ok:true,user:publicUser(user), ownerToken:user.id});
+  const result = await updateStore((data) => {
+    cleanupSessions(data);
+    const key = sessionKey(token);
+    const session = data.sessions?.[key] || data.sessions?.[token];
+    if (!session || new Date(session.expiresAt).getTime() <= Date.now()) {
+      return { error: [401, "Sesja wygasła."] };
+    }
+    const user = data.users?.[session.userId];
+    if (!user) return { error: [401, "Nie znaleziono użytkownika."] };
+
+    // Sesja przesuwana: każda poprawna wizyta przedłuża ważność.
+    session.lastSeenAt = new Date().toISOString();
+    session.expiresAt = new Date(Date.now() + SESSION_DAYS * 86400000).toISOString();
+    if (data.sessions?.[token] && token !== key) {
+      data.sessions[key] = session;
+      delete data.sessions[token];
+    }
+    return { user: publicUser(user), ownerToken: user.id };
+  });
+
+  if (result.error) return res.status(result.error[0]).json({ ok:false, message:result.error[1] });
+  res.json({ ok:true, ...result });
 });
 
 router.post("/logout", async (req, res) => {

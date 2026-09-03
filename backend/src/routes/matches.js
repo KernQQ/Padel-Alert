@@ -5,6 +5,7 @@ const { broadcast } = require("../services/realtimeHub");
 
 const router = express.Router();
 
+const { sendPush } = require("../services/pushService");
 router.use((req, res, next) => {
   const mutating = ["POST", "PATCH", "PUT", "DELETE"].includes(req.method);
 
@@ -56,6 +57,7 @@ function notify(data, ownerToken, title, message, type = "match") {
     read: false,
     createdAt: new Date().toISOString()
   });
+  sendPush(data, ownerToken, { title, body: message, url: "/" });
 }
 
 function getProfile(data, ownerToken) {

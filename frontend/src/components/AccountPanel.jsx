@@ -7,10 +7,11 @@ export default function AccountPanel({
   onAuthenticated,
   onLogout,
   onOpenProfile,
-  avatarUrl = ""
+  avatarUrl = "",
+  required = false
 }) {
   const [mode, setMode] = useState("login");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(required);
   const [form, setForm] = useState({ email: "", password: "", nickname: "" });
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -57,7 +58,7 @@ export default function AccountPanel({
 
       localStorage.setItem("padelalert-session", data.token);
       await onAuthenticated(data.user, data.token);
-      setOpen(false);
+      if (!required) setOpen(false);
       setForm({ email: "", password: "", nickname: "" });
     } catch (error) {
       setMessage(error.message);
@@ -126,24 +127,16 @@ export default function AccountPanel({
 
   return (
     <>
-      <button
-        type="button"
-        className="account-login-button"
-        onClick={() => setOpen(true)}
-      >
-        Zaloguj
-      </button>
+      {!required && (
+        <button type="button" className="account-login-button" onClick={() => setOpen(true)}>Zaloguj</button>
+      )}
 
-      {open && (
+      {(required || open) && (
         <div className="account-modal-backdrop">
           <section className="account-modal">
-            <button
-              type="button"
-              className="account-close"
-              onClick={() => setOpen(false)}
-            >
-              ×
-            </button>
+            {!required && (
+              <button type="button" className="account-close" onClick={() => setOpen(false)}>×</button>
+            )}
 
             <span className="section-kicker">Konto PADLETIC</span>
             <h2>{mode === "login" ? "Zaloguj się" : "Załóż konto"}</h2>

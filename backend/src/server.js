@@ -22,6 +22,7 @@ const eventsRoute = require("./routes/events");
 const authRoute = require("./routes/auth");
 const databaseRoute = require("./routes/database");
 const adminRoute = require("./routes/admin");
+const pushRoute = require("./routes/push");
 const { closeDatabase, getDatabaseStatus } = require("./services/communityStore");
 
 const app = express();
@@ -163,6 +164,7 @@ app.use("/events", eventsRoute);
 app.use("/auth", authRoute);
 app.use("/database", databaseRoute);
 app.use("/admin", adminRoute);
+app.use("/push", pushRoute);
 
 app.use((req, res) => {
   res.status(404).json({

@@ -15,7 +15,9 @@ const DEFAULT_DATA = {
   matchMessages: {},
   matchChatReads: {},
   users: {},
-  sessions: {}
+  sessions: {},
+  presence: {},
+  pushSubscriptions: {}
 };
 
 const DATABASE_URL = String(process.env.DATABASE_URL || "").trim();

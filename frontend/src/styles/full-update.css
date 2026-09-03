@@ -1,0 +1,88 @@
+/* PADLETIC FULL UPDATE — loaded last on purpose. */
+:root[data-theme="dark"] .main-shell {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(rgba(3, 13, 8, .86), rgba(3, 13, 8, .92)),
+    url('/assets/padel-hero.jpg') center top / cover fixed no-repeat !important;
+}
+:root[data-theme="dark"] .main-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0 0 0 228px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 78% 20%, rgba(64, 150, 65, .14), transparent 34%);
+}
+
+.consumer-booking-sheet { position: fixed !important; }
+.consumer-booking-sheet .consumer-booking-close {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  display: grid !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  padding: 0 !important;
+  place-items: center !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 999px !important;
+  color: #f4f7f5 !important;
+  background: #142019 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.22) !important;
+  font-size: 23px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+}
+.consumer-booking-sheet .consumer-booking-close:hover { background: #1b2b21 !important; }
+
+.auth-gate,
+.auth-gate-loading {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #f5f7f5;
+  background:
+    linear-gradient(rgba(2,12,7,.78), rgba(2,12,7,.92)),
+    url('/assets/padel-hero.jpg') center / cover no-repeat;
+}
+.auth-gate { align-content: center; gap: 20px; }
+.auth-gate-brand { display: grid; justify-items: center; gap: 7px; text-align: center; }
+.auth-gate-brand .brand-mark { width: 54px !important; height: 54px !important; }
+.auth-gate-brand strong { font-size: 26px; letter-spacing: -.04em; }
+.auth-gate-brand small { color: #a9b5ad; }
+.auth-gate .account-modal-backdrop {
+  position: static !important;
+  display: block !important;
+  width: min(100%, 430px);
+  padding: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+.auth-gate .account-modal {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-color: rgba(255,255,255,.12) !important;
+  background: rgba(12,26,17,.94) !important;
+}
+
+@media (max-width: 900px) {
+  :root[data-theme="dark"] .main-shell {
+    background-attachment: scroll !important;
+    background-position: 58% top !important;
+  }
+  :root[data-theme="dark"] .main-shell::after { inset: 0; }
+  .consumer-booking-sheet .consumer-booking-close {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    top: 9px !important;
+    right: 9px !important;
+    font-size: 21px !important;
+  }
+}

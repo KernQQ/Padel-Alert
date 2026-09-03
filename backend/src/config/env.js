@@ -30,12 +30,15 @@ const config = {
   maxJsonSize: process.env.MAX_JSON_SIZE || "256kb",
   sessionDays: Math.max(
     1,
-    Number(process.env.SESSION_DAYS || 30)
+    Number(process.env.SESSION_DAYS || 180)
   ),
   authWindowMs: Math.max(
     10000,
     Number(process.env.AUTH_RATE_WINDOW_MS || 15 * 60 * 1000)
   ),
+  vapidPublicKey: String(process.env.VAPID_PUBLIC_KEY || "").trim(),
+  vapidPrivateKey: String(process.env.VAPID_PRIVATE_KEY || "").trim(),
+  vapidSubject: String(process.env.VAPID_SUBJECT || "mailto:admin@padletic.pl").trim(),
   authMaxAttempts: Math.max(
     3,
     Number(process.env.AUTH_RATE_MAX || 12)

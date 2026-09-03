@@ -23,6 +23,7 @@ function MatchPage({
   onChanged,
   createSignal = 0,
   createPrefill = null,
+  onCreateConsumed,
   playNowSignal = 0
 }) {
   const today = getToday();
@@ -41,8 +42,9 @@ function MatchPage({
       setMatchmakerPrefill(createPrefill || null);
       setEditingMatchId(null);
       setShowWizard(true);
+      onCreateConsumed?.();
     }
-  }, [createSignal, createPrefill]);
+  }, [createSignal, createPrefill, onCreateConsumed]);
   const [message, setMessage] = useState("");
   const [filters, setFilters] = useState({
     clubSlug: "all",
