@@ -1,0 +1,167 @@
+/* PADLETIC 1.2 — profile cropper, profile 2.0 and social refinements */
+.photo-crop-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(1, 7, 5, .82);
+  backdrop-filter: blur(14px);
+}
+
+.photo-crop-modal {
+  width: min(520px, 100%);
+  max-height: calc(100dvh - 30px);
+  overflow: auto;
+  border: 1px solid rgba(116, 255, 77, .18);
+  border-radius: 28px;
+  background: #07100d;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .55);
+  padding: 18px;
+}
+
+.photo-crop-head {
+  display: grid;
+  grid-template-columns: 54px 1fr 76px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.photo-crop-head > button {
+  min-height: 42px;
+  border: 0;
+  background: transparent;
+  color: #f6fff9;
+  font-weight: 800;
+}
+
+.photo-crop-head div { text-align: center; }
+.photo-crop-head small { color: #799188; }
+.photo-crop-head h2 { margin: 2px 0 0; font-size: 20px; }
+.photo-crop-head .photo-crop-save-link { color: #8be336; }
+
+.photo-crop-viewport {
+  position: relative;
+  width: min(100%, 440px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #020504;
+  touch-action: none !important;
+  user-select: none;
+  cursor: grab;
+}
+
+.photo-crop-viewport:active { cursor: grabbing; }
+.photo-crop-viewport > img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+.photo-crop-mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 0 42%, rgba(0, 0, 0, .64) 42.4% 100%);
+}
+
+.photo-crop-ring {
+  position: absolute;
+  width: 84%;
+  aspect-ratio: 1;
+  left: 8%;
+  top: 8%;
+  border: 2px solid rgba(240, 255, 246, .95);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(132, 224, 48, .35), inset 0 0 32px rgba(132, 224, 48, .05);
+  pointer-events: none;
+}
+
+.photo-crop-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #9db0a8;
+}
+
+.photo-crop-controls {
+  display: grid;
+  grid-template-columns: 28px 1fr 28px;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 8px 4px;
+  color: #8be336;
+  font-weight: 900;
+}
+
+.photo-crop-controls input { width: 100%; accent-color: #83d72f; }
+.photo-crop-hint { text-align: center; color: #81928b; font-size: 13px; }
+.photo-crop-actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-top: 14px; }
+.photo-crop-actions button { min-height: 48px; border-radius: 14px; }
+
+.profile-preference-block {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 10px;
+}
+.profile-preference-block > span { color: #9cafA7; font-size: 13px; font-weight: 700; }
+.profile-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.profile-chip-row button {
+  border: 1px solid rgba(146, 176, 160, .18);
+  border-radius: 999px;
+  padding: 9px 13px;
+  background: rgba(255, 255, 255, .025);
+  color: #a7b8b0;
+  font-weight: 750;
+}
+.profile-chip-row button.active {
+  border-color: rgba(134, 223, 49, .46);
+  background: rgba(128, 212, 44, .14);
+  color: #a9ef64;
+}
+
+.premium-player-card .large-avatar.has-photo,
+.online-player-list .small-avatar.has-photo { overflow: hidden; padding: 0; }
+.premium-player-card .large-avatar img,
+.online-player-list .small-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.player-card-profileline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 7px;
+}
+.player-card-profileline span {
+  border: 1px solid rgba(132, 220, 47, .16);
+  background: rgba(132, 220, 47, .07);
+  color: #98c878;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.court-create-match-hint {
+  margin-top: 9px;
+  font-size: 12px;
+  color: #82a293;
+}
+
+@media (max-width: 900px) {
+  .photo-crop-backdrop { padding: 0; align-items: end; }
+  .photo-crop-modal {
+    width: 100%;
+    max-height: 100dvh;
+    border-radius: 26px 26px 0 0;
+    padding: 14px 14px calc(18px + env(safe-area-inset-bottom));
+  }
+  .photo-crop-viewport { border-radius: 18px; }
+  .photo-crop-actions { position: sticky; bottom: 0; background: linear-gradient(180deg, rgba(7,16,13,0), #07100d 24%); padding-top: 16px; }
+}
