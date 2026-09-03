@@ -4,7 +4,7 @@
   isolation: isolate;
   background:
     linear-gradient(rgba(3, 13, 8, .86), rgba(3, 13, 8, .92)),
-    url('/assets/padel-hero.jpg') center top / cover fixed no-repeat !important;
+    url('/assets/padletic-night-court.jpg') center top / cover fixed no-repeat !important;
 }
 :root[data-theme="dark"] .main-shell::after {
   content: "";
@@ -47,7 +47,7 @@
   color: #f5f7f5;
   background:
     linear-gradient(rgba(2,12,7,.78), rgba(2,12,7,.92)),
-    url('/assets/padel-hero.jpg') center / cover no-repeat;
+    url('/assets/padletic-night-court.jpg') center / cover no-repeat;
 }
 .auth-gate { align-content: center; gap: 20px; }
 .auth-gate-brand { display: grid; justify-items: center; gap: 7px; text-align: center; }
@@ -84,5 +84,14 @@
     top: 9px !important;
     right: 9px !important;
     font-size: 21px !important;
+  }
+}
+
+
+/* PADLETIC dark-only + iPhone notification safe area */
+:root { color-scheme: dark; }
+@media (max-width: 620px) {
+  .notification-drawer {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 34px) !important;
   }
 }

@@ -298,7 +298,6 @@ function App() {
   const [matchCreateSignal, setMatchCreateSignal] = useState(0);
   const [matchCreatePrefill, setMatchCreatePrefill] = useState(null);
   const [playNowSignal, setPlayNowSignal] = useState(0);
-  const [theme, setTheme] = useState("dark");
 
   const [anonymousToken] = useState(() => {
     const savedToken = localStorage.getItem("padelalert-owner-token");
@@ -483,9 +482,9 @@ function App() {
   }, [accountUser, ownerToken]);
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    writeStorage("padelalert-theme", theme);
-  }, [theme]);
+    document.documentElement.dataset.theme = "dark";
+    localStorage.removeItem("padelalert-theme");
+  }, []);
 
   useEffect(() => writeStorage("padelalert-favorites", favorites), [favorites]);
   useEffect(
@@ -1469,13 +1468,6 @@ function App() {
         <div className="sidebar-actions">
           <InstallAppButton variant="sidebar" />
 
-          <button
-            type="button"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          >
-            <span>{theme === "light" ? "☾" : "☀"}</span>
-            {theme === "light" ? "Tryb ciemny" : "Tryb jasny"}
-          </button>
         </div>
       </aside>
 
