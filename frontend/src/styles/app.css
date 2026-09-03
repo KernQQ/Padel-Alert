@@ -10626,56 +10626,95 @@ body {
   }
 }
 
+/* PADLETIC FINAL FLOATING COURT SHEET FIX
+   App.jsx already renders the sheet through createPortal(..., document.body).
+   The missing piece after rebase was position: fixed; the older sticky rule
+   was still winning, so the card lived at the bottom of the document. */
 
-/* PADLETIC — close selected-court booking bubble */
+.consumer-court-options button {
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+}
+
+.consumer-court-options button > span {
+  min-width: 0 !important;
+}
+
+.consumer-court-options button > b {
+  justify-self: end !important;
+  margin-left: 14px !important;
+  white-space: nowrap !important;
+}
+
+/* Desktop: floating selection card */
 .consumer-booking-sheet {
   position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: 22px !important;
+  transform: translateX(-50%) !important;
+  z-index: 10000 !important;
+  width: min(760px, calc(100vw - 40px)) !important;
+  max-width: 760px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
 }
 
-.consumer-booking-close {
-  position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
-  z-index: 3 !important;
+/* Booking action is currently a button, not an anchor. */
+.consumer-booking-actions .consumer-booking-link {
   display: inline-flex !important;
-  width: 32px !important;
-  height: 32px !important;
-  min-height: 32px !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 0 !important;
-  border: 1px solid var(--v7-line, var(--v5-line)) !important;
-  border-radius: 999px !important;
-  color: var(--v7-text, var(--v5-text)) !important;
-  background: color-mix(in srgb, var(--v7-surface, var(--v5-surface)) 92%, transparent) !important;
-  box-shadow: none !important;
-  cursor: pointer !important;
-  font-size: 21px !important;
-  font-weight: 400 !important;
-  line-height: 1 !important;
-  touch-action: manipulation !important;
-}
-
-.consumer-booking-close:hover {
-  border-color: var(--v7-green, var(--v5-green)) !important;
-  color: var(--v7-green, var(--v5-green)) !important;
-}
-
-.consumer-booking-sheet > div:first-of-type {
-  padding-right: 38px;
 }
 
 @media (max-width: 900px) {
-  .consumer-booking-close {
-    top: 8px !important;
-    right: 8px !important;
-    width: 34px !important;
-    height: 34px !important;
-    min-height: 34px !important;
-    font-size: 23px !important;
+  .consumer-court-options button {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    padding-right: 12px !important;
   }
 
-  .consumer-booking-sheet > div:first-of-type {
-    padding-right: 42px;
+  .consumer-court-options button > b {
+    justify-self: end !important;
+    min-width: 76px !important;
+    margin-left: 10px !important;
+    text-align: center !important;
+  }
+
+  /* Mobile: always visible in the viewport, directly above bottom nav. */
+  .consumer-booking-sheet {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: auto !important;
+    bottom: calc(78px + env(safe-area-inset-bottom)) !important;
+    transform: none !important;
+    z-index: 10000 !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: min(44dvh, 350px) !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+    padding: 12px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+    overscroll-behavior: contain !important;
+  }
+
+  .consumer-booking-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 7px !important;
+    width: 100% !important;
+  }
+
+  .consumer-booking-actions .consumer-booking-link {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    justify-content: center !important;
   }
 }
