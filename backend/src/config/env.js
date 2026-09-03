@@ -38,7 +38,15 @@ const config = {
   ),
   vapidPublicKey: String(process.env.VAPID_PUBLIC_KEY || "").trim(),
   vapidPrivateKey: String(process.env.VAPID_PRIVATE_KEY || "").trim(),
-  vapidSubject: String(process.env.VAPID_SUBJECT || "mailto:admin@padletic.pl").trim(),
+  vapidSubject: (() => {
+    const subject = String(process.env.VAPID_SUBJECT || "mailto:admin@padletic.pl").trim();
+    // web-push accepts a URL, typically mailto: or https:.
+    // Be forgiving when Render contains just an email address.
+    if (subject.includes("@") && !/^[a-z][a-z0-9+.-]*:/i.test(subject)) {
+      return `mailto:${subject}`;
+    }
+    return subject;
+  })(),
   authMaxAttempts: Math.max(
     3,
     Number(process.env.AUTH_RATE_MAX || 12)
