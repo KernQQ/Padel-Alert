@@ -12019,3 +12019,96 @@ body {
     padding-left: 12px;
   }
 }
+
+
+/* PADLETIC AUTO ARCHIVE */
+.match-archive-switch {
+  display: inline-flex;
+  gap: 6px;
+  margin: 4px 0 18px;
+  padding: 4px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 12px;
+  background: rgba(255,255,255,.025);
+}
+
+.match-archive-switch button {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #8b9790;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.match-archive-switch button.active {
+  background: rgba(132,222,27,.13);
+  color: #b8ef77;
+}
+
+.owner-posts-archive {
+  margin-top: 22px;
+}
+
+.owner-posts-archive details {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  background: rgba(255,255,255,.018);
+  overflow: hidden;
+}
+
+.owner-posts-archive summary {
+  min-height: 64px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.owner-posts-archive summary::-webkit-details-marker {
+  display: none;
+}
+
+.owner-posts-archive summary b,
+.owner-posts-archive summary small {
+  display: block;
+}
+
+.owner-posts-archive summary small {
+  margin-top: 3px;
+  color: #78837d;
+  font-size: 11px;
+}
+
+.owner-posts-archive summary > span:last-child {
+  color: #93a099;
+  font-size: 12px;
+}
+
+.owner-posts-archive details[open] summary {
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.owner-post-card.is-archived {
+  opacity: .78;
+}
+
+@media (max-width: 760px) {
+  .match-archive-switch {
+    width: calc(100% - 32px);
+    margin: 4px 16px 16px;
+  }
+
+  .match-archive-switch button {
+    flex: 1;
+  }
+
+  .owner-posts-archive {
+    margin-top: 16px;
+  }
+}

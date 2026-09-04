@@ -53,9 +53,43 @@ function publicPost(post, requester, requests, profiles = {}) {
 }
 function notify(data, ownerToken, title, message, type="info") { data.notifications.unshift({ id:randomUUID(), ownerToken, title, message, type, read:false, createdAt:new Date().toISOString() }); sendPush(data, ownerToken, { title, body: message, url: "/" }); }
 
+function warsawTimestamp(date, time) {
+  if (!date || !time) return NaN;
+
+  const [year, month, day] = String(date).split("-").map(Number);
+  const [hour, minute] = String(time).split(":").map(Number);
+
+  if (![year, month, day, hour, minute].every(Number.isFinite)) return NaN;
+
+  const guess = new Date(Date.UTC(year, month - 1, day, hour, minute, 0));
+
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Europe/Warsaw",
+    timeZoneName: "longOffset",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+
+  const offsetPart = formatter
+    .formatToParts(guess)
+    .find((part) => part.type === "timeZoneName")?.value || "GMT+00:00";
+
+  const match = offsetPart.match(/GMT([+-])(\d{2}):(\d{2})/);
+  if (!match) return guess.getTime();
+
+  const sign = match[1] === "+" ? 1 : -1;
+  const offsetMinutes = sign * (Number(match[2]) * 60 + Number(match[3]));
+
+  return Date.UTC(year, month - 1, day, hour, minute, 0) - offsetMinutes * 60000;
+}
+
 function postEndTimestamp(post) {
   if (!post?.date || !post?.to) return NaN;
-  return new Date(`${post.date}T${post.to}:00`).getTime();
+  return warsawTimestamp(post.date, post.to);
 }
 
 function cleanupCommunity(data) {
@@ -69,6 +103,7 @@ function cleanupCommunity(data) {
     if (Number.isFinite(endAt) && endAt < now) {
       post.status = "closed";
       post.autoClosed = true;
+      post.archivedAt = post.archivedAt || new Date().toISOString();
       post.updatedAt = new Date().toISOString();
     }
   });

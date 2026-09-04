@@ -37,6 +37,7 @@ function MatchPage({
   const [matchmakerPrefill, setMatchmakerPrefill] = useState(null);
   const [editingMatchId, setEditingMatchId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showArchive, setShowArchive] = useState(false);
 
   useEffect(() => {
     if (createSignal > 0) {
@@ -116,9 +117,11 @@ function MatchPage({
       const levelOk =
         filters.level === "all" || match.level === filters.level;
 
-      return clubOk && dateOk && levelOk && match.status !== "cancelled";
+      const archived = ["completed", "cancelled"].includes(match.status);
+
+      return clubOk && dateOk && levelOk && (showArchive ? archived : !archived);
     });
-  }, [matches, filters]);
+  }, [matches, filters, showArchive]);
 
   const urgentMatches = filteredMatches
     .filter((match) => match.spotsLeft === 1 && match.status === "open")
@@ -557,6 +560,23 @@ function MatchPage({
         </button>
       </section>
 
+      <div className="match-archive-switch">
+        <button
+          type="button"
+          className={!showArchive ? "active" : ""}
+          onClick={() => setShowArchive(false)}
+        >
+          Aktywne
+        </button>
+        <button
+          type="button"
+          className={showArchive ? "active" : ""}
+          onClick={() => setShowArchive(true)}
+        >
+          Archiwum
+        </button>
+      </div>
+
       <section className="all-matches-section">
         <div className="match-section-heading">
           <div>
@@ -693,13 +713,17 @@ function MatchPage({
         ) : (
           <div className="matches-empty-state">
             <span></span>
-            <h2>Nie ma jeszcze pasujących meczów</h2>
+            <h2>{showArchive ? "Archiwum jest puste" : "Nie ma jeszcze pasujących meczów"}</h2>
             <p>
-              Utwórz pierwszy mecz albo zaznacz „Gram teraz”.
+              {showArchive
+                ? "Zakończone i anulowane mecze pojawią się tutaj automatycznie."
+                : "Utwórz pierwszy mecz albo zaznacz „Gram teraz”."}
             </p>
-            <button onClick={() => setShowWizard(true)}>
-              Utwórz mecz
-            </button>
+            {!showArchive && (
+              <button onClick={() => setShowWizard(true)}>
+                Utwórz mecz
+              </button>
+            )}
           </div>
         )}
       </section>

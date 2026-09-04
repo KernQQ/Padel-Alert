@@ -2285,7 +2285,7 @@ function App() {
                 <button type="button" onClick={openNewPlayerListing}>
                   <span className="account-quick-icon">＋</span>
                   <strong>Moje zgłoszenia</strong>
-                  <small>{ownerPosts.length} wszystkich</small>
+                  <small>{ownerPosts.filter((post) => post.status === "open").length} aktywnych</small>
                   <b>→</b>
                 </button>
                 <button type="button" onClick={() => setActiveTab("courts")}>
@@ -2312,7 +2312,7 @@ function App() {
                   <button onClick={openNewPlayerListing}>＋ Dodaj zgłoszenie</button>
                 </div>
                 <div className="owner-post-list">
-                  {ownerPosts.map((post) => (
+                  {ownerPosts.filter((post) => post.status === "open").map((post) => (
                     <article className="owner-post-card" key={post.id}>
                       <header>
                         <div><span className={`status-badge status-${post.status}`}>{post.status === "open" ? "Aktywne" : post.status === "closed" ? "Zamknięte" : "Anulowane"}</span><h3>{post.clubName}</h3><p>{formatDate(post.date)} · {post.from}–{post.to}</p></div>
@@ -2331,7 +2331,7 @@ function App() {
                       </div>
                     </article>
                   ))}
-                  {ownerPosts.length === 0 && (
+                  {ownerPosts.filter((post) => post.status === "open").length === 0 && (
                     <div className="empty-state large my-empty-state">
                       <span className="my-empty-icon">♧</span>
                       <div>
@@ -2342,6 +2342,47 @@ function App() {
                   )}
                 </div>
               </section>
+
+              {ownerPosts.some((post) => post.status !== "open") && (
+                <section className="owner-posts-section owner-posts-archive">
+                  <details>
+                    <summary>
+                      <span>
+                        <b>Archiwum zgłoszeń</b>
+                        <small>
+                          {ownerPosts.filter((post) => post.status !== "open").length} wpisów
+                        </small>
+                      </span>
+                      <span>Rozwiń</span>
+                    </summary>
+                    <div className="owner-post-list">
+                      {ownerPosts
+                        .filter((post) => post.status !== "open")
+                        .map((post) => (
+                          <article className="owner-post-card is-archived" key={post.id}>
+                            <header>
+                              <div>
+                                <span className={`status-badge status-${post.status}`}>
+                                  {post.status === "closed" ? "Archiwum" : "Anulowane"}
+                                </span>
+                                <h3>{post.clubName}</h3>
+                                <p>{formatDate(post.date)} · {post.from}–{post.to}</p>
+                              </div>
+                              <div className="owner-post-actions">
+                                <button
+                                  className="danger-action"
+                                  onClick={() => deletePlayerListing(post)}
+                                >
+                                  Usuń
+                                </button>
+                              </div>
+                            </header>
+                          </article>
+                        ))}
+                    </div>
+                  </details>
+                </section>
+              )}
 
               <div className="saved-grid secondary-saved-grid v6-saved-grid">
                 <section className="saved-panel">
