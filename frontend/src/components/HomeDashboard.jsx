@@ -74,12 +74,12 @@ function HomeDashboard({
     <div className="pa-premium-home pa-rc-home">
       <section className="pa-premium-hero pa-rc-hero">
         <div className="pa-premium-hero-copy">
-          <p className="pa-premium-kicker">SZCZECIN · LIVE</p>
+          <p className="pa-premium-kicker">SZCZECIN · PADEL · COMMUNITY</p>
           <h1>
             Graj,
             <strong>kiedy chcesz.</strong>
           </h1>
-          <p>Wolne korty w Szczecinie w jednym miejscu.</p>
+          <p>Wolne korty. Fajni ludzie. Padel w jednym miejscu.</p>
         </div>
       </section>
 
