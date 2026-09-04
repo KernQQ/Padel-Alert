@@ -49,6 +49,95 @@ const TIME_OPTIONS_END = [
   { value: "23:59", label: "00:00" }
 ];
 
+
+const ALL_TIME_OPTIONS = Array.from({ length: 36 }, (_, index) => {
+  const total = 6 * 60 + index * 30;
+  const h = String(Math.floor(total / 60)).padStart(2, "0");
+  const m = String(total % 60).padStart(2, "0");
+  return `${h}:${m}`;
+});
+
+function PadleticTimePicker({ value, onChange, options = ALL_TIME_OPTIONS, placeholder = "Wybierz", allowEmpty = false, emptyLabel = "Dowolna" }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const close = (event) => {
+      if (!rootRef.current?.contains(event.target)) setOpen(false);
+    };
+    const onKey = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const normalizedOptions = options.map((item) =>
+    typeof item === "string" ? { value: item, label: item } : item
+  );
+  const activeLabel = normalizedOptions.find((item) => item.value === value)?.label;
+
+  return (
+    <div className={`padletic-time-picker${open ? " is-open" : ""}`} ref={rootRef}>
+      <button
+        type="button"
+        className="padletic-time-trigger"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <span className={!value ? "is-placeholder" : ""}>
+          {activeLabel || (allowEmpty && !value ? emptyLabel : placeholder)}
+        </span>
+        <span className="padletic-time-chevron" aria-hidden="true">⌄</span>
+      </button>
+
+      {open && (
+        <>
+          <button
+            type="button"
+            className="padletic-time-backdrop"
+            aria-label="Zamknij wybór godziny"
+            onClick={() => setOpen(false)}
+          />
+          <div className="padletic-time-popover" role="listbox" aria-label="Wybierz godzinę">
+            <div className="padletic-time-popover-head">
+              <strong>Wybierz godzinę</strong>
+              <button type="button" onClick={() => setOpen(false)} aria-label="Zamknij">×</button>
+            </div>
+            <div className="padletic-time-options">
+              {allowEmpty && (
+                <button
+                  type="button"
+                  className={!value ? "active" : ""}
+                  onClick={() => { onChange(""); setOpen(false); }}
+                >
+                  {emptyLabel}
+                </button>
+              )}
+              {normalizedOptions.map((item) => (
+                <button
+                  type="button"
+                  key={item.value}
+                  className={value === item.value ? "active" : ""}
+                  onClick={() => { onChange(item.value); setOpen(false); }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 const BO5_CLUB_URLS = {
   "padel-arena-poludniowa":
     "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
@@ -1323,20 +1412,20 @@ function App() {
 
         <label>
           <span>Od</span>
-          <select value={from} onChange={(event) => setFrom(event.target.value)}>
-            {TIME_OPTIONS_START.map((value) => (
-              <option key={value} value={value}>{value}</option>
-            ))}
-          </select>
+          <PadleticTimePicker
+            value={from}
+            onChange={setFrom}
+            options={TIME_OPTIONS_START}
+          />
         </label>
 
         <label>
           <span>Do</span>
-          <select value={to} onChange={(event) => setTo(event.target.value)}>
-            {TIME_OPTIONS_END.map((item) => (
-              <option key={item.value} value={item.value}>{item.label}</option>
-            ))}
-          </select>
+          <PadleticTimePicker
+            value={to}
+            onChange={setTo}
+            options={TIME_OPTIONS_END}
+          />
         </label>
 
         <div className="duration-picker">
@@ -1901,13 +1990,14 @@ function App() {
 
                   <label>
                     <span>Dostępny od</span>
-                    <input
-                      type="time"
+                    <PadleticTimePicker
                       value={partnerFilters.from}
-                      onChange={(event) =>
+                      allowEmpty
+                      emptyLabel="Dowolna"
+                      onChange={(value) =>
                         setPartnerFilters({
                           ...partnerFilters,
-                          from: event.target.value
+                          from: value
                         })
                       }
                     />
@@ -2689,13 +2779,13 @@ function App() {
 
               <label>
                 <span>Od</span>
-                <input
-                  type="time"
+                <PadleticTimePicker
                   value={playerForm.from}
-                  onChange={(event) =>
+                  options={TIME_OPTIONS_START}
+                  onChange={(value) =>
                     setPlayerForm({
                       ...playerForm,
-                      from: event.target.value
+                      from: value
                     })
                   }
                 />
@@ -2703,13 +2793,13 @@ function App() {
 
               <label>
                 <span>Do</span>
-                <input
-                  type="time"
+                <PadleticTimePicker
                   value={playerForm.to}
-                  onChange={(event) =>
+                  options={TIME_OPTIONS_END}
+                  onChange={(value) =>
                     setPlayerForm({
                       ...playerForm,
-                      to: event.target.value
+                      to: value
                     })
                   }
                 />
