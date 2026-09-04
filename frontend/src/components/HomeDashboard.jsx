@@ -23,7 +23,6 @@ function imageForClub(club, index) {
 function HomeDashboard({
   nickname,
   level,
-  countdown,
   recommendations,
   clubStats,
   players,
@@ -42,12 +41,8 @@ function HomeDashboard({
 
   const slotsForClub = (club) => {
     const key = club?.slug || normalizeKey(club?.name);
-
     return recommendations
-      .filter((item) => {
-        const itemKey = item?.clubSlug || normalizeKey(item?.clubName);
-        return itemKey === key;
-      })
+      .filter((item) => (item?.clubSlug || normalizeKey(item?.clubName)) === key)
       .filter(
         (item, index, arr) =>
           arr.findIndex(
@@ -59,309 +54,162 @@ function HomeDashboard({
       .slice(0, 4);
   };
 
-  const nearest = recommendations
-    .filter(
-      (item, index, arr) =>
-        arr.findIndex(
-          (candidate) =>
-            candidate.startHour === item.startHour &&
-            candidate.clubName === item.clubName
-        ) === index
-    )
-    .slice(0, 3);
-
   return (
-    <div className="pa-premium-home pa-rc-home">
-      <section className="pa-premium-hero pa-rc-hero">
-        <div className="pa-premium-hero-copy">
-          <p className="pa-premium-kicker">SZCZECIN · PADEL · COMMUNITY</p>
+    <div className="pd-home-v1">
+      <section className="pd-home-hero">
+        <div className="pd-home-hero-copy">
+          <div className="pd-home-eyebrow">SZCZECIN · PADEL · COMMUNITY</div>
           <h1>
-            Graj,
-            <strong>kiedy chcesz.</strong>
+            <span>KORTY</span>
+            <span>LUDZIE</span>
+            <span>GRA<i>.</i></span>
           </h1>
-          <p>Wolne korty. Fajni ludzie. Padel w jednym miejscu.</p>
+          <p>Wolne terminy. Rezerwuj. Widzimy się na korcie.</p>
         </div>
+        <div className="pd-home-hero-photo" aria-hidden="true" />
       </section>
 
-      <section className="pa-premium-search pa-rc-search">
-        <button type="button" className="pa-premium-field" onClick={onOpenCourts}>
+      <section className="pd-home-search" aria-label="Szybkie wyszukiwanie kortów">
+        <button type="button" onClick={onOpenCourts}>
           <small>Lokalizacja</small>
           <strong>Szczecin</strong>
           <span>⌄</span>
         </button>
-
-        <button type="button" className="pa-premium-field" onClick={onOpenCourts}>
+        <button type="button" onClick={onOpenCourts}>
           <small>Data</small>
           <strong>{date || "Dzisiaj"}</strong>
           <span>⌄</span>
         </button>
-
-        <button
-          type="button"
-          className="pa-premium-field pa-premium-field-time"
-          onClick={onOpenCourts}
-        >
+        <button type="button" onClick={onOpenCourts}>
           <small>Godzina od</small>
-          <strong>{from || "18:00"}</strong>
+          <strong>{from || "08:00"}</strong>
           <span>⌄</span>
         </button>
-
-        <button
-          type="button"
-          className="pa-premium-field pa-premium-field-time"
-          onClick={onOpenCourts}
-        >
+        <button type="button" onClick={onOpenCourts}>
           <small>Czas gry</small>
           <strong>{duration} min</strong>
           <span>⌄</span>
         </button>
-
-        <button
-          type="button"
-          className="pa-premium-field pa-premium-field-more"
-          onClick={onOpenCourts}
-        >
-          <small>Więcej</small>
-          <strong>Filtry gry</strong>
-          <span>⌄</span>
-        </button>
-
-        <button
-          type="button"
-          className="pa-premium-search-button"
-          onClick={onOpenCourts}
-        >
+        <button type="button" className="pd-home-search-submit" onClick={onOpenCourts}>
           Szukaj kortów <span>→</span>
         </button>
       </section>
 
-      <div className="pa-premium-mobile-more">
-        <button type="button" onClick={onOpenCourts}>
-          + Więcej filtrów
-        </button>
-      </div>
+      <section className="pd-home-section">
+        <header className="pd-home-section-head">
+          <div>
+            <small>OSTATNIO SPRAWDZANE</small>
+            <h2>Najbliższe wolne</h2>
+            <p>Najbliższe terminy w Szczecinie.</p>
+          </div>
+          <button type="button" onClick={onOpenCourts}>Zobacz wszystkie kluby →</button>
+        </header>
 
-      <section className="pa-premium-tabs pa-rc-tabs">
-        <button type="button" className="active" onClick={onOpenCourts}>
-          Dzisiaj
-          <small>teraz</small>
-        </button>
-        <button type="button" onClick={onOpenCourts}>
-          Jutro
-        </button>
-        <button type="button" onClick={onOpenCourts}>
-          Weekend
-        </button>
-        <span>↻ odświeżenie za {countdown}s</span>
-      </section>
-
-      <header className="pa-premium-section-title pa-rc-section-title">
-        <div>
-          <h2>Najbliższe wolne</h2>
-          <p>Najszybsze dostępne godziny w Szczecinie</p>
-        </div>
-        <button type="button" onClick={onOpenCourts}>
-          Zobacz wszystkie →
-        </button>
-      </header>
-
-      <section className="pa-rc-nearest">
-        {nearest.length > 0 ? (
-          nearest.map((item) => (
-            <button
-              type="button"
-              className="pa-rc-nearest-card"
-              key={`${item.clubName}-${item.courtKey}-${item.startHour}`}
-              onClick={() => onSelectCourt(item)}
-            >
-              <span className="pa-rc-nearest-mark">
-                {(item.clubName || "P").slice(0, 1).toUpperCase()}
-              </span>
-              <span className="pa-rc-nearest-copy">
-                <small>{item.clubName}</small>
-                <strong>{item.startHour}</strong>
-                <em>
-                  {item.courtName} · {duration} min
-                </em>
-              </span>
-              <b>→</b>
-            </button>
-          ))
-        ) : (
-          <button
-            type="button"
-            className="pa-rc-nearest-card pa-rc-nearest-empty"
-            onClick={onOpenCourts}
-          >
-            <span className="pa-rc-nearest-mark">↻</span>
-            <span className="pa-rc-nearest-copy">
-              <small>Brak szybkiego wyniku</small>
-              <strong>Sprawdź dostępność</strong>
-              <em>Otwórz pełną wyszukiwarkę kortów</em>
-            </span>
-            <b>→</b>
-          </button>
-        )}
-
-        <button
-          type="button"
-          className="pa-rc-nearest-card pa-rc-nearest-all"
-          onClick={onOpenCourts}
-        >
-          <span className="pa-rc-nearest-mark">⌗</span>
-          <span className="pa-rc-nearest-copy">
-            <small>Wszystkie kluby</small>
-            <strong>Więcej terminów</strong>
-            <em>Pełna wyszukiwarka</em>
-          </span>
-          <b>→</b>
-        </button>
-      </section>
-
-      <header className="pa-premium-section-title pa-rc-section-title pa-rc-clubs-title">
-        <div>
-          <h2>Kluby w Szczecinie</h2>
-          <p>Najbliższe terminy bez przechodzenia między stronami</p>
-        </div>
-        <button type="button" onClick={onOpenCourts}>
-          Zobacz wszystkie kluby →
-        </button>
-      </header>
-
-      <section className="pa-premium-club-grid pa-rc-club-grid">
-        {topClubs.map((club, index) => {
-          const clubSlots = slotsForClub(club);
-
-          return (
-            <article
-              className="pa-premium-club-card pa-rc-club-card"
-              key={club.slug || club.name}
-            >
-              <button
-                type="button"
-                className="pa-premium-club-photo pa-rc-club-photo"
-                style={{ backgroundImage: `url(${imageForClub(club, index)})` }}
-                onClick={onOpenCourts}
-                aria-label={`Otwórz ${club.name}`}
-              >
-                <span className="pa-premium-favorite">♡</span>
-              </button>
-
-              <div className="pa-premium-club-body pa-rc-club-body">
-                <div className="pa-premium-club-heading">
-                  <h3>{club.name}</h3>
-                  <b>
-                    {clubSlots.length > 0
-                      ? `${clubSlots.length} ${clubSlots.length === 1 ? "termin" : "terminy"}`
-                      : "Sprawdź"}
-                  </b>
-                </div>
-
-                <p>{Object.keys(club.courts || {}).length} kortów · Szczecin</p>
-
-                <div className="pa-rc-card-label">Najbliższe wolne</div>
-
-                {clubSlots.length > 0 ? (
-                  <div className="pa-premium-times pa-rc-times">
-                    {clubSlots.map((item) => (
-                      <button
-                        type="button"
-                        key={`${item.courtKey}-${item.startHour}`}
-                        onClick={() => onSelectCourt(item)}
-                      >
-                        {item.startHour}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    className="pa-premium-check"
-                    onClick={onOpenCourts}
-                  >
-                    Sprawdź dostępność →
-                  </button>
-                )}
-
+        <div className="pd-home-clubs">
+          {topClubs.map((club, index) => {
+            const slots = slotsForClub(club);
+            return (
+              <article className="pd-home-club-card" key={club.slug || club.name}>
                 <button
                   type="button"
-                  className="pa-rc-card-action"
+                  className="pd-home-club-photo"
+                  style={{ backgroundImage: `url(${imageForClub(club, index)})` }}
                   onClick={onOpenCourts}
+                  aria-label={`Otwórz ${club.name}`}
                 >
-                  Zobacz wszystkie terminy <span>→</span>
+                  <span>♡</span>
                 </button>
-              </div>
-            </article>
-          );
-        })}
+                <div className="pd-home-club-info">
+                  <div className="pd-home-club-top">
+                    <div>
+                      <h3>{club.name}</h3>
+                      <p>{Object.keys(club.courts || {}).length} kortów · Szczecin</p>
+                    </div>
+                    <button type="button" onClick={onOpenCourts} aria-label="Więcej terminów">→</button>
+                  </div>
 
-        {topClubs.length === 0 && (
-          <div className="pa-premium-empty pa-rc-empty">
-            <strong>Ładowanie klubów…</strong>
-            <span>Dane dostępności są pobierane z BO5.</span>
-          </div>
-        )}
+                  {slots.length > 0 ? (
+                    <div className="pd-home-slots">
+                      {slots.map((item, slotIndex) => (
+                        <button
+                          type="button"
+                          className={slotIndex === 0 ? "is-first" : ""}
+                          key={`${item.courtKey}-${item.startHour}`}
+                          onClick={() => onSelectCourt(item)}
+                        >
+                          {item.startHour}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <button type="button" className="pd-home-no-slot" onClick={onOpenCourts}>
+                      Sprawdź dostępność →
+                    </button>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+
+          {topClubs.length === 0 && (
+            <button type="button" className="pd-home-empty" onClick={onOpenCourts}>
+              <strong>Sprawdź dostępność kortów</strong>
+              <span>Dane są właśnie pobierane.</span>
+            </button>
+          )}
+        </div>
       </section>
 
-      <section className="pa-premium-feature-strip pa-rc-feature-strip">
-        <button type="button" onClick={onOpenSaved}>
-          <b>◉</b>
-          <span>
-            <strong>Alerty</strong>
-            <small>Powiadomienia o wolnych kortach</small>
-          </span>
-        </button>
-        <button type="button" onClick={onOpenSaved}>
-          <b>♡</b>
-          <span>
-            <strong>Ulubione</strong>
-            <small>Zapisuj kluby i korty</small>
-          </span>
-        </button>
-        <button type="button" onClick={onOpenPlayers}>
-          <b>♧</b>
-          <span>
-            <strong>Znajomi</strong>
-            <small>Znajdź partnera do gry</small>
-          </span>
+      <section className="pd-home-benefits">
+        <button type="button" onClick={onOpenCourts}>
+          <b>⌁</b>
+          <span><strong>Szybkie wyszukiwanie</strong><small>Znajdź wolne korty w kilka sekund.</small></span>
         </button>
         <button type="button" onClick={onOpenMatches}>
-          <b>ϟ</b>
-          <span>
-            <strong>Szybka gra</strong>
-            <small>Znajdź mecz w kilka sekund</small>
-          </span>
+          <b>◎</b>
+          <span><strong>Więcej meczów</strong><small>Dołącz do gry i poznaj nowych ludzi.</small></span>
         </button>
+        <button type="button" onClick={onOpenPlayers}>
+          <b>□</b>
+          <span><strong>Aktywna społeczność</strong><small>Gracze, kluby, wydarzenia.</small></span>
+        </button>
+        <button type="button" onClick={onOpenSaved}>
+          <b>▥</b>
+          <span><strong>Wszystko w jednym miejscu</strong><small>Korty, mecze, gracze.</small></span>
+        </button>
+      </section>
+
+      <section className="pd-home-community">
+        <div className="pd-home-community-copy">
+          <small>PADEL ŁĄCZY</small>
+          <h2>Ten sam kort.<br />Więcej dobrych ludzi.</h2>
+          <button type="button" onClick={onOpenPlayers}>Dołącz do gry <span>→</span></button>
+        </div>
+        <div className="pd-home-community-photo" aria-hidden="true" />
+        <div className="pd-home-community-words">
+          <span>GRAJ</span><span>POZNAWAJ</span><span>RYWALIZUJ</span><span>WRACAJ</span>
+        </div>
       </section>
 
       {activePlayers.length > 0 && (
-        <section className="pa-premium-players pa-rc-players">
+        <section className="pd-home-players">
           <header>
             <div>
-              <h2>Gracze szukający gry</h2>
-              <p>Osoby o podobnym poziomie</p>
+              <small>SPOŁECZNOŚĆ</small>
+              <h2>Kto teraz szuka gry</h2>
             </div>
-            <button type="button" onClick={onOpenPlayers}>
-              Wszyscy →
-            </button>
+            <button type="button" onClick={onOpenPlayers}>Wszyscy →</button>
           </header>
-
           <div>
             {activePlayers.map((player) => (
               <article key={player.id}>
-                <span className="consumer-player-avatar">
-                  {player.nickname.slice(0, 1).toUpperCase()}
-                </span>
+                <span className="consumer-player-avatar">{player.nickname.slice(0, 1).toUpperCase()}</span>
                 <div>
                   <strong>{player.nickname}</strong>
-                  <small>
-                    {player.clubName} · {player.from}–{player.to}
-                  </small>
+                  <small>{player.clubName} · {player.from}–{player.to}</small>
                 </div>
                 <LevelBadge level={player.level} compact />
-                <button type="button" onClick={() => onInvitePlayer(player)}>
-                  Zaproś
-                </button>
+                <button type="button" onClick={() => onInvitePlayer(player)}>Zaproś</button>
               </article>
             ))}
           </div>
