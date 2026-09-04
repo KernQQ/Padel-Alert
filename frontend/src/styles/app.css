@@ -11713,3 +11713,102 @@ body {
     padding: 0;
   }
 }
+
+
+/* =========================================================
+   PADLETIC START — EDITORIAL V2 / HERO FIX
+   One continuous hero, softer title, integrated search.
+   ========================================================= */
+.pd-home-hero {
+  position: relative;
+  min-height: 360px;
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.09);
+  background:
+    linear-gradient(90deg,
+      rgba(4,10,7,.98) 0%,
+      rgba(4,10,7,.93) 25%,
+      rgba(4,10,7,.62) 47%,
+      rgba(4,10,7,.16) 70%,
+      rgba(4,10,7,.10) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.28)),
+    url("/premium/hero.jpg") 78% 58% / cover no-repeat;
+}
+
+.pd-home-hero-photo {
+  display: none;
+}
+
+.pd-home-hero-copy {
+  position: relative;
+  z-index: 2;
+  width: min(560px, 48%);
+  min-height: 360px;
+  padding: 54px 0 86px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: transparent;
+}
+
+.pd-home-hero h1 {
+  margin: 20px 0 16px;
+  font-size: clamp(46px, 4.25vw, 66px);
+  line-height: .84;
+  letter-spacing: -.052em;
+}
+
+.pd-home-hero-copy > p {
+  font-size: 15px;
+  color: rgba(239,244,240,.80);
+}
+
+.pd-home-search {
+  width: calc(100% - 72px);
+  margin: -42px auto 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(9,17,13,.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 18px 48px rgba(0,0,0,.34);
+}
+
+.pd-home-search .pd-home-search-submit {
+  border-radius: 10px;
+  background: #dce7dc;
+}
+
+@media (max-width: 760px) {
+  .pd-home-hero {
+    min-height: 500px;
+    border: 0;
+    background:
+      linear-gradient(180deg,
+        rgba(4,9,6,.10) 0%,
+        rgba(4,9,6,.12) 32%,
+        rgba(4,9,6,.62) 66%,
+        #050a07 100%),
+      url("/premium/hero.jpg") 72% center / cover no-repeat;
+  }
+
+  .pd-home-hero-copy {
+    width: auto;
+    min-height: 500px;
+    padding: 100px 24px 88px;
+    justify-content: flex-end;
+  }
+
+  .pd-home-hero h1 {
+    font-size: clamp(44px, 13.5vw, 58px);
+    margin: 17px 0 13px;
+  }
+
+  .pd-home-search {
+    width: auto;
+    margin: -44px 16px 0;
+    position: relative;
+    z-index: 5;
+  }
+}
