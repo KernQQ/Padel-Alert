@@ -11812,3 +11812,210 @@ body {
     z-index: 5;
   }
 }
+
+
+/* =========================================================
+   PADLETIC START — EDITORIAL V3 / MOBILE FIX
+   Compact hero + 2x2 search grid + proper bottom-nav spacing.
+   Desktop intentionally unchanged.
+   ========================================================= */
+@media (max-width: 760px) {
+  .page:has(.pd-home-v1) {
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+  }
+
+  .pd-home-v1 {
+    width: 100%;
+    padding: 0 0 28px;
+  }
+
+  .pd-home-hero {
+    min-height: 315px;
+    border: 0;
+    background:
+      linear-gradient(180deg,
+        rgba(4,9,6,.10) 0%,
+        rgba(4,9,6,.16) 28%,
+        rgba(4,9,6,.58) 68%,
+        #050a07 100%),
+      url("/premium/hero.jpg") 70% 50% / cover no-repeat;
+  }
+
+  .pd-home-hero-copy {
+    min-height: 315px;
+    width: auto;
+    padding: 72px 22px 32px;
+    justify-content: flex-end;
+  }
+
+  .pd-home-eyebrow {
+    font-size: 7px;
+    letter-spacing: .24em;
+    margin-bottom: 3px;
+  }
+
+  .pd-home-hero h1 {
+    margin: 10px 0 10px;
+    font-size: clamp(34px, 10.8vw, 46px);
+    line-height: .88;
+    letter-spacing: -.045em;
+  }
+
+  .pd-home-hero-copy > p {
+    max-width: 280px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: rgba(239,244,240,.82);
+  }
+
+  .pd-home-search {
+    position: relative;
+    z-index: 5;
+    width: auto;
+    margin: -14px 14px 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,.28);
+    background: #09110d;
+  }
+
+  .pd-home-search > button {
+    min-height: 64px;
+    padding: 11px 34px 10px 14px;
+    border: 0;
+    border-right: 1px solid var(--pd-line);
+    border-bottom: 1px solid var(--pd-line);
+  }
+
+  .pd-home-search > button:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .pd-home-search > button small {
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+
+  .pd-home-search > button strong {
+    font-size: 13px;
+  }
+
+  .pd-home-search > button > span {
+    right: 12px;
+  }
+
+  .pd-home-search .pd-home-search-submit {
+    grid-column: 1 / -1;
+    min-height: 52px;
+    margin: 8px;
+    padding: 0 16px;
+    border-radius: 11px;
+    background: #dce7dc;
+    color: #07100b;
+    font-size: 14px;
+  }
+
+  .pd-home-section {
+    padding: 34px 14px 0;
+  }
+
+  .pd-home-section-head h2 {
+    font-size: 23px;
+  }
+
+  .pd-home-section-head p {
+    font-size: 12px;
+  }
+
+  .pd-home-section-head > button {
+    font-size: 9px;
+  }
+
+  .pd-home-club-card {
+    min-width: min(84vw, 315px);
+  }
+
+  .pd-home-club-info {
+    padding: 14px;
+  }
+
+  .pd-home-club-top h3 {
+    font-size: 15px;
+  }
+
+  .pd-home-club-top p {
+    font-size: 11px;
+  }
+
+  .pd-home-slots button,
+  .pd-home-no-slot {
+    min-height: 36px;
+    font-size: 11px;
+  }
+
+  .pd-home-benefits {
+    margin: 30px 14px;
+  }
+
+  .pd-home-benefits > button {
+    min-height: 108px;
+    padding: 14px;
+  }
+
+  .pd-home-benefits strong {
+    font-size: 12px;
+  }
+
+  .pd-home-benefits small {
+    font-size: 10px;
+  }
+
+  .pd-home-community {
+    margin: 0 14px;
+    min-height: 180px;
+  }
+
+  .pd-home-community-copy {
+    min-height: 180px;
+    padding: 22px;
+  }
+
+  .pd-home-community-copy h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .pd-home-community-copy button {
+    min-height: 40px;
+    font-size: 12px;
+  }
+}
+
+/* smaller phones */
+@media (max-width: 390px) {
+  .pd-home-hero {
+    min-height: 292px;
+  }
+
+  .pd-home-hero-copy {
+    min-height: 292px;
+    padding: 64px 18px 28px;
+  }
+
+  .pd-home-hero h1 {
+    font-size: 36px;
+  }
+
+  .pd-home-search {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .pd-home-search > button {
+    min-height: 60px;
+    padding-left: 12px;
+  }
+}
