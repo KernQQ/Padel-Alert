@@ -1679,8 +1679,20 @@ function App() {
                     <button
                       type="button"
                       onClick={() => {
-                        setFrom("16:00");
-                        setTo("22:00");
+                        const nextFrom = "16:00";
+                        const nextTo = "22:00";
+
+                        setFrom(nextFrom);
+                        setTo(nextTo);
+                        setSelectedProposal(null);
+                        setActiveSearch((current) => ({
+                          ...current,
+                          club: clubSlug,
+                          date,
+                          from: nextFrom,
+                          to: nextTo,
+                          courtType
+                        }));
                       }}
                     >
                       Pokaż od 16:00
@@ -1690,11 +1702,23 @@ function App() {
                       onClick={() => {
                         const base = new Date(`${date}T12:00:00`);
                         base.setDate(base.getDate() + 1);
-                        setDate([
+
+                        const nextDate = [
                           base.getFullYear(),
                           String(base.getMonth() + 1).padStart(2, "0"),
                           String(base.getDate()).padStart(2, "0")
-                        ].join("-"));
+                        ].join("-");
+
+                        setDate(nextDate);
+                        setSelectedProposal(null);
+                        setActiveSearch((current) => ({
+                          ...current,
+                          club: clubSlug,
+                          date: nextDate,
+                          from,
+                          to,
+                          courtType
+                        }));
                       }}
                     >
                       Sprawdź jutro
