@@ -37,3 +37,123 @@
   .padletic-picker-options.time-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
   .padletic-picker-options.time-grid > button { min-height: 52px; font-weight: 700; }
 }
+
+
+/* PADLETIC FLOATING MOBILE PICKER — wspólny wygląd iOS + Android */
+@media (max-width: 900px), (pointer: coarse) {
+  .padletic-select-layer,
+  .padletic-picker-layer {
+    align-items: flex-end;
+    padding:
+      12px
+      12px
+      max(12px, env(safe-area-inset-bottom))
+      12px;
+  }
+
+  .padletic-select-backdrop,
+  .padletic-picker-backdrop {
+    background: rgba(0, 7, 4, .60);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .padletic-select-sheet,
+  .padletic-picker-sheet {
+    width: min(100%, 560px);
+    max-height: min(72dvh, 650px);
+    border: 1px solid rgba(126,255,49,.24);
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 50% -10%, rgba(126,255,49,.07), transparent 34%),
+      linear-gradient(180deg, rgba(9,24,15,.995), rgba(4,13,8,.995));
+    box-shadow:
+      0 -14px 48px rgba(0,0,0,.44),
+      0 10px 38px rgba(0,0,0,.30),
+      inset 0 1px rgba(255,255,255,.035);
+    overflow: hidden;
+  }
+
+  .padletic-picker-sheet {
+    padding:
+      10px 12px
+      max(12px, env(safe-area-inset-bottom))
+      12px;
+  }
+
+  .padletic-select-sheet::before,
+  .padletic-picker-sheet::before {
+    content: "";
+    display: block;
+    width: 42px;
+    height: 4px;
+    margin: 8px auto 2px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.20);
+  }
+
+  .padletic-select-sheet-head,
+  .padletic-picker-sheet header {
+    min-height: 66px;
+    padding-top: 8px;
+  }
+
+  .padletic-select-sheet-head {
+    padding-left: 18px;
+    padding-right: 14px;
+  }
+
+  .padletic-picker-sheet header {
+    padding-left: 6px;
+    padding-right: 4px;
+  }
+
+  .padletic-select-sheet-head span,
+  .padletic-picker-sheet header small {
+    font-size: 10px;
+    letter-spacing: .18em;
+  }
+
+  .padletic-select-sheet-head strong,
+  .padletic-picker-sheet header strong {
+    font-size: 20px;
+    line-height: 1.15;
+  }
+
+  .padletic-select-close,
+  .padletic-picker-sheet header > button {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.035);
+  }
+
+  .padletic-select-options,
+  .padletic-picker-options {
+    gap: 8px;
+    padding: 10px 12px 12px;
+  }
+
+  .padletic-select-option,
+  .padletic-picker-options > button {
+    min-height: 54px;
+    border-radius: 16px;
+    background: rgba(255,255,255,.022);
+  }
+
+  .padletic-select-option.active,
+  .padletic-picker-options > button.active {
+    border-color: rgba(132,222,27,.62);
+    background:
+      linear-gradient(90deg, rgba(108,198,0,.17), rgba(108,198,0,.055));
+  }
+
+  .padletic-picker-options.time-grid {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+
+  .padletic-picker-options.time-grid > button {
+    min-height: 50px;
+    border-radius: 14px;
+  }
+}
