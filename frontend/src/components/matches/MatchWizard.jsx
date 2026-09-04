@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { apiFetch } from "../../services/api";
 import LevelSelect from "../ui/LevelSelect";
+import PadleticTimePicker from "../ui/PadleticTimePicker";
 
 function today() {
   const date = new Date();
@@ -154,24 +155,12 @@ function MatchWizard({
 
               <label>
                 <span>Od</span>
-                <input
-                  type="time"
-                  value={form.from}
-                  onChange={(event) =>
-                    setForm({ ...form, from: event.target.value })
-                  }
-                />
+                <PadleticTimePicker value={form.from} onChange={(value) => setForm({ ...form, from: value })} ariaLabel="Godzina od" />
               </label>
 
               <label>
                 <span>Do</span>
-                <input
-                  type="time"
-                  value={form.to}
-                  onChange={(event) =>
-                    setForm({ ...form, to: event.target.value })
-                  }
-                />
+                <PadleticTimePicker value={form.to} onChange={(value) => setForm({ ...form, to: value })} ariaLabel="Godzina do" />
               </label>
             </div>
           </section>

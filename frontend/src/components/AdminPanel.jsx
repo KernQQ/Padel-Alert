@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiFetch } from "../services/api";
 import PadleticSelect from "./ui/PadleticSelect";
+import PadleticTimePicker from "./ui/PadleticTimePicker";
 
 function sessionHeaders() {
   const token = localStorage.getItem("padelalert-session");
@@ -261,8 +262,8 @@ export default function AdminPanel({ onChanged }) {
             <label>Klub<input value={editing.clubName || ""} onChange={(e) => setEditing({ ...editing, clubName: e.target.value })} /></label>
             <div className="admin-modal-grid">
               <label>Data<input type="date" value={editing.date || ""} onChange={(e) => setEditing({ ...editing, date: e.target.value })} /></label>
-              <label>Od<input type="time" value={editing.from || ""} onChange={(e) => setEditing({ ...editing, from: e.target.value })} /></label>
-              <label>Do<input type="time" value={editing.to || ""} onChange={(e) => setEditing({ ...editing, to: e.target.value })} /></label>
+              <label>Od<PadleticTimePicker value={editing.from || ""} onChange={(value) => setEditing({ ...editing, from: value })} ariaLabel="Godzina od" /></label>
+              <label>Do<PadleticTimePicker value={editing.to || ""} onChange={(value) => setEditing({ ...editing, to: value })} ariaLabel="Godzina do" /></label>
               <label>Maks. graczy<input type="number" min="2" max="8" value={editing.maxPlayers || 4} onChange={(e) => setEditing({ ...editing, maxPlayers: e.target.value })} /></label>
               <label>Status<PadleticSelect value={editing.status || "open"} onChange={(e) => setEditing({ ...editing, status: e.target.value })}><option value="open">Otwarty</option><option value="full">Komplet</option><option value="confirmed">Potwierdzony</option><option value="completed">Zakończony</option><option value="cancelled">Anulowany</option></PadleticSelect></label>
               <label>Poziom<input value={editing.level || ""} onChange={(e) => setEditing({ ...editing, level: e.target.value })} /></label>

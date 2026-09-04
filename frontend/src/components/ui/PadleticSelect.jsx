@@ -1,9 +1,12 @@
 import { Children, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
-function isAndroidDevice() {
+function isMobileDevice() {
   if (typeof navigator === "undefined") return false;
-  return /Android/i.test(navigator.userAgent || "");
+  const ua = navigator.userAgent || "";
+  const touchMac = /Macintosh/i.test(ua) && (navigator.maxTouchPoints || 0) > 1;
+  return /Android|iPhone|iPad|iPod/i.test(ua) || touchMac ||
+    (typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches && window.innerWidth <= 900);
 }
 
 function getOptionItems(children) {
@@ -39,12 +42,12 @@ export default function PadleticSelect({
   ...rest
 }) {
   const [open, setOpen] = useState(false);
-  const [android, setAndroid] = useState(false);
+  const [mobile, setMobile] = useState(false);
   const options = useMemo(() => getOptionItems(children), [children]);
   const stringValue = value == null ? "" : String(value);
   const active = options.find((item) => item.value === stringValue);
 
-  useEffect(() => setAndroid(isAndroidDevice()), []);
+  useEffect(() => setMobile(isMobileDevice()), []);
 
   useEffect(() => {
     if (!open || typeof document === "undefined") return undefined;
@@ -60,7 +63,7 @@ export default function PadleticSelect({
     };
   }, [open]);
 
-  if (!android) {
+  if (!mobile) {
     return (
       <select
         value={value}

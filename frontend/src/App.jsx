@@ -36,6 +36,7 @@ import ProfilePhotoCropper from "./components/ProfilePhotoCropper";
 import { useRealtime } from "./hooks/useRealtime";
 import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
 import PadleticSelect from "./components/ui/PadleticSelect";
+import PadleticTimePicker from "./components/ui/PadleticTimePicker";
 
 
 
@@ -51,110 +52,6 @@ const TIME_OPTIONS_END = [
   { value: "23:59", label: "00:00" }
 ];
 
-
-const ALL_TIME_OPTIONS = Array.from({ length: 36 }, (_, index) => {
-  const total = 6 * 60 + index * 30;
-  const h = String(Math.floor(total / 60)).padStart(2, "0");
-  const m = String(total % 60).padStart(2, "0");
-  return `${h}:${m}`;
-});
-
-function PadleticTimePicker({ value, onChange, options = ALL_TIME_OPTIONS, placeholder = "Wybierz", allowEmpty = false, emptyLabel = "Dowolna" }) {
-  const [open, setOpen] = useState(false);
-  const rootRef = useRef(null);
-
-  useEffect(() => {
-    if (!open) return undefined;
-    const close = (event) => {
-      if (!rootRef.current?.contains(event.target)) setOpen(false);
-    };
-    const onKey = (event) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("pointerdown", close);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("pointerdown", close);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-
-  const normalizedOptions = options.map((item) =>
-    typeof item === "string" ? { value: item, label: item } : item
-  );
-  const activeLabel = normalizedOptions.find((item) => item.value === value)?.label;
-
-  return (
-    <div className={`padletic-time-picker${open ? " is-open" : ""}`} ref={rootRef}>
-      <button
-        type="button"
-        className="padletic-time-trigger"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        onClick={() => setOpen((current) => !current)}
-      >
-        <span className={!value ? "is-placeholder" : ""}>
-          {activeLabel || (allowEmpty && !value ? emptyLabel : placeholder)}
-        </span>
-        <span className="padletic-time-chevron" aria-hidden="true">⌄</span>
-      </button>
-
-      {open && (
-        <>
-          <button
-            type="button"
-            className="padletic-time-backdrop"
-            aria-label="Zamknij wybór godziny"
-            onClick={() => setOpen(false)}
-          />
-          <div className="padletic-time-popover" role="listbox" aria-label="Wybierz godzinę">
-            <div className="padletic-time-popover-head">
-              <strong>Wybierz godzinę</strong>
-              <button type="button" onClick={() => setOpen(false)} aria-label="Zamknij">×</button>
-            </div>
-            <div className="padletic-time-options">
-              {allowEmpty && (
-                <button
-                  type="button"
-                  className={!value ? "active" : ""}
-                  onClick={() => { onChange(""); setOpen(false); }}
-                >
-                  {emptyLabel}
-                </button>
-              )}
-              {normalizedOptions.map((item) => (
-                <button
-                  type="button"
-                  key={item.value}
-                  className={value === item.value ? "active" : ""}
-                  onClick={() => { onChange(item.value); setOpen(false); }}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-const BO5_CLUB_URLS = {
-  "padel-arena-poludniowa":
-    "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
-  "padel-club":
-    "https://bo5.pl/padelclub/reservation",
-  "fabryka-energii":
-    "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
-};
-
-const BO5_CLUB_URLS_BY_ID = {
-  "264": "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
-  "624": "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
-  "595": "https://bo5.pl/padelclub/reservation",
-  "528": "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
-};
 
 function normalizeClubKey(value) {
   return String(value || "")

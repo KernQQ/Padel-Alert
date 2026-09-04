@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { apiFetch } from "../services/api";
 import LevelBadge from "./ui/LevelBadge";
 import PadleticSelect from "./ui/PadleticSelect";
+import PadleticTimePicker from "./ui/PadleticTimePicker";
 
 function todayIso() {
   const now = new Date();
@@ -144,24 +145,12 @@ function MatchmakerPanel({
 
         <label>
           <span>Od</span>
-          <input
-            type="time"
-            value={form.from}
-            onChange={(event) =>
-              update("from", event.target.value)
-            }
-          />
+          <PadleticTimePicker value={form.from} onChange={(value) => update("from", value)} ariaLabel="Godzina od" />
         </label>
 
         <label>
           <span>Do</span>
-          <input
-            type="time"
-            value={form.to}
-            onChange={(event) =>
-              update("to", event.target.value)
-            }
-          />
+          <PadleticTimePicker value={form.to} onChange={(value) => update("to", value)} ariaLabel="Godzina do" />
         </label>
 
         <label>
