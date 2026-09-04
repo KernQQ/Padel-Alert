@@ -157,4 +157,51 @@
     border-radius: 14px;
   }
 }
-\n\n/* PADLETIC TIME GRID V2 — kompaktowy i czytelny na iOS + Android */\n@media (max-width: 900px), (pointer: coarse) {\n  .padletic-picker-sheet {\n    max-height: min(88dvh, 720px);\n  }\n\n  .padletic-picker-sheet .padletic-picker-options {\n    max-height: calc(min(88dvh, 720px) - 96px);\n    overflow-y: auto;\n    -webkit-overflow-scrolling: touch;\n    scrollbar-gutter: stable;\n    scrollbar-width: thin;\n  }\n\n  .padletic-picker-options.time-grid {\n    grid-template-columns: repeat(4, minmax(0, 1fr));\n    gap: 6px;\n    padding: 8px 8px 10px;\n  }\n\n  .padletic-picker-options.time-grid > button {\n    min-height: 44px;\n    padding: 8px 4px;\n    border-radius: 12px;\n    font-size: clamp(14px, 4vw, 17px);\n    font-weight: 800;\n    justify-content: center;\n  }\n\n  .padletic-picker-options.time-grid > button i {\n    display: none;\n  }\n\n  .padletic-picker-options.time-grid > button.active {\n    color: #071005;\n    background: linear-gradient(180deg, #96ef22, #79cf0d);\n    border-color: rgba(162,255,52,.9);\n    box-shadow: 0 5px 18px rgba(113,206,0,.18);\n  }\n}\n\n@media (max-width: 350px) {\n  .padletic-picker-options.time-grid {\n    grid-template-columns: repeat(3, minmax(0, 1fr));\n  }\n}\n
+
+
+/* PADLETIC TIME GRID V2 — kompaktowy i czytelny na iOS + Android */
+@media (max-width: 900px), (pointer: coarse) {
+  .padletic-picker-sheet {
+    max-height: min(88dvh, 720px);
+  }
+
+  .padletic-picker-sheet .padletic-picker-options {
+    max-height: calc(min(88dvh, 720px) - 96px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+  }
+
+  .padletic-picker-options.time-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px 8px 10px;
+  }
+
+  .padletic-picker-options.time-grid > button {
+    min-height: 44px;
+    padding: 8px 4px;
+    border-radius: 12px;
+    font-size: clamp(14px, 4vw, 17px);
+    font-weight: 800;
+    justify-content: center;
+  }
+
+  .padletic-picker-options.time-grid > button i {
+    display: none;
+  }
+
+  .padletic-picker-options.time-grid > button.active {
+    color: #071005;
+    background: linear-gradient(180deg, #96ef22, #79cf0d);
+    border-color: rgba(162,255,52,.9);
+    box-shadow: 0 5px 18px rgba(113,206,0,.18);
+  }
+}
+
+@media (max-width: 350px) {
+  .padletic-picker-options.time-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
