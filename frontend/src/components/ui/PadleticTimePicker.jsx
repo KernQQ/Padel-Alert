@@ -28,6 +28,7 @@ export default function PadleticTimePicker({
 }) {
   const [open, setOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const [desktopPos, setDesktopPos] = useState(null);
   const rootRef = useRef(null);
   const optionsRef = useRef(null);
   const normalized = useMemo(() => options.map((item) =>
@@ -63,6 +64,34 @@ export default function PadleticTimePicker({
       node.scrollTop = 0;
     });
     return () => cancelAnimationFrame(id);
+  }, [open, mobile]);
+
+  useEffect(() => {
+    if (!open || mobile || typeof window === "undefined") return undefined;
+
+    const updatePosition = () => {
+      const trigger = rootRef.current?.querySelector(".padletic-picker-trigger");
+      if (!trigger) return;
+      const rect = trigger.getBoundingClientRect();
+      const width = Math.max(300, Math.min(rect.width, 430));
+      const estimatedHeight = 270;
+      const gap = 8;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const openAbove = spaceBelow < estimatedHeight + 20 && rect.top > estimatedHeight;
+      setDesktopPos({
+        left: Math.max(10, Math.min(rect.left, window.innerWidth - width - 10)),
+        top: openAbove ? Math.max(10, rect.top - estimatedHeight - gap) : rect.bottom + gap,
+        width,
+      });
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
   }, [open, mobile]);
 
   const choose = (nextValue) => {
@@ -106,7 +135,15 @@ export default function PadleticTimePicker({
         <span aria-hidden="true">⌄</span>
       </button>
       {mobileSheet}
-      {open && !mobile && <div className="padletic-picker-popover">{optionsUi}</div>}
+      {open && !mobile && desktopPos && typeof document !== "undefined" && createPortal(
+        <div
+          className="padletic-picker-popover padletic-picker-popover-portal"
+          style={{ left: desktopPos.left, top: desktopPos.top, width: desktopPos.width }}
+        >
+          {optionsUi}
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
