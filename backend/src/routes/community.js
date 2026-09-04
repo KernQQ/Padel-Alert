@@ -26,6 +26,13 @@ router.use((req, res, next) => {
 
 function clean(value, maxLength = 200) { return String(value || "").trim().slice(0, maxLength); }
 function isValidTime(value) { return /^\d{2}:\d{2}$/.test(String(value || "")); }
+function normalizeProfileLevel(value, fallback = "3.0") {
+  const numeric = Number.parseFloat(String(value ?? "").replace(",", "."));
+  if (!Number.isFinite(numeric)) return fallback;
+  const normalized = numeric.toFixed(1);
+  const allowed = new Set(["1.5","2.0","2.5","3.0","3.1","3.2","3.3","3.4","3.5","3.6","3.7","3.8","3.9","4.0","4.5","5.0","5.5","6.0"]);
+  return allowed.has(normalized) ? normalized : fallback;
+}
 function token(req) { return clean(req.headers["x-owner-token"], 100); }
 function requireToken(req, res) { const value = token(req); if (!value) { res.status(401).json({ ok:false, message:"Brak identyfikatora użytkownika." }); return null; } return value; }
 function publicPost(post, requester, requests, profiles = {}) {
@@ -129,7 +136,7 @@ router.patch("/me", async (req, res) => {
     const availabilityPeriods = Array.isArray(req.body.availabilityPeriods)
       ? req.body.availabilityPeriods.map((value) => clean(value, 24)).filter((value) => ["Rano", "Popołudnie", "Wieczór"].includes(value)).slice(0, 3)
       : (Array.isArray(current.availabilityPeriods) ? current.availabilityPeriods : []);
-    const next={...current,id,nickname:clean(req.body.nickname||"Gość",50),level:clean(req.body.level||"3.0",40),preferredSide:clean(req.body.preferredSide||"Dowolna",20),favoriteClubSlug:clean(req.body.favoriteClubSlug||favoriteClubSlugs[0]||"all",80),favoriteClubSlugs,availabilityPeriods,city:clean(req.body.city||"Szczecin",60),bio:clean(req.body.bio,300),avatarDataUrl,updatedAt:new Date().toISOString()};
+    const next={...current,id,nickname:clean(req.body.nickname||"Gość",50),level:normalizeProfileLevel(req.body.level, current.level || "3.0"),preferredSide:clean(req.body.preferredSide||"Dowolna",20),favoriteClubSlug:clean(req.body.favoriteClubSlug||favoriteClubSlugs[0]||"all",80),favoriteClubSlugs,availabilityPeriods,city:clean(req.body.city||"Szczecin",60),bio:clean(req.body.bio,300),avatarDataUrl,updatedAt:new Date().toISOString()};
     data.profiles[id]=next; return { profile: next };
   });
   if (profile?.error) return res.status(profile.error[0]).json({ok:false,message:profile.error[1]});

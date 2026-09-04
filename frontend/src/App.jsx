@@ -382,6 +382,7 @@ function App() {
   const [showMobileActions, setShowMobileActions] = useState(false);
   const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
   const [showProfileEditor, setShowProfileEditor] = useState(false);
+  const profileEditorOpenRef = useRef(false);
   const [profilePhoto, setProfilePhoto] = useState(() => localStorage.getItem("padelalert-profile-photo") || "");
   const [profileCropSource, setProfileCropSource] = useState("");
   const [matchCreateSignal, setMatchCreateSignal] = useState(0);
@@ -546,6 +547,10 @@ function App() {
   }
 
   useEffect(() => {
+    profileEditorOpenRef.current = showProfileEditor;
+  }, [showProfileEditor]);
+
+  useEffect(() => {
     if (!accountUser || !ownerToken) return undefined;
     const beat = async () => {
       try {
@@ -618,7 +623,23 @@ function App() {
       setProfiles(profilesData.profiles || []);
       setPosts(postsData.posts || []);
       if (profileData.profile) {
-        setMyProfile(profileData.profile);
+        // Nie nadpisuj formularza profilu podczas edycji. Dodatkowo ignoruj
+        // starszą odpowiedź z pollingu, która mogła wystartować przed zapisem.
+        if (!profileEditorOpenRef.current) {
+          setMyProfile((current) => {
+            const currentUpdatedAt = Date.parse(current?.updatedAt || "");
+            const incomingUpdatedAt = Date.parse(profileData.profile?.updatedAt || "");
+
+            if (
+              Number.isFinite(currentUpdatedAt) &&
+              (!Number.isFinite(incomingUpdatedAt) || incomingUpdatedAt < currentUpdatedAt)
+            ) {
+              return current;
+            }
+
+            return profileData.profile;
+          });
+        }
         if (Object.prototype.hasOwnProperty.call(profileData.profile, "avatarDataUrl")) {
           const nextPhoto = profileData.profile.avatarDataUrl || "";
           setProfilePhoto(nextPhoto);
@@ -1288,21 +1309,30 @@ function App() {
   async function saveProfile(event) {
     event.preventDefault();
     setProfileMessage("");
+
+    const payload = {
+      ...myProfile,
+      level: normalizeLevel(myProfile.level || "3.0"),
+      avatarDataUrl: profilePhoto
+    };
+
     const response = await apiFetch(`/community/me`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "x-owner-token": ownerToken
       },
-      body: JSON.stringify({ ...myProfile, avatarDataUrl: profilePhoto })
+      body: JSON.stringify(payload)
     });
     const data = await response.json();
     if (!response.ok) {
       setProfileMessage(data.message || "Nie udało się zapisać profilu.");
-      return;
+      return false;
     }
+
     setMyProfile(data.profile);
     setProfileMessage("Profil został zapisany.");
+    return true;
   }
 
   async function enableSystemNotifications() {
@@ -2529,8 +2559,8 @@ function App() {
       {showProfileEditor && (
         <div className="profile-modal-backdrop" onClick={() => setShowProfileEditor(false)}>
           <form className="profile-editor-panel profile-editor-modal" onSubmit={async (event) => {
-            await saveProfile(event);
-            setShowProfileEditor(false);
+            const saved = await saveProfile(event);
+            if (saved) setShowProfileEditor(false);
           }} onClick={(event) => event.stopPropagation()}>
             <div className="profile-modal-head">
               <div>
