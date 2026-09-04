@@ -29,6 +29,7 @@ export default function PadleticTimePicker({
   const [open, setOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
   const rootRef = useRef(null);
+  const optionsRef = useRef(null);
   const normalized = useMemo(() => options.map((item) =>
     typeof item === "string" ? { value: item, label: item } : item
   ), [options]);
@@ -53,13 +54,24 @@ export default function PadleticTimePicker({
     };
   }, [open, mobile]);
 
+
+  useEffect(() => {
+    if (!open || !mobile) return;
+    const id = requestAnimationFrame(() => {
+      const node = optionsRef.current;
+      if (!node) return;
+      node.scrollTop = 0;
+    });
+    return () => cancelAnimationFrame(id);
+  }, [open, mobile]);
+
   const choose = (nextValue) => {
     onChange?.(nextValue);
     setOpen(false);
   };
 
   const optionsUi = (
-    <div className={`padletic-picker-options${normalized.length > 12 ? " time-grid" : ""}`} role="listbox">
+    <div ref={optionsRef} className={`padletic-picker-options${normalized.length > 12 ? " time-grid" : ""}`} role="listbox">
       {allowEmpty && (
         <button type="button" role="option" aria-selected={!value} className={!value ? "active" : ""} onClick={() => choose("")}>
           <span>{emptyLabel}</span><i>{!value ? "✓" : ""}</i>
