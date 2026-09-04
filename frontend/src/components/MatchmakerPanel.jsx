@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { apiFetch } from "../services/api";
 import LevelBadge from "./ui/LevelBadge";
+import PadleticSelect from "./ui/PadleticSelect";
 
 function todayIso() {
   const now = new Date();
@@ -165,7 +166,7 @@ function MatchmakerPanel({
 
         <label>
           <span>Czas gry</span>
-          <select
+          <PadleticSelect
             value={form.duration}
             onChange={(event) =>
               update("duration", Number(event.target.value))
@@ -174,12 +175,12 @@ function MatchmakerPanel({
             <option value={60}>60 min</option>
             <option value={90}>90 min</option>
             <option value={120}>120 min</option>
-          </select>
+          </PadleticSelect>
         </label>
 
         <label className="matchmaker-club">
           <span>Klub</span>
-          <select
+          <PadleticSelect
             value={form.clubSlug}
             onChange={(event) =>
               update("clubSlug", event.target.value)
@@ -192,7 +193,7 @@ function MatchmakerPanel({
                 {club.name}
               </option>
             ))}
-          </select>
+          </PadleticSelect>
         </label>
 
         <button

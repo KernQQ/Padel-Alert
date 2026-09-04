@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiFetch } from "../services/api";
+import PadleticSelect from "./ui/PadleticSelect";
 
 function sessionHeaders() {
   const token = localStorage.getItem("padelalert-session");
@@ -226,11 +227,11 @@ export default function AdminPanel({ onChanged }) {
                 <small>Poziom {user.level} · {user.city}</small>
               </div>
               <div className="admin-user-actions">
-                <select value={user.role} onChange={(e) => changeRole(user.id, e.target.value)}>
+                <PadleticSelect value={user.role} onChange={(e) => changeRole(user.id, e.target.value)}>
                   <option value="user">USER</option>
                   <option value="club_admin">CLUB_ADMIN</option>
                   <option value="admin">ADMIN</option>
-                </select>
+                </PadleticSelect>
                 <button type="button" className="admin-user-delete" onClick={() => deleteUser(user)}>Usuń użytkownika</button>
               </div>
             </article>
@@ -263,7 +264,7 @@ export default function AdminPanel({ onChanged }) {
               <label>Od<input type="time" value={editing.from || ""} onChange={(e) => setEditing({ ...editing, from: e.target.value })} /></label>
               <label>Do<input type="time" value={editing.to || ""} onChange={(e) => setEditing({ ...editing, to: e.target.value })} /></label>
               <label>Maks. graczy<input type="number" min="2" max="8" value={editing.maxPlayers || 4} onChange={(e) => setEditing({ ...editing, maxPlayers: e.target.value })} /></label>
-              <label>Status<select value={editing.status || "open"} onChange={(e) => setEditing({ ...editing, status: e.target.value })}><option value="open">Otwarty</option><option value="full">Komplet</option><option value="confirmed">Potwierdzony</option><option value="completed">Zakończony</option><option value="cancelled">Anulowany</option></select></label>
+              <label>Status<PadleticSelect value={editing.status || "open"} onChange={(e) => setEditing({ ...editing, status: e.target.value })}><option value="open">Otwarty</option><option value="full">Komplet</option><option value="confirmed">Potwierdzony</option><option value="completed">Zakończony</option><option value="cancelled">Anulowany</option></PadleticSelect></label>
               <label>Poziom<input value={editing.level || ""} onChange={(e) => setEditing({ ...editing, level: e.target.value })} /></label>
             </div>
             <label>Typ gry<input value={editing.gameType || ""} onChange={(e) => setEditing({ ...editing, gameType: e.target.value })} /></label>

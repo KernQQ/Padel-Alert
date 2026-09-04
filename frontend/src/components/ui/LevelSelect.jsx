@@ -1,4 +1,5 @@
 import { LEVELS, normalizeLevel } from "../../utils/levels";
+import PadleticSelect from "./PadleticSelect";
 
 function LevelSelect({
   value,
@@ -12,7 +13,7 @@ function LevelSelect({
 
   return (
     <div className={`pa-level-select ${className}`.trim()}>
-      <select
+      <PadleticSelect
         value={normalized}
         onChange={(event) => onChange(event.target.value)}
       >
@@ -23,7 +24,7 @@ function LevelSelect({
             {level}
           </option>
         ))}
-      </select>
+      </PadleticSelect>
     </div>
   );
 }

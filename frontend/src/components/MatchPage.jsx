@@ -6,6 +6,7 @@ import LevelSelect from "./ui/LevelSelect";
 import LevelBadge from "./ui/LevelBadge";
 import MatchmakerPanel from "./MatchmakerPanel";
 import { useRealtime } from "../hooks/useRealtime";
+import PadleticSelect from "./ui/PadleticSelect";
 
 function getToday() {
   const now = new Date();
@@ -505,7 +506,7 @@ function MatchPage({
       <section className="matches-filter-panel">
         <label>
           <span>Klub</span>
-          <select
+          <PadleticSelect
             value={filters.clubSlug}
             onChange={(event) =>
               setFilters({ ...filters, clubSlug: event.target.value })
@@ -517,7 +518,7 @@ function MatchPage({
                 {club.name}
               </option>
             ))}
-          </select>
+          </PadleticSelect>
         </label>
 
         <label>

@@ -4,6 +4,7 @@ import "./styles/app.css";
 import "./styles/padletic-update.css";
 import "./styles/widget-theme.css";
 import "./styles/android-scroll-fix.css";
+import "./styles/android-selects.css";
 import "./styles/padletic-12.css";
 import "./styles/mobile-stability.css";
 import "./styles/full-update.css";
@@ -34,6 +35,7 @@ import AdminPanel from "./components/AdminPanel";
 import ProfilePhotoCropper from "./components/ProfilePhotoCropper";
 import { useRealtime } from "./hooks/useRealtime";
 import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
+import PadleticSelect from "./components/ui/PadleticSelect";
 
 
 
@@ -1416,7 +1418,7 @@ function App() {
       <form className={className} onSubmit={submitSearch}>
         <label>
           <span>Klub</span>
-          <select
+          <PadleticSelect
             value={clubSlug}
             onChange={(event) => setClubSlug(event.target.value)}
           >
@@ -1427,7 +1429,7 @@ function App() {
                 {club.name}
               </option>
             ))}
-          </select>
+          </PadleticSelect>
         </label>
 
         <label>
@@ -1954,7 +1956,7 @@ function App() {
                 <div className="partner-filter-grid">
                   <label>
                     <span>Klub</span>
-                    <select
+                    <PadleticSelect
                       value={partnerFilters.clubSlug}
                       onChange={(event) =>
                         setPartnerFilters({
@@ -1969,7 +1971,7 @@ function App() {
                           {club.name}
                         </option>
                       ))}
-                    </select>
+                    </PadleticSelect>
                   </label>
 
                   <label>
@@ -1988,7 +1990,7 @@ function App() {
 
                   <label>
                     <span>Strona</span>
-                    <select
+                    <PadleticSelect
                       value={partnerFilters.preferredSide}
                       onChange={(event) =>
                         setPartnerFilters({
@@ -2000,7 +2002,7 @@ function App() {
                       <option value="all">Dowolna strona</option>
                       <option>Lewa</option>
                       <option>Prawa</option>
-                    </select>
+                    </PadleticSelect>
                   </label>
 
                   <label>
@@ -2035,7 +2037,7 @@ function App() {
 
                   <label>
                     <span>Sortowanie</span>
-                    <select
+                    <PadleticSelect
                       value={partnerSort}
                       onChange={(event) =>
                         setPartnerSort(event.target.value)
@@ -2044,7 +2046,7 @@ function App() {
                       <option value="soonest">Najbliższy termin</option>
                       <option value="newest">Najnowsze zgłoszenia</option>
                       <option value="level">Poziom gracza</option>
-                    </select>
+                    </PadleticSelect>
                   </label>
                 </div>
 
@@ -2607,7 +2609,7 @@ function App() {
               <label><span>Pseudonim</span><input value={myProfile.nickname || ""} onChange={(e) => setMyProfile({ ...myProfile, nickname: e.target.value })} /></label>
               <label><span>Miasto</span><input value={myProfile.city || ""} onChange={(e) => setMyProfile({ ...myProfile, city: e.target.value })} /></label>
               <label><span>Poziom</span><LevelSelect value={myProfile.level || "3.0"} onChange={(value) => setMyProfile({ ...myProfile, level: value })} /></label>
-              <label><span>Strona</span><select value={myProfile.preferredSide || "Dowolna"} onChange={(e) => setMyProfile({ ...myProfile, preferredSide: e.target.value })}><option>Dowolna</option><option>Lewa</option><option>Prawa</option></select></label>
+              <label><span>Strona</span><PadleticSelect value={myProfile.preferredSide || "Dowolna"} onChange={(e) => setMyProfile({ ...myProfile, preferredSide: e.target.value })}><option>Dowolna</option><option>Lewa</option><option>Prawa</option></PadleticSelect></label>
               <div className="profile-preference-block">
                 <span>Najczęściej gram</span>
                 <div className="profile-chip-row">
@@ -2754,7 +2756,7 @@ function App() {
 
               <label>
                 <span>Strona</span>
-                <select
+                <PadleticSelect
                   value={playerForm.preferredSide}
                   onChange={(event) =>
                     setPlayerForm({
@@ -2766,13 +2768,13 @@ function App() {
                   <option>Dowolna</option>
                   <option>Lewa</option>
                   <option>Prawa</option>
-                </select>
+                </PadleticSelect>
               </label>
             </div>
 
             <label>
               <span>Klub</span>
-              <select
+              <PadleticSelect
                 value={playerForm.clubSlug}
                 onChange={(event) =>
                   setPlayerForm({
@@ -2788,7 +2790,7 @@ function App() {
                     {club.name}
                   </option>
                 ))}
-              </select>
+              </PadleticSelect>
             </label>
 
             <div className="form-grid three">
