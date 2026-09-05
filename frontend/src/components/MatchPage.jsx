@@ -363,30 +363,20 @@ function MatchPage({
           {loading ? (
             <div className="sport-loading">Ładowanie meczów…</div>
           ) : filteredMatches.length > 0 ? filteredMatches.map((match) => (
-            <article key={match.id} className="sport-fixture">
-              <div className="sport-fixture-time">{match.from}</div>
-              <div className="sport-fixture-main">
-                <div className="sport-fixture-title">
-                  <h2>{match.clubName}</h2>
-                  <span>{match.courtName || "Kort"} · poziom {match.level}</span>
-                </div>
-                <div className="sport-fixture-players">
-                  {Array.from({ length: match.maxPlayers }).map((_, index) => {
-                    const player = match.participants[index];
-                    return (
-                      <div key={index} className={player ? "" : "open"}>
-                        <span>{player ? player.nickname.slice(0,1).toUpperCase() : "○"}</span>
-                        <strong>{player?.nickname || "Wolne"}</strong>
-                        <small>{player?.level || "—"}</small>
-                      </div>
-                    );
-                  })}
-                </div>
+            <article key={match.id} className="sport-fixture ref-match-row">
+              <div className="ref-match-date">
+                <strong>{String(match.date || "").slice(8, 10) || "—"}</strong>
+                <span>{match.date ? new Date(`${match.date}T12:00:00`).toLocaleDateString("pl-PL", { month: "short" }).toUpperCase().replace(".", "") : ""}</span>
+                <time>{match.from}</time>
               </div>
-              <div className="sport-fixture-action">
-                <small>{match.spotsLeft > 0 ? `${match.spotsLeft} ${match.spotsLeft === 1 ? "miejsce wolne" : "miejsca wolne"}` : "komplet"}</small>
+              <div className="ref-match-main">
+                <h2>{match.clubName}</h2>
+                <p>{match.owner?.nickname || match.participants?.[0]?.nickname || "Organizator"}</p>
+                <small>{match.participants?.length || 0}/{match.maxPlayers || 4}</small>
+              </div>
+              <div className="ref-match-action">
                 {!match.isJoined && !match.isWaiting && (match.status === "open" || match.status === "full") ? (
-                  <button className="primary" onClick={() => joinMatch(match)}>{match.status === "full" ? "Lista oczekujących" : "Dołącz →"}</button>
+                  <button className="primary" onClick={() => joinMatch(match)}>{match.status === "full" ? "Lista" : "Dołącz →"}</button>
                 ) : (
                   <button onClick={() => setSelectedMatch(match)}>Szczegóły →</button>
                 )}

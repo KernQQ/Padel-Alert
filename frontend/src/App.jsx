@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./styles/app.css";
+import "./styles/reference.css";
+import "./styles/padletic-update.css";
+import "./styles/widget-theme.css";
+import "./styles/android-scroll-fix.css";
+import "./styles/android-selects.css";
+import "./styles/padletic-12.css";
+import "./styles/mobile-stability.css";
+import "./styles/full-update.css";
+import "./styles/sport-system.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
@@ -25,26 +34,26 @@ import MatchInvitationsPanel from "./components/MatchInvitationsPanel";
 import ConnectionBanner from "./components/ConnectionBanner";
 import AccountPanel from "./components/AccountPanel";
 import AdminPanel from "./components/AdminPanel";
+import ProfilePhotoCropper from "./components/ProfilePhotoCropper";
 import { useRealtime } from "./hooks/useRealtime";
 import { LEVELS, getMatchScore, normalizeLevel } from "./utils/levels";
+import PadleticSelect from "./components/ui/PadleticSelect";
+import PadleticTimePicker from "./components/ui/PadleticTimePicker";
 
 
 
-const BO5_CLUB_URLS = {
-  "padel-arena-poludniowa":
-    "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
-  "padel-club":
-    "https://bo5.pl/padelclub/reservation",
-  "fabryka-energii":
-    "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
-};
 
-const BO5_CLUB_URLS_BY_ID = {
-  "264": "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
-  "624": "https://bo5.pl/padelARENApoludniowa/reservation/624/Padel",
-  "595": "https://bo5.pl/padelclub/reservation",
-  "528": "https://bo5.pl/fabrykaenergii/reservation/528/Padel"
-};
+const TIME_OPTIONS_START = Array.from({ length: 36 }, (_, index) => {
+  const total = 6 * 60 + index * 30;
+  const h = String(Math.floor(total / 60)).padStart(2, "0");
+  const m = String(total % 60).padStart(2, "0");
+  return `${h}:${m}`;
+});
+const TIME_OPTIONS_END = [
+  ...TIME_OPTIONS_START.filter((value) => value > "06:00").map((value) => ({ value, label: value })),
+  { value: "23:59", label: "00:00" }
+];
+
 
 function normalizeClubKey(value) {
   return String(value || "")
@@ -53,6 +62,42 @@ function normalizeClubKey(value) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+
+async function prepareProfilePhoto(file) {
+  if (!file) return "";
+  if (!/^image\/(jpeg|png|webp)$/i.test(file.type || "")) {
+    throw new Error("Wybierz zdjęcie JPG, PNG lub WEBP.");
+  }
+  if (file.size > 8 * 1024 * 1024) {
+    throw new Error("Zdjęcie źródłowe może mieć maksymalnie 8 MB.");
+  }
+
+  const source = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(new Error("Nie udało się odczytać zdjęcia."));
+    reader.readAsDataURL(file);
+  });
+
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Nie udało się otworzyć zdjęcia."));
+    img.src = source;
+  });
+
+  const size = 320;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const scale = Math.max(size / image.width, size / image.height);
+  const width = image.width * scale;
+  const height = image.height * scale;
+  ctx.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+  return canvas.toDataURL("image/jpeg", 0.78);
 }
 
 function resolveBo5ClubBase(proposal, club) {
@@ -235,12 +280,16 @@ function App() {
   const today = getToday();
 
   const [activeTab, setActiveTab] = useState("home");
+  const [mySection, setMySection] = useState("matches");
   const [showMobileActions, setShowMobileActions] = useState(false);
   const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
   const [showProfileEditor, setShowProfileEditor] = useState(false);
+  const profileEditorOpenRef = useRef(false);
+  const [profilePhoto, setProfilePhoto] = useState(() => localStorage.getItem("padelalert-profile-photo") || "");
+  const [profileCropSource, setProfileCropSource] = useState("");
   const [matchCreateSignal, setMatchCreateSignal] = useState(0);
+  const [matchCreatePrefill, setMatchCreatePrefill] = useState(null);
   const [playNowSignal, setPlayNowSignal] = useState(0);
-  const [theme, setTheme] = useState("dark");
 
   const [anonymousToken] = useState(() => {
     const savedToken = localStorage.getItem("padelalert-owner-token");
@@ -253,6 +302,7 @@ function App() {
   });
   const [ownerToken, setOwnerToken] = useState(anonymousToken);
   const [accountUser, setAccountUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const visibleNavigation = useMemo(() =>
     accountUser?.role === "admin"
       ? [...NAVIGATION, { id: "admin", label: "Admin", icon: "" }]
@@ -267,16 +317,16 @@ function App() {
 
   const [clubSlug, setClubSlug] = useState("all");
   const [date, setDate] = useState(today);
-  const [from, setFrom] = useState("18:00");
-  const [to, setTo] = useState("22:00");
+  const [from, setFrom] = useState("08:00");
+  const [to, setTo] = useState("23:59");
   const [duration, setDuration] = useState(120);
   const [courtType, setCourtType] = useState("all");
 
   const [activeSearch, setActiveSearch] = useState({
     club: "all",
     date: today,
-    from: "18:00",
-    to: "22:00",
+    from: "08:00",
+    to: "23:59",
     courtType: "all"
   });
 
@@ -302,7 +352,7 @@ function App() {
   const [contactPost, setContactPost] = useState(null);
   const [joinPost, setJoinPost] = useState(null);
   const [joinForm, setJoinForm] = useState({ nickname: "", contact: "", message: "" });
-  const [myProfile, setMyProfile] = useState({ nickname: "Gość", level: "3.0", preferredSide: "Dowolna", favoriteClubSlug: "all", city: "Szczecin", bio: "" });
+  const [myProfile, setMyProfile] = useState({ nickname: "Gość", level: "3.0", preferredSide: "Dowolna", favoriteClubSlug: "all", favoriteClubSlugs: [], availabilityPeriods: [], city: "Szczecin", bio: "" });
   const [profileMessage, setProfileMessage] = useState("");
   const [ownerPosts, setOwnerPosts] = useState([]);
   const [outgoingRequests, setOutgoingRequests] = useState([]);
@@ -336,29 +386,47 @@ function App() {
 
   useEffect(() => {
     const session = localStorage.getItem("padelalert-session");
-    if (!session) return;
+    if (!session) {
+      setAuthChecked(true);
+      return;
+    }
 
-    apiFetch("/auth/me", {
-      headers: { Authorization: `Bearer ${session}` }
-    })
-      .then(async response => {
-        if (!response.ok) throw new Error("session");
+    apiFetch("/auth/me", { headers: { Authorization: `Bearer ${session}` } })
+      .then(async (response) => {
+        if (response.status === 401) {
+          localStorage.removeItem("padelalert-session");
+          localStorage.removeItem("padelalert-account-user");
+          setAccountUser(null);
+          setOwnerToken(anonymousToken);
+          return null;
+        }
+        if (!response.ok) throw new Error("temporary-auth-check");
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
+        if (!data) return;
         setAccountUser(data.user);
         setOwnerToken(data.ownerToken);
+        localStorage.setItem("padelalert-account-user", JSON.stringify(data.user));
       })
       .catch(() => {
-        localStorage.removeItem("padelalert-session");
-        setAccountUser(null);
-        setOwnerToken(anonymousToken);
-      });
+        // Chwilowy błąd sieci nie usuwa zapisanej sesji ani użytkownika.
+        try {
+          const cached = JSON.parse(localStorage.getItem("padelalert-account-user") || "null");
+          if (cached?.id) {
+            setAccountUser(cached);
+            setOwnerToken(cached.id);
+          }
+        } catch {}
+      })
+      .finally(() => setAuthChecked(true));
   }, [anonymousToken]);
 
   async function handleAuthenticated(user) {
+    setAuthChecked(true);
     setAccountUser(user);
     setOwnerToken(user.id);
+    localStorage.setItem("padelalert-account-user", JSON.stringify(user));
     setToast(`Witaj, ${user.nickname || "Graczu"}!`);
   }
 
@@ -373,6 +441,7 @@ function App() {
       } catch {}
     }
     localStorage.removeItem("padelalert-session");
+    localStorage.removeItem("padelalert-account-user");
     setAccountUser(null);
     setOwnerToken(anonymousToken);
     setActiveTab("home");
@@ -380,9 +449,38 @@ function App() {
   }
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    writeStorage("padelalert-theme", theme);
-  }, [theme]);
+    profileEditorOpenRef.current = showProfileEditor;
+  }, [showProfileEditor]);
+
+  useEffect(() => {
+    if (!accountUser || !ownerToken) return undefined;
+    const beat = async () => {
+      try {
+        await apiFetch("/community/presence", {
+          method: "POST",
+          headers: { "x-owner-token": ownerToken }
+        });
+        const response = await apiFetch("/community/profiles");
+        if (response.ok) {
+          const data = await response.json();
+          setProfiles(data.profiles || []);
+        }
+      } catch {}
+    };
+    beat();
+    const interval = window.setInterval(beat, 60000);
+    const onVisible = () => { if (document.visibilityState === "visible") beat(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [accountUser, ownerToken]);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = "dark";
+    localStorage.removeItem("padelalert-theme");
+  }, []);
 
   useEffect(() => writeStorage("padelalert-favorites", favorites), [favorites]);
   useEffect(
@@ -426,7 +524,31 @@ function App() {
 
       setProfiles(profilesData.profiles || []);
       setPosts(postsData.posts || []);
-      if (profileData.profile) setMyProfile(profileData.profile);
+      if (profileData.profile) {
+        // Nie nadpisuj formularza profilu podczas edycji. Dodatkowo ignoruj
+        // starszą odpowiedź z pollingu, która mogła wystartować przed zapisem.
+        if (!profileEditorOpenRef.current) {
+          setMyProfile((current) => {
+            const currentUpdatedAt = Date.parse(current?.updatedAt || "");
+            const incomingUpdatedAt = Date.parse(profileData.profile?.updatedAt || "");
+
+            if (
+              Number.isFinite(currentUpdatedAt) &&
+              (!Number.isFinite(incomingUpdatedAt) || incomingUpdatedAt < currentUpdatedAt)
+            ) {
+              return current;
+            }
+
+            return profileData.profile;
+          });
+        }
+        if (Object.prototype.hasOwnProperty.call(profileData.profile, "avatarDataUrl")) {
+          const nextPhoto = profileData.profile.avatarDataUrl || "";
+          setProfilePhoto(nextPhoto);
+          if (nextPhoto) localStorage.setItem("padelalert-profile-photo", nextPhoto);
+          else localStorage.removeItem("padelalert-profile-photo");
+        }
+      }
       setOwnerPosts(ownerData.posts || []);
       setOutgoingRequests(outgoingData.requests || []);
 
@@ -1089,40 +1211,77 @@ function App() {
   async function saveProfile(event) {
     event.preventDefault();
     setProfileMessage("");
+
+    const payload = {
+      ...myProfile,
+      level: normalizeLevel(myProfile.level || "3.0"),
+      avatarDataUrl: profilePhoto
+    };
+
     const response = await apiFetch(`/community/me`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "x-owner-token": ownerToken
       },
-      body: JSON.stringify(myProfile)
+      body: JSON.stringify(payload)
     });
     const data = await response.json();
     if (!response.ok) {
       setProfileMessage(data.message || "Nie udało się zapisać profilu.");
-      return;
+      return false;
     }
+
     setMyProfile(data.profile);
     setProfileMessage("Profil został zapisany.");
+    return true;
   }
 
   async function enableSystemNotifications() {
-    if (!("Notification" in window)) {
-      setToast("Ta przeglądarka nie obsługuje powiadomień systemowych.");
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      setToast("Ta przeglądarka nie obsługuje powiadomień push.");
       return;
     }
 
-    if (Notification.permission === "granted") {
-      setToast("Powiadomienia systemowe są już włączone.");
+    const permission = Notification.permission === "granted"
+      ? "granted"
+      : await Notification.requestPermission();
+    if (permission !== "granted") {
+      setToast("Powiadomienia nie zostały włączone.");
       return;
     }
 
-    const permission = await Notification.requestPermission();
-    setToast(
-      permission === "granted"
-        ? "Powiadomienia systemowe zostały włączone."
-        : "Powiadomienia systemowe nie zostały włączone."
-    );
+    try {
+      const configResponse = await apiFetch("/push/config");
+      const pushConfig = await configResponse.json();
+      if (!pushConfig.enabled || !pushConfig.publicKey) {
+        setToast("Push jest gotowy w aplikacji, ale wymaga konfiguracji VAPID na backendzie.");
+        return;
+      }
+
+      const registration = await navigator.serviceWorker.ready;
+      const base64 = pushConfig.publicKey.replace(/-/g, "+").replace(/_/g, "/");
+      const padded = base64 + "=".repeat((4 - base64.length % 4) % 4);
+      const raw = atob(padded);
+      const applicationServerKey = Uint8Array.from(raw, (char) => char.charCodeAt(0));
+      let subscription = await registration.pushManager.getSubscription();
+      if (!subscription) {
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey
+        });
+      }
+
+      const response = await apiFetch("/push/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-owner-token": ownerToken },
+        body: JSON.stringify({ subscription: subscription.toJSON() })
+      });
+      if (!response.ok) throw new Error("subscribe");
+      setToast("Powiadomienia push są włączone na tym urządzeniu.");
+    } catch {
+      setToast("Nie udało się włączyć push. Spróbuj ponownie po wdrożeniu backendu.");
+    }
   }
 
   async function markAllNotificationsRead() {
@@ -1159,7 +1318,7 @@ function App() {
       <form className={className} onSubmit={submitSearch}>
         <label>
           <span>Klub</span>
-          <select
+          <PadleticSelect
             value={clubSlug}
             onChange={(event) => setClubSlug(event.target.value)}
           >
@@ -1170,7 +1329,7 @@ function App() {
                 {club.name}
               </option>
             ))}
-          </select>
+          </PadleticSelect>
         </label>
 
         <label>
@@ -1185,19 +1344,19 @@ function App() {
 
         <label>
           <span>Od</span>
-          <input
-            type="time"
+          <PadleticTimePicker
             value={from}
-            onChange={(event) => setFrom(event.target.value)}
+            onChange={setFrom}
+            options={TIME_OPTIONS_START}
           />
         </label>
 
         <label>
           <span>Do</span>
-          <input
-            type="time"
+          <PadleticTimePicker
             value={to}
-            onChange={(event) => setTo(event.target.value)}
+            onChange={setTo}
+            options={TIME_OPTIONS_END}
           />
         </label>
 
@@ -1226,6 +1385,29 @@ function App() {
     );
   }
 
+  if (!authChecked) {
+    return <div className="auth-gate-loading">PADLETIC</div>;
+  }
+
+  if (!accountUser) {
+    return (
+      <div className="auth-gate">
+        <div className="auth-gate-brand">
+          <span className="brand-mark">P</span>
+          <strong>PADLETIC</strong>
+          <small>Graj, kiedy chcesz.</small>
+        </div>
+        <AccountPanel
+          required
+          user={null}
+          anonymousToken={anonymousToken}
+          onAuthenticated={handleAuthenticated}
+          onLogout={handleLogout}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <ConnectionBanner />
@@ -1250,6 +1432,7 @@ function App() {
           onAuthenticated={handleAuthenticated}
           onLogout={handleLogout}
           onOpenProfile={() => setActiveTab("saved")}
+          avatarUrl={profilePhoto}
         />
       </div>
       <aside className="sidebar">
@@ -1295,7 +1478,7 @@ function App() {
         </nav>
 
         <div className="sidebar-profile">
-          <span className="profile-avatar">{(myProfile.nickname || "G").slice(0, 1).toUpperCase()}</span>
+          <span className={`profile-avatar ${profilePhoto ? "has-photo" : ""}`}>{profilePhoto ? <img src={profilePhoto} alt="" /> : (myProfile.nickname || "G").slice(0, 1).toUpperCase()}</span>
 
           <div>
             <strong>{myProfile.nickname || "Gość"}</strong>
@@ -1304,15 +1487,8 @@ function App() {
         </div>
 
         <div className="sidebar-actions">
-          <InstallAppButton />
+          <InstallAppButton variant="sidebar" />
 
-          <button
-            type="button"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          >
-            <span>{theme === "light" ? "☾" : "☀"}</span>
-            {theme === "light" ? "Tryb ciemny" : "Tryb jasny"}
-          </button>
         </div>
       </aside>
 
@@ -1348,6 +1524,7 @@ function App() {
               onAuthenticated={handleAuthenticated}
               onLogout={handleLogout}
               onOpenProfile={() => setActiveTab("saved")}
+              avatarUrl={profilePhoto}
             />
           </div>
         </header>
@@ -1364,7 +1541,10 @@ function App() {
               duration={duration}
               date={date}
               from={from}
-              onOpenCourts={() => setActiveTab("courts")}
+              onOpenCourts={() => { setActiveSearch({ club: clubSlug, date, from, to, courtType }); setSelectedProposal(null); setActiveTab("courts"); }}
+              onChangeDate={setDate}
+              onChangeFrom={setFrom}
+              onChangeDuration={setDuration}
               onOpenMatches={() => setActiveTab("matches")}
               onOpenPlayers={() => setActiveTab("partners")}
               onOpenSaved={() => setActiveTab("saved")}
@@ -1377,199 +1557,128 @@ function App() {
           )}
 
           {activeTab === "courts" && (
-            <div className="consumer-courts">
-              <header className="consumer-page-header">
+            <div className="sport-courts">
+              <header className="sport-page-head">
                 <div>
-                  <p>Szczecin</p>
+                  <span>Korty</span>
                   <h1>Wolne korty</h1>
+                  <p>Znajdź i zarezerwuj kort.</p>
                 </div>
-                <span className="consumer-refresh-status">
-                  <i /> aktualizacja za {countdown}s
-                </span>
+                <div className="sport-page-date">
+                  {new Date(`${date}T12:00:00`).toLocaleDateString("pl-PL", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
+                </div>
               </header>
 
-              <section className="consumer-search-card">
-                <div className="consumer-date-pills">
-                  {[0, 1, 2, 3].map((offset) => {
-                    const base = new Date(`${today}T12:00:00`);
-                    base.setDate(base.getDate() + offset);
-                    const value = [
-                      base.getFullYear(),
-                      String(base.getMonth() + 1).padStart(2, "0"),
-                      String(base.getDate()).padStart(2, "0")
-                    ].join("-");
-                    const labels = ["Dzisiaj", "Jutro"];
-                    const label = labels[offset] || base.toLocaleDateString("pl-PL", {
-                      weekday: "short",
-                      day: "numeric"
-                    });
-
-                    return (
-                      <button
-                        key={value}
-                        type="button"
-                        className={date === value ? "active" : ""}
-                        onClick={() => setDate(value)}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
+              <section className="sport-courts-toolbar">
+                <label className="sport-filter sport-filter-club">
+                  <span>Klub</span>
+                  <PadleticSelect value={clubSlug} onChange={(event) => setClubSlug(event.target.value)}>
+                    <option value="all">Wszystkie kluby</option>
+                    {clubs.map((club) => <option key={club.slug} value={club.slug}>{club.name}</option>)}
+                  </PadleticSelect>
+                </label>
+                <label className="sport-filter">
+                  <span>Data</span>
+                  <input type="date" min={today} value={date} onChange={(event) => setDate(event.target.value)} />
+                </label>
+                <label className="sport-filter">
+                  <span>Od</span>
+                  <PadleticTimePicker value={from} onChange={setFrom} options={TIME_OPTIONS_START} />
+                </label>
+                <div className="sport-duration">
+                  {[60, 90, 120].map((value) => (
+                    <button key={value} type="button" className={duration === value ? "active" : ""} onClick={() => setDuration(value)}>
+                      {value} min
+                    </button>
+                  ))}
                 </div>
-
-                {renderSearchForm("consumer-search-form")}
+                <button className="sport-search-action" type="button" onClick={submitSearch}>Szukaj <span>→</span></button>
               </section>
 
-              <div className="consumer-toolbar">
+              <div className="sport-courts-tools">
                 <button type="button" onClick={saveSearch}>Zapisz wyszukiwanie</button>
                 <button type="button" onClick={createAlert}>Utwórz alert</button>
                 <button type="button" onClick={loadAvailability}>Odśwież</button>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={autoRefresh}
-                    onChange={(event) => setAutoRefresh(event.target.checked)}
-                  />
-                  Auto
-                </label>
+                <label><input type="checkbox" checked={autoRefresh} onChange={(event) => setAutoRefresh(event.target.checked)} /> Auto</label>
+                <span>{countdown}s</span>
               </div>
 
-              {loading && (
-                <div className="consumer-loading">
-                  <div />
-                  <div />
-                  <div />
-                </div>
-              )}
-
-              {error && <div className="consumer-error">{error}</div>}
+              {loading && <div className="sport-loading">Sprawdzam dostępność…</div>}
+              {error && <div className="sport-error">{error}</div>}
 
               {!loading && !error && groupedProposals.length > 0 && (
-                <section className="consumer-results">
-                  <header>
-                    <div>
-                      <h2>Dostępne terminy</h2>
-                      <p>
-                        {groupedProposals.reduce(
-                          (total, group) => total + group.courts.length,
-                          0
-                        )} dostępnych kortów
-                      </p>
+                <section className="sport-availability-board">
+                  {groupedProposals.map((proposal) => (
+                    <div className="sport-time-block" key={`${proposal.startHour}-${proposal.endHour}`}>
+                      <div className="sport-time-heading">
+                        <strong>{proposal.startHour}</strong>
+                        <span>{proposal.courts.length} {proposal.courts.length === 1 ? "dostępny" : "dostępne"}</span>
+                      </div>
+                      <div className="sport-court-rows">
+                        {proposal.courts.map((court) => (
+                          <button
+                            type="button"
+                            key={`${proposal.startHour}-${court.courtKey}`}
+                            onClick={() => setSelectedProposal({ ...court, startHour: proposal.startHour, endHour: proposal.endHour })}
+                          >
+                            <span className="sport-court-name"><strong>{court.clubName}</strong><small>{court.courtName}</small></span>
+                            <span className="sport-court-duration">{duration} min</span>
+                            <b>Rezerwuj →</b>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </header>
-
-                  <div className="consumer-time-list">
-                    {groupedProposals.map((proposal) => (
-                      <article
-                        className="consumer-time-group"
-                        key={`${proposal.startHour}-${proposal.endHour}`}
-                      >
-                        <div className="consumer-time-column">
-                          <strong>{proposal.startHour}</strong>
-                          <small>do {proposal.endHour}</small>
-                        </div>
-
-                        <div className="consumer-court-options">
-                          {proposal.courts.map((court) => (
-                            <button
-                              type="button"
-                              key={`${proposal.startHour}-${court.courtKey}`}
-                              onClick={() =>
-                                setSelectedProposal({
-                                  ...court,
-                                  startHour: proposal.startHour,
-                                  endHour: proposal.endHour
-                                })
-                              }
-                            >
-                              <span>
-                                <strong>{court.clubName}</strong>
-                                <small>{court.courtName}</small>
-                              </span>
-                              <b>Wybierz</b>
-                            </button>
-                          ))}
-                        </div>
-                      </article>
-                    ))}
-                  </div>
+                  ))}
                 </section>
               )}
 
               {!loading && !error && groupedProposals.length === 0 && (
-                <section className="consumer-no-results">
-                  <span className="consumer-no-results-mark">—</span>
-                  <h2>Brak wolnych kortów w tym przedziale.</h2>
-                  <p>Spróbuj innej godziny albo sprawdź następny dzień.</p>
+                <section className="sport-empty">
+                  <strong>Brak wolnych kortów w tym przedziale.</strong>
+                  <p>Spróbuj późniejszej godziny albo następnego dnia.</p>
                   <div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setFrom("16:00");
-                        setTo("22:00");
-                      }}
-                    >
-                      Pokaż od 16:00
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const base = new Date(`${date}T12:00:00`);
-                        base.setDate(base.getDate() + 1);
-                        setDate([
-                          base.getFullYear(),
-                          String(base.getMonth() + 1).padStart(2, "0"),
-                          String(base.getDate()).padStart(2, "0")
-                        ].join("-"));
-                      }}
-                    >
-                      Sprawdź jutro
-                    </button>
+                    <button type="button" onClick={() => {
+                      const nextFrom = "16:00";
+                      const nextTo = "22:00";
+                      setFrom(nextFrom); setTo(nextTo); setSelectedProposal(null);
+                      setActiveSearch((current) => ({ ...current, club: clubSlug, date, from: nextFrom, to: nextTo, courtType }));
+                    }}>Pokaż od 16:00</button>
+                    <button type="button" onClick={() => {
+                      const base = new Date(`${date}T12:00:00`);
+                      base.setDate(base.getDate() + 1);
+                      const nextDate = [base.getFullYear(), String(base.getMonth()+1).padStart(2,"0"), String(base.getDate()).padStart(2,"0")].join("-");
+                      setDate(nextDate); setSelectedProposal(null);
+                      setActiveSearch((current) => ({ ...current, club: clubSlug, date: nextDate, from, to, courtType }));
+                    }}>Sprawdź jutro</button>
                   </div>
                 </section>
               )}
 
               {selectedProposal && createPortal((
-                <section className="consumer-booking-sheet">
+                <section className="sport-selection">
+                  <button type="button" className="sport-selection-close" onClick={() => setSelectedProposal(null)}>×</button>
                   <div>
-                    <small>Wybrany termin</small>
-                    <strong>
-                      {selectedProposal.startHour}–{selectedProposal.endHour}
-                      {" · "}
-                      {selectedProposal.clubName}
-                    </strong>
+                    <small>WYBRANO</small>
+                    <strong>{selectedProposal.startHour} · {selectedProposal.clubName}</strong>
                     <span>{selectedProposal.courtName}</span>
                   </div>
-
-                  <div className="consumer-booking-actions">
-                    <button type="button" onClick={() => setSelectedProposal(null)}>
-                      Zmień
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setActiveTab("matches");
-                        setMatchCreateSignal((value) => value + 1);
-                      }}
-                    >
-                      Utwórz mecz
-                    </button>
-                    <button
-                      type="button"
-                      className="consumer-booking-link"
-                      onClick={() => {
-                        const href = buildBo5DeepLink(selectedProposal, selectedClub);
-
-                        if (!href) {
-                          setToast("Nie udało się przygotować linku do rezerwacji.");
-                          return;
-                        }
-
-                        window.location.assign(href);
-                      }}
-                    >
-                      Przejdź do rezerwacji
-                    </button>
+                  <div>
+                    <button type="button" onClick={() => {
+                      setMatchCreatePrefill({
+                        clubSlug: selectedProposal.clubSlug,
+                        clubName: selectedProposal.clubName,
+                        date,
+                        from: selectedProposal.startHour,
+                        to: selectedProposal.endHour
+                      });
+                      setActiveTab("matches");
+                      setMatchCreateSignal((value) => value + 1);
+                    }}>Utwórz mecz</button>
+                    <button type="button" className="primary" onClick={() => {
+                      const href = buildBo5DeepLink(selectedProposal, selectedClub);
+                      if (!href) { setToast("Nie udało się przygotować linku do rezerwacji."); return; }
+                      window.location.assign(href);
+                    }}>Przejdź do rezerwacji →</button>
                   </div>
                 </section>
               ), document.body)}
@@ -1583,431 +1692,84 @@ function App() {
               profile={myProfile}
               onChanged={loadCommunity}
               createSignal={matchCreateSignal}
+              createPrefill={matchCreatePrefill}
+              onCreateConsumed={() => setMatchCreateSignal(0)}
               playNowSignal={playNowSignal}
             />
           )}
 
           {activeTab === "partners" && (
-            <>
-              <section className="partners-heading partners-heading-premium">
+            <div className="sport-players">
+              <header className="sport-page-head sport-page-head-action">
                 <div>
-                  <span className="eyebrow">Gracze</span>
-                  <h1>Znajdź graczy</h1>
-                  <p>
-                    Wybierz poziom, klub i termin. Napisz do osoby, z którą chcesz zagrać.
-                  </p>
+                  <span>Gracze</span>
+                  <h1>Gracze</h1>
+                  <p>Znajdź partnera do gry.</p>
                 </div>
+                <button type="button" onClick={openNewPlayerListing}>+ Dodaj zgłoszenie</button>
+              </header>
 
-                <button onClick={openNewPlayerListing}>
-                  ＋ Dodaj swoje zgłoszenie
-                </button>
-              </section>
-
-              <section className="metric-grid partner-metrics">
-                <article className="metric-card metric-blue">
-                  <span className="metric-icon">◎</span>
-                  <div>
-                    <strong>{posts.length}</strong>
-                    <small>aktywnych zgłoszeń</small>
-                  </div>
-                </article>
-
-                <article className="metric-card metric-green">
-                  <span className="metric-icon">●</span>
-                  <div>
-                    <strong>{activeTodayCount}</strong>
-                    <small>dostępnych dzisiaj</small>
-                  </div>
-                </article>
-
-                <article className="metric-card metric-amber">
-                  <span className="metric-icon">✓</span>
-                  <div>
-                    <strong>{ownPosts.length}</strong>
-                    <small>Twoich zgłoszeń</small>
-                  </div>
-                </article>
-              </section>
-
-              <section className="partner-filter-panel">
-                <div className="partner-filter-heading">
-                  <div>
-                    <span className="section-kicker">Dopasuj grę</span>
-                    <h2>Filtry partnerów</h2>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setPartnerFilters({
-                        clubSlug: "all",
-                        level: "all",
-                        preferredSide: "all",
-                        date: "",
-                        from: "",
-                        ownOnly: false
-                      })
-                    }
-                  >
-                    Wyczyść filtry
-                  </button>
-                </div>
-
-                <div className="partner-filter-grid">
-                  <label>
-                    <span>Klub</span>
-                    <select
-                      value={partnerFilters.clubSlug}
-                      onChange={(event) =>
-                        setPartnerFilters({
-                          ...partnerFilters,
-                          clubSlug: event.target.value
-                        })
-                      }
-                    >
-                      <option value="all">Wszystkie kluby</option>
-                      {clubs.map((club) => (
-                        <option key={club.slug} value={club.slug}>
-                          {club.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label>
-                    <span>Poziom</span>
-                    <LevelSelect
-                      includeAll
-                      value={partnerFilters.level}
-                      onChange={(value) =>
-                        setPartnerFilters({
-                          ...partnerFilters,
-                          level: value
-                        })
-                      }
-                    />
-                  </label>
-
-                  <label>
-                    <span>Strona</span>
-                    <select
-                      value={partnerFilters.preferredSide}
-                      onChange={(event) =>
-                        setPartnerFilters({
-                          ...partnerFilters,
-                          preferredSide: event.target.value
-                        })
-                      }
-                    >
-                      <option value="all">Dowolna strona</option>
-                      <option>Lewa</option>
-                      <option>Prawa</option>
-                    </select>
-                  </label>
-
-                  <label>
-                    <span>Data</span>
-                    <input
-                      type="date"
-                      min={today}
-                      value={partnerFilters.date}
-                      onChange={(event) =>
-                        setPartnerFilters({
-                          ...partnerFilters,
-                          date: event.target.value
-                        })
-                      }
-                    />
-                  </label>
-
-                  <label>
-                    <span>Dostępny od</span>
-                    <input
-                      type="time"
-                      value={partnerFilters.from}
-                      onChange={(event) =>
-                        setPartnerFilters({
-                          ...partnerFilters,
-                          from: event.target.value
-                        })
-                      }
-                    />
-                  </label>
-
-                  <label>
-                    <span>Sortowanie</span>
-                    <select
-                      value={partnerSort}
-                      onChange={(event) =>
-                        setPartnerSort(event.target.value)
-                      }
-                    >
-                      <option value="soonest">Najbliższy termin</option>
-                      <option value="newest">Najnowsze zgłoszenia</option>
-                      <option value="level">Poziom gracza</option>
-                    </select>
-                  </label>
-                </div>
-
-                <label className="own-posts-filter">
+              <section className="sport-player-filters">
+                <label className="sport-player-search">
+                  <span>⌕</span>
                   <input
-                    type="checkbox"
-                    checked={partnerFilters.ownOnly}
-                    onChange={(event) =>
-                      setPartnerFilters({
-                        ...partnerFilters,
-                        ownOnly: event.target.checked
-                      })
-                    }
+                    placeholder="Szukaj po imieniu…"
+                    value={""}
+                    readOnly
+                    onFocus={(event) => event.target.blur()}
                   />
-                  <span>Pokaż tylko moje zgłoszenia</span>
                 </label>
+                <label><span>Poziom</span><LevelSelect includeAll value={partnerFilters.level} onChange={(value) => setPartnerFilters({ ...partnerFilters, level: value })} /></label>
+                <label><span>Klub</span><PadleticSelect value={partnerFilters.clubSlug} onChange={(event) => setPartnerFilters({ ...partnerFilters, clubSlug: event.target.value })}><option value="all">Wszystkie kluby</option>{clubs.map((club) => <option key={club.slug} value={club.slug}>{club.name}</option>)}</PadleticSelect></label>
+                <label><span>Strona</span><PadleticSelect value={partnerFilters.preferredSide} onChange={(event) => setPartnerFilters({ ...partnerFilters, preferredSide: event.target.value })}><option value="all">Dowolna</option><option>Lewa</option><option>Prawa</option></PadleticSelect></label>
+                <button type="button" onClick={() => setPartnerFilters({ clubSlug: "all", level: "all", preferredSide: "all", date: "", from: "", ownOnly: false })}>Wyczyść</button>
               </section>
 
-              <div className="partner-content-layout">
-                <section className="partner-results-column">
-                  <div className="partner-results-header">
-                    <div>
-                      <span className="section-kicker">
-                        Aktualne zgłoszenia
+              <section className="sport-player-list">
+                <div className="sport-player-head">
+                  <span>Gracz</span><span>Poziom</span><span>Klub / miasto</span><span>Termin</span><span></span>
+                </div>
+                {filteredPartnerPosts.map((post) => (
+                  <article key={post.id}>
+                    <div className="sport-player-person">
+                      <span className={`sport-avatar ${post.avatarDataUrl ? "has-photo" : ""}`}>
+                        {post.avatarDataUrl ? <img src={post.avatarDataUrl} alt="" /> : post.nickname.slice(0,1).toUpperCase()}
                       </span>
-                      <h2>
-                        {filteredPartnerPosts.length}{" "}
-                        {filteredPartnerPosts.length === 1
-                          ? "pasujący gracz"
-                          : "pasujących graczy"}
-                      </h2>
+                      <div><strong>{post.nickname}</strong><small>{post.preferredSide || "Dowolna"} strona</small></div>
                     </div>
-
-                    <button
-                      type="button"
-                      onClick={loadCommunity}
-                    >
-                      ↻ Odśwież
-                    </button>
-                  </div>
-
-                  <div className="players-grid premium-players-grid">
-                    {filteredPartnerPosts.map((post) => (
-                      <article className="player-card premium-player-card" key={post.id}>
-                        <div className="player-cover">
-                          <span>
-                            {post.flexibleHours
-                              ? "Elastyczne godziny"
-                              : "Konkretny termin"}
-                          </span>
-                          <strong>{post.level}</strong>
-                        </div>
-
-                        <div className="player-body">
-                          <div className="player-identity">
-                            <span
-                              className="large-avatar colorful-avatar"
-                              style={{
-                                "--avatar-hue": getAvatarHue(post.nickname)
-                              }}
-                            >
-                              {post.nickname.slice(0, 1).toUpperCase()}
-                            </span>
-
-                            <div>
-                              <h3>{post.nickname}</h3>
-                              <p>
-                                Preferowana strona:{" "}
-                                {post.preferredSide || "Dowolna"}
-                              </p>
-                            </div>
-
-                            {post.canDelete && (
-                              <span className="own-listing-badge">
-                                Twoje
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="player-details">
-                            <article>
-                              <span>📍</span>
-                              <div>
-                                <small>Klub</small>
-                                <strong>{post.clubName}</strong>
-                              </div>
-                            </article>
-
-                            <article>
-                              <span>📅</span>
-                              <div>
-                                <small>Termin</small>
-                                <strong>{formatDate(post.date)}</strong>
-                              </div>
-                            </article>
-
-                            <article>
-                              <span>🕒</span>
-                              <div>
-                                <small>Godziny</small>
-                                <strong>
-                                  {post.flexibleHours ? "Około " : ""}
-                                  {post.from}–{post.to}
-                                </strong>
-                              </div>
-                            </article>
-                          </div>
-
-                          {post.note ? (
-                            <blockquote>{post.note}</blockquote>
-                          ) : (
-                            <p className="player-default-note">
-                              Chętnie dołączę do meczu w podanym terminie.
-                            </p>
-                          )}
-
-                          <div className="player-card-meta">
-                            <span>
-                              {post.requestsCount || 0} zainteresowanych
-                            </span>
-                            <span>
-                              {post.createdAt
-                                ? `Dodano ${formatShortDate(
-                                    post.createdAt.slice(0, 10)
-                                  )}`
-                                : "Aktywne zgłoszenie"}
-                            </span>
-                          </div>
-
-                          <div className="player-actions">
-                            {post.canDelete && (
-                              <>
-                                <button
-                                  className="secondary-action"
-                                  onClick={() => editPlayerListing(post)}
-                                >
-                                  Edytuj
-                                </button>
-
-                                <button
-                                  className="danger-action"
-                                  onClick={() => deletePlayerListing(post)}
-                                >
-                                  Usuń
-                                </button>
-                              </>
-                            )}
-
-                            <button
-                              className="primary-action"
-                              onClick={() => copyPlayerContact(post)}
-                            >
-                              Zaproś do meczu
-                            </button>
-                          </div>
-                        </div>
-                      </article>
-                    ))}
-
-                    {filteredPartnerPosts.length === 0 && (
-                      <div className="empty-state large partner-empty-state">
-                        <span className="empty-state-icon">◎</span>
-                        <h2>
-                          {posts.length === 0
-                            ? "Nie ma jeszcze zgłoszeń"
-                            : "Brak graczy spełniających filtry"}
-                        </h2>
-                        <p>
-                          {posts.length === 0
-                            ? "Dodaj swoją dyspozycyjność i uruchom społeczność."
-                            : "Zmień klub, poziom, datę albo godzinę."}
-                        </p>
-
-                        <div className="empty-state-actions">
-                          <button onClick={openNewPlayerListing}>
-                            Dodaj swoje zgłoszenie
-                          </button>
-
-                          {posts.length > 0 && (
-                            <button
-                              className="empty-secondary-button"
-                              onClick={() =>
-                                setPartnerFilters({
-                                  clubSlug: "all",
-                                  level: "all",
-                                  preferredSide: "all",
-                                  date: "",
-                                  from: "",
-                                  ownOnly: false
-                                })
-                              }
-                            >
-                              Wyczyść filtry
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </section>
-
-                <aside className="partner-side-column">
-                  <section className="partner-side-card online-card">
-                    <div className="side-card-heading">
-                      <div>
-                        <span className="live-dot" />
-                        <strong>Gracze online</strong>
-                      </div>
-                      <small>{profiles.length}</small>
+                    <strong className="sport-player-level">{post.level}</strong>
+                    <span>{post.clubName || post.city || "Szczecin"}</span>
+                    <span>{formatDate(post.date)} · {post.from}–{post.to}</span>
+                    <div className="sport-player-actions">
+                      {post.canDelete ? (
+                        <><button type="button" onClick={() => editPlayerListing(post)}>Edytuj</button><button type="button" onClick={() => deletePlayerListing(post)}>Usuń</button></>
+                      ) : (
+                        <button type="button" className="primary" onClick={() => copyPlayerContact(post)}>Zagram →</button>
+                      )}
                     </div>
+                  </article>
+                ))}
 
-                    <div className="online-player-list">
-                      {profiles.slice(0, 5).map((profile) => (
-                        <article key={profile.id}>
-                          <span
-                            className="small-avatar colorful-avatar"
-                            style={{
-                              "--avatar-hue": getAvatarHue(profile.nickname)
-                            }}
-                          >
-                            {profile.nickname.slice(0, 1).toUpperCase()}
-                          </span>
-
-                          <div>
-                            <strong>{profile.nickname}</strong>
-                            <small>
-                              {profile.level} · {profile.preferredSide}
-                            </small>
-                          </div>
-
-                          <span className="online-indicator" />
-                        </article>
-                      ))}
+                {filteredPartnerPosts.length === 0 && profiles.map((profile) => (
+                  <article key={profile.id}>
+                    <div className="sport-player-person">
+                      <span className={`sport-avatar ${profile.avatarDataUrl ? "has-photo" : ""}`}>
+                        {profile.avatarDataUrl ? <img src={profile.avatarDataUrl} alt="" /> : profile.nickname.slice(0,1).toUpperCase()}
+                      </span>
+                      <div><strong>{profile.nickname}</strong><small>{profile.preferredSide || "Dowolna"} strona</small></div>
                     </div>
-                  </section>
+                    <strong className="sport-player-level">{profile.level}</strong>
+                    <span>{profile.city || "Szczecin"}</span>
+                    <span className="sport-online"><i /> online</span>
+                    <span></span>
+                  </article>
+                ))}
 
-                  <section className="partner-side-card">
-                    <span className="section-kicker">Szybki start</span>
-                    <h3>Nie widzisz odpowiedniego gracza?</h3>
-                    <p>
-                      Dodaj własne zgłoszenie. Zajmuje to mniej niż minutę.
-                    </p>
-
-                    <button
-                      className="side-primary-button"
-                      onClick={openNewPlayerListing}
-                    >
-                      ＋ Dodaj dyspozycyjność
-                    </button>
-                  </section>
-
-                  <section className="partner-side-card tips-card">
-                    <span className="section-kicker">Dobre zgłoszenie</span>
-                    <ul>
-                      <li>Podaj realny poziom gry.</li>
-                      <li>Zaznacz, czy godziny są elastyczne.</li>
-                      <li>Dodaj krótki opis rodzaju gry.</li>
-                    </ul>
-                  </section>
-                </aside>
-              </div>
-            </>
+                {filteredPartnerPosts.length === 0 && profiles.length === 0 && (
+                  <div className="sport-empty"><strong>Nie ma jeszcze graczy.</strong><p>Dodaj swoją dyspozycyjność jako pierwsza osoba.</p><button type="button" onClick={openNewPlayerListing}>Dodaj zgłoszenie →</button></div>
+                )}
+              </section>
+            </div>
           )}
 
           {activeTab === "admin" && accountUser?.role === "admin" && (
@@ -2015,187 +1777,81 @@ function App() {
           )}
 
           {activeTab === "saved" && (
-            <>
-              <section className="page-heading my-center-heading">
-                <span className="eyebrow">Moje</span>
-                <h1>Twoja gra</h1>
-                <p>Profil, mecze, alerty i zapisane wyszukiwania.</p>
-              </section>
-
-              <section className="account-summary-card">
-                <div className="account-summary-main">
-                  <span
-                    className="profile-editor-avatar colorful-avatar"
-                    style={{ "--avatar-hue": getAvatarHue(myProfile.nickname) }}
-                  >
-                    {(myProfile.nickname || "G").slice(0, 1).toUpperCase()}
+            <div className="sport-my">
+              <header className="sport-my-profile">
+                <div className="sport-my-person">
+                  <span className={`sport-avatar sport-avatar-large ${profilePhoto ? "has-photo" : ""}`}>
+                    {profilePhoto ? <img src={profilePhoto} alt="" /> : (myProfile.nickname || "G").slice(0,1).toUpperCase()}
                   </span>
                   <div>
-                    <div className="account-summary-name">
-                      <h2>{myProfile.nickname || "Gość"}</h2>
-                      <LevelBadge level={myProfile.level || "3.0"} compact plain />
-                    </div>
-                    <p>{myProfile.city || "Szczecin"} · {myProfile.preferredSide || "Dowolna"}</p>
+                    <span>Moje</span>
+                    <h1>{myProfile.nickname || "Gość"}</h1>
+                    <p>{myProfile.city || "Szczecin"} · poziom {myProfile.level || "3.0"} · {myProfile.preferredSide || "Dowolna"} strona</p>
                   </div>
                 </div>
-                <button className="account-edit-button" type="button" onClick={() => setShowProfileEditor(true)}>
-                  Edytuj profil
-                </button>
-              </section>
+                <button type="button" onClick={() => setShowProfileEditor(true)}>Edytuj profil</button>
+              </header>
 
-              <div className="account-quick-grid">
-                <button type="button" onClick={() => setActiveTab("matches")}>
-                  <span className="account-quick-icon">▣</span>
-                  <strong>Moje mecze</strong>
-                  <small>Przejdź do meczów</small>
-                  <b>→</b>
-                </button>
-                <button type="button" onClick={() => setShowNotificationsPanel(true)}>
-                  <span className="account-quick-icon"><BellIcon /></span>
-                  <strong>Powiadomienia</strong>
-                  <small>{unreadNotificationsCount} nieprzeczytanych</small>
-                  <b>→</b>
-                </button>
-                <button type="button" onClick={openNewPlayerListing}>
-                  <span className="account-quick-icon">＋</span>
-                  <strong>Moje zgłoszenia</strong>
-                  <small>{ownerPosts.length} wszystkich</small>
-                  <b>→</b>
-                </button>
-                <button type="button" onClick={() => setActiveTab("courts")}>
-                  <span className="account-quick-icon">⌕</span>
-                  <strong>Zapisane wyszukiwania</strong>
-                  <small>{savedSearches.length} zapisanych</small>
-                  <b>→</b>
-                </button>
-              </div>
+              <nav className="sport-my-tabs">
+                <button className={mySection === "matches" ? "active" : ""} onClick={() => setMySection("matches")}>Mecze</button>
+                <button className={mySection === "posts" ? "active" : ""} onClick={() => setMySection("posts")}>Zgłoszenia</button>
+                <button className={mySection === "alerts" ? "active" : ""} onClick={() => setMySection("alerts")}>Alerty</button>
+                <button className={mySection === "saved" ? "active" : ""} onClick={() => setMySection("saved")}>Zapisane</button>
+              </nav>
 
-              <MatchInvitationsPanel
-                ownerToken={ownerToken}
-              />
-
-              <MyMatchesPanel
-                ownerToken={ownerToken}
-                refreshSignal={unreadNotificationsCount}
-              />
-
-              <section className="owner-posts-section">
-                <div className="section-heading">
-                  <div><span className="section-kicker">Moje zgłoszenia</span><h2>Zainteresowani gracze</h2></div>
-                  <button onClick={openNewPlayerListing}>＋ Dodaj zgłoszenie</button>
-                </div>
-                <div className="owner-post-list">
-                  {ownerPosts.map((post) => (
-                    <article className="owner-post-card" key={post.id}>
-                      <header>
-                        <div><span className={`status-badge status-${post.status}`}>{post.status === "open" ? "Aktywne" : post.status === "closed" ? "Zamknięte" : "Anulowane"}</span><h3>{post.clubName}</h3><p>{formatDate(post.date)} · {post.from}–{post.to}</p></div>
-                        <div className="owner-post-actions"><button onClick={() => editPlayerListing(post)}>Edytuj</button><button onClick={() => updatePostStatus(post.id, post.status === "open" ? "closed" : "open")}>{post.status === "open" ? "Zamknij" : "Otwórz ponownie"}</button><button className="danger-action" onClick={() => deletePlayerListing(post)}>Usuń</button></div>
-                      </header>
-                      <div className="request-list">
-                        {(post.requests || []).map((request) => (
-                          <article key={request.id}>
-                            <span className="small-avatar colorful-avatar" style={{ "--avatar-hue": getAvatarHue(request.nickname) }}>{request.nickname.slice(0,1).toUpperCase()}</span>
-                            <div><strong>{request.nickname}</strong><p>{request.message || "Chętnie dołączę do meczu."}</p><small>{request.contact}</small></div>
-                            <span className={`request-status request-${request.status}`}>{request.status === "pending" ? "Oczekuje" : request.status === "accepted" ? "Zaakceptowany" : "Odrzucony"}</span>
-                            {request.status === "pending" && <div className="request-actions"><button onClick={() => updateRequestStatus(request.id, "accepted")}>Akceptuj</button><button onClick={() => updateRequestStatus(request.id, "rejected")}>Odrzuć</button></div>}
-                          </article>
-                        ))}
-                        {(post.requests || []).length === 0 && <div className="empty-state">Nikt jeszcze się nie zgłosił.</div>}
-                      </div>
-                    </article>
-                  ))}
-                  {ownerPosts.length === 0 && (
-                    <div className="empty-state large my-empty-state">
-                      <span className="my-empty-icon">♧</span>
-                      <div>
-                        <strong>Nie masz jeszcze własnych ogłoszeń.</strong>
-                        <p>Dodaj ogłoszenie, aby znaleźć partnerów do gry.</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </section>
-
-              <div className="saved-grid secondary-saved-grid v6-saved-grid">
-                <section className="saved-panel">
-                  <h2>Zapisane wyszukiwania</h2>
-                  {savedSearches.map((search) => (
-                    <article key={search.id}>
-                      <div>
-                        <strong>{search.name}</strong>
-                        <small>{search.date} · {search.from}–{search.to} · {search.duration} min</small>
-                      </div>
-                      <div className="v6-inline-actions">
-                        <button onClick={() => applySavedSearch(search)}>Otwórz</button>
-                        <button onClick={() => setSavedSearches((current) => current.filter((item) => item.id !== search.id))}>Usuń</button>
-                      </div>
-                    </article>
-                  ))}
-                  {savedSearches.length === 0 && (
-                    <div className="saved-empty-card">
-                      <span className="saved-empty-icon">⌕</span>
-                      <div>
-                        <strong>Nie masz zapisanych wyszukiwań.</strong>
-                        <p>Zapisane filtry i terminy pojawią się tutaj.</p>
-                      </div>
-                      <button type="button" onClick={() => setActiveTab("courts")}>
-                        Przeglądaj korty <span>→</span>
-                      </button>
-                    </div>
-                  )}
+              {mySection === "matches" && (
+                <section className="sport-my-content">
+                  <MyMatchesPanel ownerToken={ownerToken} refreshSignal={unreadNotificationsCount} />
                 </section>
+              )}
 
-                <section className="saved-panel">
-                  <h2>Alerty kortów</h2>
+              {mySection === "posts" && (
+                <section className="sport-my-content sport-my-list">
+                  <header><h2>Moje zgłoszenia</h2><button type="button" onClick={openNewPlayerListing}>+ Dodaj zgłoszenie</button></header>
+                  {ownerPosts.map((post) => (
+                    <article key={post.id}>
+                      <time><strong>{post.date?.slice(8,10)}</strong><span>{new Date(`${post.date}T12:00:00`).toLocaleDateString("pl-PL",{month:"short"}).toUpperCase()}</span></time>
+                      <div><strong>{post.from} · {post.clubName}</strong><small>{post.to} · poziom {post.level}</small></div>
+                      <span>{post.status === "open" ? "Aktywne" : "Archiwum"}</span>
+                      <div><button onClick={() => editPlayerListing(post)}>Edytuj</button><button onClick={() => deletePlayerListing(post)}>Usuń</button></div>
+                    </article>
+                  ))}
+                  {ownerPosts.length === 0 && <div className="sport-empty"><strong>Brak zgłoszeń.</strong><p>Dodaj zgłoszenie, aby znaleźć partnerów do gry.</p></div>}
+                </section>
+              )}
+
+              {mySection === "alerts" && (
+                <section className="sport-my-content sport-my-list">
+                  <header><h2>Alerty kortów</h2></header>
                   {alerts.map((alert) => (
                     <article key={alert.id}>
-                      <div>
-                        <strong>{alert.clubName || alert.club || "Wszystkie kluby"}</strong>
-                        <small>{alert.date} · {alert.from}–{alert.to} · {alert.duration} min</small>
-                      </div>
+                      <time><strong>{alert.date?.slice(8,10)}</strong><span>{new Date(`${alert.date}T12:00:00`).toLocaleDateString("pl-PL",{month:"short"}).toUpperCase()}</span></time>
+                      <div><strong>{alert.clubName || alert.club || "Wszystkie kluby"}</strong><small>{alert.from}–{alert.to} · {alert.duration} min</small></div>
+                      <span>Aktywny</span>
                       <button onClick={() => setAlerts((current) => current.filter((item) => item.id !== alert.id))}>Usuń</button>
                     </article>
                   ))}
-                  {alerts.length === 0 && (
-                    <div className="saved-empty-card">
-                      <span className="saved-empty-icon">♧</span>
-                      <div>
-                        <strong>Nie masz aktywnych alertów.</strong>
-                        <p>Ustaw alert, a PADLETIC przypomni Ci o wolnym korcie.</p>
-                      </div>
-                      <button type="button" onClick={() => setActiveTab("courts")}>
-                        Ustaw alerty <span>→</span>
-                      </button>
-                    </div>
-                  )}
+                  {alerts.length === 0 && <div className="sport-empty"><strong>Brak aktywnych alertów.</strong><p>Ustaw alert w zakładce Korty.</p></div>}
                 </section>
+              )}
 
-                <section className="saved-panel">
-                  <h2>Wysłane zgłoszenia</h2>
-                  {outgoingRequests.map((request) => (
-                    <article key={request.id}>
-                      <div>
-                        <strong>{request.post?.nickname || "Gracz"}</strong>
-                        <small>{request.post?.clubName} · {request.post?.date} · status: {request.status}</small>
-                      </div>
+              {mySection === "saved" && (
+                <section className="sport-my-content sport-my-list">
+                  <header><h2>Zapisane wyszukiwania</h2></header>
+                  {savedSearches.map((search) => (
+                    <article key={search.id}>
+                      <time><strong>{search.date?.slice(8,10)}</strong><span>{new Date(`${search.date}T12:00:00`).toLocaleDateString("pl-PL",{month:"short"}).toUpperCase()}</span></time>
+                      <div><strong>{search.name}</strong><small>{search.from}–{search.to} · {search.duration} min</small></div>
+                      <button onClick={() => applySavedSearch(search)}>Otwórz →</button>
+                      <button onClick={() => setSavedSearches((current) => current.filter((item) => item.id !== search.id))}>Usuń</button>
                     </article>
                   ))}
-                  {outgoingRequests.length === 0 && (
-                    <div className="saved-empty-card">
-                      <span className="saved-empty-icon">➤</span>
-                      <div>
-                        <strong>Nie wysłano jeszcze zgłoszeń.</strong>
-                        <p>Znajdź gracza i wyślij zaproszenie do wspólnej gry.</p>
-                      </div>
-                      <button type="button" onClick={() => setActiveTab("players")}>
-                        Zobacz graczy <span>→</span>
-                      </button>
-                    </div>
-                  )}
+                  {savedSearches.length === 0 && <div className="sport-empty"><strong>Brak zapisanych wyszukiwań.</strong><p>Zapisz filtry w zakładce Korty.</p></div>}
                 </section>
-              </div>
-            </>
+              )}
+            </div>
           )}
+
         </main>
 
         <nav className="mobile-bottom-nav">
@@ -2255,8 +1911,8 @@ function App() {
       {showProfileEditor && (
         <div className="profile-modal-backdrop" onClick={() => setShowProfileEditor(false)}>
           <form className="profile-editor-panel profile-editor-modal" onSubmit={async (event) => {
-            await saveProfile(event);
-            setShowProfileEditor(false);
+            const saved = await saveProfile(event);
+            if (saved) setShowProfileEditor(false);
           }} onClick={(event) => event.stopPropagation()}>
             <div className="profile-modal-head">
               <div>
@@ -2265,18 +1921,94 @@ function App() {
               </div>
               <button type="button" onClick={() => setShowProfileEditor(false)} aria-label="Zamknij">×</button>
             </div>
+            <div className="profile-photo-editor">
+              <span className={`profile-editor-avatar colorful-avatar ${profilePhoto ? "has-photo" : ""}`} style={{ "--avatar-hue": getAvatarHue(myProfile.nickname) }}>
+                {profilePhoto ? <img src={profilePhoto} alt="Zdjęcie profilowe" /> : (myProfile.nickname || "G").slice(0, 1).toUpperCase()}
+              </span>
+              <div>
+                <strong>Zdjęcie profilowe</strong>
+                <small>JPG, PNG lub WEBP. Zdjęcie zapisze się na Twoim koncie i będzie dostępne na innych urządzeniach.</small>
+                <div className="profile-photo-actions">
+                  <label className="profile-photo-pick">Wybierz zdjęcie<input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    if (!/^image\/(jpeg|png|webp)$/i.test(file.type || "")) {
+                      setProfileMessage("Wybierz zdjęcie JPG, PNG lub WEBP.");
+                      event.target.value = "";
+                      return;
+                    }
+                    if (file.size > 20 * 1024 * 1024) {
+                      setProfileMessage("Zdjęcie z galerii może mieć maksymalnie 20 MB.");
+                      event.target.value = "";
+                      return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setProfileCropSource(String(reader.result || ""));
+                      setProfileMessage("");
+                    };
+                    reader.onerror = () => setProfileMessage("Nie udało się odczytać zdjęcia.");
+                    reader.readAsDataURL(file);
+                    event.target.value = "";
+                  }} /></label>
+                  {profilePhoto && <button type="button" onClick={() => { setProfilePhoto(""); localStorage.removeItem("padelalert-profile-photo"); }}>Usuń</button>}
+                </div>
+              </div>
+            </div>
             <div className="profile-form-grid">
               <label><span>Pseudonim</span><input value={myProfile.nickname || ""} onChange={(e) => setMyProfile({ ...myProfile, nickname: e.target.value })} /></label>
               <label><span>Miasto</span><input value={myProfile.city || ""} onChange={(e) => setMyProfile({ ...myProfile, city: e.target.value })} /></label>
               <label><span>Poziom</span><LevelSelect value={myProfile.level || "3.0"} onChange={(value) => setMyProfile({ ...myProfile, level: value })} /></label>
-              <label><span>Strona</span><select value={myProfile.preferredSide || "Dowolna"} onChange={(e) => setMyProfile({ ...myProfile, preferredSide: e.target.value })}><option>Dowolna</option><option>Lewa</option><option>Prawa</option></select></label>
-              <label className="profile-wide"><span>Ulubiony klub</span><select value={myProfile.favoriteClubSlug || "all"} onChange={(e) => setMyProfile({ ...myProfile, favoriteClubSlug: e.target.value })}><option value="all">Brak / dowolny</option>{clubs.map((club) => <option key={club.slug} value={club.slug}>{club.name}</option>)}</select></label>
-              <label className="profile-wide"><span>O mnie</span><textarea value={myProfile.bio || ""} onChange={(e) => setMyProfile({ ...myProfile, bio: e.target.value })} placeholder="Np. gram rekreacyjnie po pracy." /></label>
+              <label><span>Strona</span><PadleticSelect value={myProfile.preferredSide || "Dowolna"} onChange={(e) => setMyProfile({ ...myProfile, preferredSide: e.target.value })}><option>Dowolna</option><option>Lewa</option><option>Prawa</option></PadleticSelect></label>
+              <div className="profile-preference-block">
+                <span>Najczęściej gram</span>
+                <div className="profile-chip-row">
+                  {["Rano", "Popołudnie", "Wieczór"].map((period) => {
+                    const selected = (myProfile.availabilityPeriods || []).includes(period);
+                    return (
+                      <button key={period} type="button" className={selected ? "active" : ""} onClick={() => {
+                        const current = myProfile.availabilityPeriods || [];
+                        const next = selected ? current.filter((item) => item !== period) : [...current, period];
+                        setMyProfile({ ...myProfile, availabilityPeriods: next });
+                      }}>{period}</button>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="profile-preference-block">
+                <span>Ulubione kluby</span>
+                <div className="profile-chip-row">
+                  {clubs.map((club) => {
+                    const selected = (myProfile.favoriteClubSlugs || (myProfile.favoriteClubSlug && myProfile.favoriteClubSlug !== "all" ? [myProfile.favoriteClubSlug] : [])).includes(club.slug);
+                    return (
+                      <button key={club.slug} type="button" className={selected ? "active" : ""} onClick={() => {
+                        const current = myProfile.favoriteClubSlugs || (myProfile.favoriteClubSlug && myProfile.favoriteClubSlug !== "all" ? [myProfile.favoriteClubSlug] : []);
+                        const next = selected ? current.filter((slug) => slug !== club.slug) : [...current, club.slug];
+                        setMyProfile({ ...myProfile, favoriteClubSlugs: next, favoriteClubSlug: next[0] || "all" });
+                      }}>{club.name}</button>
+                    );
+                  })}
+                </div>
+              </div>
+              <label className="profile-wide"><span>O mnie</span><textarea value={myProfile.bio || ""} onChange={(e) => setMyProfile({ ...myProfile, bio: e.target.value })} placeholder="Np. lubię dynamiczną grę i dobrą atmosferę." /></label>
             </div>
             {profileMessage && <div className="form-message">{profileMessage}</div>}
             <button className="profile-save-button" type="submit">Zapisz profil</button>
           </form>
         </div>
+      )}
+
+      {profileCropSource && (
+        <ProfilePhotoCropper
+          source={profileCropSource}
+          onCancel={() => setProfileCropSource("")}
+          onSave={(value) => {
+            setProfilePhoto(value);
+            localStorage.setItem("padelalert-profile-photo", value);
+            setProfileCropSource("");
+            setProfileMessage("Zdjęcie przycięte i skompresowane. Kliknij „Zapisz profil”.");
+          }}
+        />
       )}
 
       {toast && (
@@ -2374,7 +2106,7 @@ function App() {
 
               <label>
                 <span>Strona</span>
-                <select
+                <PadleticSelect
                   value={playerForm.preferredSide}
                   onChange={(event) =>
                     setPlayerForm({
@@ -2386,13 +2118,13 @@ function App() {
                   <option>Dowolna</option>
                   <option>Lewa</option>
                   <option>Prawa</option>
-                </select>
+                </PadleticSelect>
               </label>
             </div>
 
             <label>
               <span>Klub</span>
-              <select
+              <PadleticSelect
                 value={playerForm.clubSlug}
                 onChange={(event) =>
                   setPlayerForm({
@@ -2408,7 +2140,7 @@ function App() {
                     {club.name}
                   </option>
                 ))}
-              </select>
+              </PadleticSelect>
             </label>
 
             <div className="form-grid three">
@@ -2429,13 +2161,13 @@ function App() {
 
               <label>
                 <span>Od</span>
-                <input
-                  type="time"
+                <PadleticTimePicker
                   value={playerForm.from}
-                  onChange={(event) =>
+                  options={TIME_OPTIONS_START}
+                  onChange={(value) =>
                     setPlayerForm({
                       ...playerForm,
-                      from: event.target.value
+                      from: value
                     })
                   }
                 />
@@ -2443,13 +2175,13 @@ function App() {
 
               <label>
                 <span>Do</span>
-                <input
-                  type="time"
+                <PadleticTimePicker
                   value={playerForm.to}
-                  onChange={(event) =>
+                  options={TIME_OPTIONS_END}
+                  onChange={(value) =>
                     setPlayerForm({
                       ...playerForm,
-                      to: event.target.value
+                      to: value
                     })
                   }
                 />

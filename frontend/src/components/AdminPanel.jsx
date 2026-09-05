@@ -20,7 +20,7 @@ function statusLabel(status) {
 }
 
 export default function AdminPanel({ onChanged }) {
-  const [tab, setTab] = useState("matches");
+  const [tab, setTab] = useState("users");
   const [summary, setSummary] = useState(null);
   const [matches, setMatches] = useState([]);
   const [users, setUsers] = useState([]);

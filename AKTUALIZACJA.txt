@@ -1,23 +1,31 @@
-PADLETIC RECOVERY 01
+PADLETIC — REFERENCE 1:1 — UPDATE 01
 
-Co naprawia:
-- usuwa zielony kolor z UI
-- zmniejsza i stabilizuje bottom nav na wszystkich zakładkach
-- dodaje prawidłowy padding, żeby menu nie zasłaniało treści
-- Start: bez tekstowego hero, mniej ciężki formularz
-- Korty: bez wielkiej zielonej wyspy; kompaktowe filtry i płaska lista
-- Mecze: płaskie sekcje i normalny pusty/loading state
-- Gracze: usuwa ogromną kartę filtrów i zmniejsza inputy
-- Moje: usuwa wielkie kafle/wyspy
-- Admin: kompaktowy, płaski układ
+WZORZEC:
+Ostatnia zaakceptowana plansza 6 ekranów mobile:
+Start / Korty / Mecze / Gracze / Moje / Admin.
+
+ZAŁOŻENIE:
+Nie reinterpretować projektu. Wygląd ma trzymać się planszy referencyjnej:
+- identyczny system nagłówka i dolnej nawigacji,
+- ciemny granat + złamana biel,
+- bez limonkowego brandingu,
+- małe, spójne promienie narożników,
+- Start: zdjęcie + KORTY LUDZIE GRA. + pojedynczy pasek Szczecin,
+- Korty: kompaktowe filtry i lista terminów,
+- Mecze: data po lewej + klub + Dołącz,
+- Gracze: wyszukiwarka + kompaktowe filtry + lista,
+- Moje: profil + zakładki + jeden pusty stan,
+- Admin: 2x2 statystyki + lista użytkowników.
 
 PODMIANA:
 Skopiuj folder frontend do:
 C:\PROJEKTY\Padel-Alert
-i zaakceptuj zamianę pliku.
 
 STOPKA / POWERSHELL:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic recovery mobile UI 01"
+git commit -m "Padletic reference 1to1 mobile 01"
 git push
+
+UWAGA:
+Backend bez zmian.
