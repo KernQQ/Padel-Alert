@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LevelBadge from "./ui/LevelBadge";
 
 const CLUB_IMAGES = {
@@ -43,6 +43,29 @@ function HomeDashboard({
   const topClubs = clubStats.slice(0, 3);
   const activePlayers = players.slice(0, 3);
   const [openPicker, setOpenPicker] = useState("");
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    if (!openPicker) return undefined;
+
+    const closeOnOutside = (event) => {
+      if (!searchRef.current?.contains(event.target)) {
+        setOpenPicker("");
+      }
+    };
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setOpenPicker("");
+    };
+
+    document.addEventListener("pointerdown", closeOnOutside);
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [openPicker]);
   const times = Array.from({ length: 32 }, (_, i) => { const total = 8 * 60 + i * 30; return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`; });
   const dates = Array.from({ length: 7 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() + i); return { value: [d.getFullYear(), String(d.getMonth()+1).padStart(2,"0"), String(d.getDate()).padStart(2,"0")].join("-"), label: i === 0 ? "Dzisiaj" : i === 1 ? "Jutro" : d.toLocaleDateString("pl-PL", { weekday: "short", day: "numeric" }) }; });
 
@@ -76,12 +99,12 @@ function HomeDashboard({
         <div className="pd-home-hero-photo" aria-hidden="true" />
       </section>
 
-      <section className="pd-home-search pd-home-search-interactive" aria-label="Szybkie wyszukiwanie kortów">
-        <div className="pd-home-field-wrap"><button type="button" onClick={() => setOpenPicker(openPicker === "location" ? "" : "location")}><small>Lokalizacja</small><strong>Szczecin</strong><span>⌄</span></button>{openPicker === "location" && <div className="pd-home-picker"><button className="active" type="button" onClick={() => setOpenPicker("")}>Szczecin <b>✓</b></button></div>}</div>
-        <div className="pd-home-field-wrap"><button type="button" onClick={() => setOpenPicker(openPicker === "date" ? "" : "date")}><small>Data</small><strong>{date || "Dzisiaj"}</strong><span>⌄</span></button>{openPicker === "date" && <div className="pd-home-picker pd-home-picker-grid">{dates.map(item => <button type="button" key={item.value} className={date === item.value ? "active" : ""} onClick={() => { onChangeDate?.(item.value); setOpenPicker(""); }}>{item.label}</button>)}</div>}</div>
-        <div className="pd-home-field-wrap"><button type="button" onClick={() => setOpenPicker(openPicker === "time" ? "" : "time")}><small>Godzina od</small><strong>{from || "08:00"}</strong><span>⌄</span></button>{openPicker === "time" && <div className="pd-home-picker pd-home-picker-grid pd-home-time-grid">{times.map(value => <button type="button" key={value} className={from === value ? "active" : ""} onClick={() => { onChangeFrom?.(value); setOpenPicker(""); }}>{value}</button>)}</div>}</div>
-        <div className="pd-home-field-wrap"><button type="button" onClick={() => setOpenPicker(openPicker === "duration" ? "" : "duration")}><small>Czas gry</small><strong>{duration} min</strong><span>⌄</span></button>{openPicker === "duration" && <div className="pd-home-picker">{[60,90,120].map(value => <button type="button" key={value} className={duration === value ? "active" : ""} onClick={() => { onChangeDuration?.(value); setOpenPicker(""); }}>{value} min</button>)}</div>}</div>
-        <button type="button" className="pd-home-search-submit" onClick={onOpenCourts}>Szukaj kortów <span>→</span></button>
+      <section ref={searchRef} className="pd-home-search pd-home-search-interactive" aria-label="Szybkie wyszukiwanie kortów">
+        <div className={`pd-home-field-wrap ${openPicker === "location" ? "is-open" : ""}`}><button type="button" aria-expanded={openPicker === "location"} onClick={() => setOpenPicker(openPicker === "location" ? "" : "location")}><small>Lokalizacja</small><strong>Szczecin</strong><span>⌄</span></button>{openPicker === "location" && <div className="pd-home-picker"><button className="active" type="button" onClick={() => setOpenPicker("")}>Szczecin <b>✓</b></button></div>}</div>
+        <div className={`pd-home-field-wrap ${openPicker === "date" ? "is-open" : ""}`}><button type="button" aria-expanded={openPicker === "date"} onClick={() => setOpenPicker(openPicker === "date" ? "" : "date")}><small>Data</small><strong>{date || "Dzisiaj"}</strong><span>⌄</span></button>{openPicker === "date" && <div className="pd-home-picker pd-home-picker-grid">{dates.map(item => <button type="button" key={item.value} className={date === item.value ? "active" : ""} onClick={() => { onChangeDate?.(item.value); setOpenPicker(""); }}>{item.label}</button>)}</div>}</div>
+        <div className={`pd-home-field-wrap ${openPicker === "time" ? "is-open" : ""}`}><button type="button" aria-expanded={openPicker === "time"} onClick={() => setOpenPicker(openPicker === "time" ? "" : "time")}><small>Godzina od</small><strong>{from || "08:00"}</strong><span>⌄</span></button>{openPicker === "time" && <div className="pd-home-picker pd-home-picker-grid pd-home-time-grid">{times.map(value => <button type="button" key={value} className={from === value ? "active" : ""} onClick={() => { onChangeFrom?.(value); setOpenPicker(""); }}>{value}</button>)}</div>}</div>
+        <div className={`pd-home-field-wrap ${openPicker === "duration" ? "is-open" : ""}`}><button type="button" aria-expanded={openPicker === "duration"} onClick={() => setOpenPicker(openPicker === "duration" ? "" : "duration")}><small>Czas gry</small><strong>{duration} min</strong><span>⌄</span></button>{openPicker === "duration" && <div className="pd-home-picker">{[60,90,120].map(value => <button type="button" key={value} className={duration === value ? "active" : ""} onClick={() => { onChangeDuration?.(value); setOpenPicker(""); }}>{value} min</button>)}</div>}</div>
+        <button type="button" className="pd-home-search-submit" onClick={() => { setOpenPicker(""); onOpenCourts?.(); }}>Szukaj kortów <span>→</span></button>
       </section>
 
       <section className="pd-home-section">

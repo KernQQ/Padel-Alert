@@ -12147,107 +12147,297 @@ body {
 @media(max-width:900px){.pd-home-clubs{display:flex!important;overflow-x:auto!important;scroll-snap-type:x mandatory;gap:12px!important;padding-bottom:10px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}.pd-home-clubs::-webkit-scrollbar{display:none}.pd-home-club-card{flex:0 0 84vw!important;max-width:340px!important;scroll-snap-align:start}.pd-home-field-wrap{display:block!important}.pd-home-picker{position:fixed;z-index:10001;left:14px;right:14px;top:auto;bottom:calc(92px + env(safe-area-inset-bottom));min-width:0;max-height:52vh;overflow:auto;border-radius:20px;padding:12px}.pd-home-picker-grid,.pd-home-time-grid{min-width:0;grid-template-columns:repeat(3,1fr)}.pd-home-search-interactive{grid-template-columns:1fr 1fr!important}.pd-home-search-interactive>.pd-home-field-wrap{grid-column:auto!important}.pd-home-search-interactive>.pd-home-search-submit{grid-column:1/-1!important}}
 
 
-/* =========================================================
-   PADLETIC — DESKTOP START FIX after batch update
-   Restores the intended search-field styling after fields
-   were wrapped to support local pickers on Start.
-   ========================================================= */
+/* ============================================================
+   PADLETIC START SEARCH V4
+   Clean desktop + mobile composition and reliable popup states.
+   ============================================================ */
+.pd-home-search.pd-home-search-interactive {
+  overflow: visible !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.pd-home-search-interactive .pd-home-field-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.pd-home-search-interactive .pd-home-field-wrap > button {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  display: block;
+  width: 100% !important;
+  height: 100%;
+  border: 1px solid rgba(255,255,255,.105) !important;
+  background:
+    linear-gradient(180deg, rgba(18,28,22,.96), rgba(10,18,14,.98)) !important;
+  color: #f2f5f3 !important;
+  box-shadow: none !important;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color .16s ease,
+    background .16s ease,
+    transform .16s ease;
+}
+
+.pd-home-search-interactive .pd-home-field-wrap > button:hover {
+  border-color: rgba(164,229,83,.28) !important;
+  background:
+    linear-gradient(180deg, rgba(21,33,25,.98), rgba(11,20,15,.99)) !important;
+}
+
+.pd-home-search-interactive .pd-home-field-wrap.is-open > button {
+  border-color: rgba(164,229,83,.62) !important;
+  background:
+    linear-gradient(180deg, rgba(24,39,27,.99), rgba(12,23,16,.99)) !important;
+}
+
+.pd-home-search-interactive .pd-home-field-wrap > button small {
+  display: block;
+  color: #829087 !important;
+  font-weight: 650;
+  line-height: 1.1;
+}
+
+.pd-home-search-interactive .pd-home-field-wrap > button strong {
+  display: block;
+  color: #f3f6f4 !important;
+  font-weight: 780;
+  line-height: 1.18;
+}
+
+.pd-home-search-interactive .pd-home-field-wrap > button > span {
+  color: #8e9a92 !important;
+  transition: transform .16s ease, color .16s ease;
+}
+
+.pd-home-search-interactive .pd-home-field-wrap.is-open > button > span {
+  color: #b9ee78 !important;
+  transform: translateY(-50%) rotate(180deg) !important;
+}
+
+.pd-home-picker {
+  border: 1px solid rgba(164,229,83,.24) !important;
+  background:
+    radial-gradient(circle at 50% -30%, rgba(164,229,83,.08), transparent 48%),
+    #08110c !important;
+  box-shadow: 0 22px 60px rgba(0,0,0,.52) !important;
+}
+
+.pd-home-picker button {
+  border: 1px solid transparent !important;
+  background: rgba(255,255,255,.015) !important;
+  color: #dce3de !important;
+  transition: background .14s ease, border-color .14s ease, color .14s ease;
+}
+
+.pd-home-picker button:hover {
+  background: rgba(164,229,83,.07) !important;
+  border-color: rgba(164,229,83,.20) !important;
+}
+
+.pd-home-picker button.active {
+  background: rgba(164,229,83,.14) !important;
+  border-color: rgba(164,229,83,.54) !important;
+  color: #c8f18f !important;
+}
+
 @media (min-width: 901px) {
   .pd-home-search.pd-home-search-interactive {
+    width: calc(100% - 72px) !important;
+    margin: -35px auto 0 !important;
     display: grid !important;
-    grid-template-columns: 1.05fr 1fr .96fr .96fr 1.16fr !important;
+    grid-template-columns: 1.05fr 1fr .96fr .96fr 1.18fr !important;
+    gap: 8px !important;
     align-items: stretch;
-    overflow: visible !important;
-    background: rgba(9,17,13,.97) !important;
-    border: 1px solid rgba(255,255,255,.105) !important;
   }
 
-  .pd-home-search-interactive > .pd-home-field-wrap {
-    position: relative;
-    min-width: 0;
-    min-height: 74px;
-    border-right: 1px solid rgba(255,255,255,.105);
+  .pd-home-search-interactive .pd-home-field-wrap {
+    min-height: 66px !important;
   }
 
-  .pd-home-search-interactive > .pd-home-field-wrap > button {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 100%;
-    min-height: 74px;
-    padding: 15px 42px 13px 20px;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    color: #eef3ef !important;
-    text-align: left;
-    cursor: pointer;
-    box-shadow: none !important;
-    appearance: none;
-    -webkit-appearance: none;
+  .pd-home-search-interactive .pd-home-field-wrap > button {
+    min-height: 66px !important;
+    padding: 12px 38px 11px 16px !important;
+    border-radius: 12px !important;
   }
 
-  .pd-home-search-interactive > .pd-home-field-wrap > button:hover {
-    background: rgba(255,255,255,.025) !important;
+  .pd-home-search-interactive .pd-home-field-wrap > button small {
+    margin: 0 0 5px !important;
+    font-size: 9px !important;
   }
 
-  .pd-home-search-interactive > .pd-home-field-wrap > button small {
-    display: block;
-    margin: 0 0 6px;
-    color: #7f8a84 !important;
-    font-size: 10px;
-    font-weight: 500;
-    line-height: 1.15;
-  }
-
-  .pd-home-search-interactive > .pd-home-field-wrap > button strong {
-    display: block;
-    color: #eef3ef !important;
-    font-size: 14px;
-    font-weight: 760;
-    line-height: 1.2;
+  .pd-home-search-interactive .pd-home-field-wrap > button strong {
+    font-size: 13px !important;
     white-space: nowrap;
   }
 
-  .pd-home-search-interactive > .pd-home-field-wrap > button > span {
+  .pd-home-search-interactive .pd-home-field-wrap > button > span {
     position: absolute;
-    right: 18px;
+    right: 14px;
     top: 50%;
     transform: translateY(-50%);
-    color: #aab3ae;
   }
 
   .pd-home-search-interactive > .pd-home-search-submit {
-    min-height: 56px !important;
-    height: auto !important;
-    margin: 9px !important;
-    padding: 0 22px !important;
+    min-height: 66px !important;
+    height: 66px !important;
+    margin: 0 !important;
+    padding: 0 20px !important;
     border: 0 !important;
-    border-radius: 10px !important;
+    border-radius: 12px !important;
     background: #dce7dc !important;
-    color: #08100c !important;
+    color: #07100b !important;
     box-shadow: none !important;
   }
 
-  .pd-home-search-interactive .pd-home-picker {
-    top: calc(100% + 8px);
-    bottom: auto;
-    left: 0;
-    right: auto;
-    z-index: 500;
-    max-height: 360px;
+  .pd-home-search-interactive > .pd-home-search-submit:hover {
+    background: #edf3ed !important;
+    transform: translateY(-1px);
+  }
+
+  .pd-home-picker {
+    top: calc(100% + 8px) !important;
+    bottom: auto !important;
+    left: 0 !important;
+    right: auto !important;
+    z-index: 1000 !important;
+    max-height: 330px;
     overflow: auto;
-    border-radius: 14px;
-    background: #09110d;
+    border-radius: 14px !important;
+    padding: 7px !important;
   }
 
-  .pd-home-search-interactive .pd-home-picker-grid {
-    grid-template-columns: repeat(2, minmax(96px, 1fr));
-    min-width: 250px;
+  .pd-home-picker-grid {
+    grid-template-columns: repeat(2, minmax(96px, 1fr)) !important;
+    min-width: 244px !important;
+    gap: 5px !important;
   }
 
-  .pd-home-search-interactive .pd-home-time-grid {
-    grid-template-columns: repeat(3, minmax(72px, 1fr));
-    min-width: 290px;
+  .pd-home-time-grid {
+    grid-template-columns: repeat(3, minmax(72px, 1fr)) !important;
+    min-width: 282px !important;
+  }
+
+  .pd-home-picker button {
+    min-height: 38px !important;
+    border-radius: 9px !important;
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .pd-home-search.pd-home-search-interactive {
+    width: auto !important;
+    margin: -10px 14px 0 !important;
+    padding: 8px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 8px !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    border-radius: 20px !important;
+    background: rgba(7,14,10,.94) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .pd-home-search-interactive .pd-home-field-wrap {
+    min-height: 68px !important;
+  }
+
+  .pd-home-search-interactive .pd-home-field-wrap > button {
+    min-height: 68px !important;
+    padding: 12px 34px 11px 13px !important;
+    border-radius: 13px !important;
+  }
+
+  .pd-home-search-interactive .pd-home-field-wrap > button small {
+    margin: 0 0 5px !important;
+    font-size: 9px !important;
+  }
+
+  .pd-home-search-interactive .pd-home-field-wrap > button strong {
+    font-size: 14px !important;
+  }
+
+  .pd-home-search-interactive .pd-home-field-wrap > button > span {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .pd-home-search-interactive > .pd-home-search-submit {
+    grid-column: 1 / -1 !important;
+    min-height: 54px !important;
+    height: 54px !important;
+    margin: 0 !important;
+    padding: 0 17px !important;
+    border: 0 !important;
+    border-radius: 13px !important;
+    background: #dce7dc !important;
+    color: #07100b !important;
+  }
+
+  .pd-home-picker {
+    position: fixed !important;
+    z-index: 10001 !important;
+    left: 14px !important;
+    right: 14px !important;
+    top: auto !important;
+    bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+    min-width: 0 !important;
+    max-height: min(52vh, 430px) !important;
+    overflow: auto !important;
+    padding: 10px !important;
+    border-radius: 22px !important;
+  }
+
+  .pd-home-picker::before {
+    content: "";
+    display: block;
+    width: 38px;
+    height: 4px;
+    margin: 2px auto 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.18);
+  }
+
+  .pd-home-picker-grid {
+    min-width: 0 !important;
+    grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .pd-home-time-grid {
+    grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+  }
+
+  .pd-home-picker button {
+    min-height: 46px !important;
+    padding: 0 8px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .pd-home-search.pd-home-search-interactive {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    gap: 7px !important;
+    padding: 7px !important;
+  }
+
+  .pd-home-search-interactive .pd-home-field-wrap,
+  .pd-home-search-interactive .pd-home-field-wrap > button {
+    min-height: 64px !important;
+  }
+
+  .pd-home-search-interactive .pd-home-field-wrap > button strong {
+    font-size: 13px !important;
   }
 }
