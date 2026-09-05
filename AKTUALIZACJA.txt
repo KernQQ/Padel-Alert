@@ -1,31 +1,35 @@
-PADLETIC — REFERENCE 1:1 — UPDATE 01
+PADLETIC — MOBILE 1:1 / UPDATE 02
 
-WZORZEC:
-Ostatnia zaakceptowana plansza 6 ekranów mobile:
-Start / Korty / Mecze / Gracze / Moje / Admin.
+CEL:
+iOS i Android korzystają z jednego, identycznego layoutu zgodnego z zaakceptowaną planszą.
+Desktop NIE jest przebudowywany w tej aktualizacji.
 
-ZAŁOŻENIE:
-Nie reinterpretować projektu. Wygląd ma trzymać się planszy referencyjnej:
-- identyczny system nagłówka i dolnej nawigacji,
-- ciemny granat + złamana biel,
-- bez limonkowego brandingu,
-- małe, spójne promienie narożników,
-- Start: zdjęcie + KORTY LUDZIE GRA. + pojedynczy pasek Szczecin,
-- Korty: kompaktowe filtry i lista terminów,
-- Mecze: data po lewej + klub + Dołącz,
-- Gracze: wyszukiwarka + kompaktowe filtry + lista,
-- Moje: profil + zakładki + jeden pusty stan,
-- Admin: 2x2 statystyki + lista użytkowników.
+CO ZMIENIA:
+- mobile header jak na referencji
+- stały dolny navbar na wszystkich 6 zakładkach
+- Start: KORTY / LUDZIE / GRA + kompaktowe wyszukiwanie + najbliższy kort
+- Korty: formularz 2-kolumnowy + lista terminów jak rozkład
+- Mecze: fixture cards z datą po lewej i CTA po prawej
+- Gracze: wyszukiwarka + kompaktowe filtry + płaska lista
+- Moje: profil + zakładki + jeden spójny pusty stan
+- Admin: 2x2 statystyki + lista użytkowników
+- brak limonkowego brandingu na mobile
+- mobile CSS jest ładowany JAKO OSTATNI, więc stare style nie powinny go nadpisywać
+- breakpoint mobile: do 760 px
+- desktop pozostaje osobną wersją
 
 PODMIANA:
 Skopiuj folder frontend do:
 C:\PROJEKTY\Padel-Alert
+i zaakceptuj zamianę plików.
 
 STOPKA / POWERSHELL:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic reference 1to1 mobile 01"
+git commit -m "Padletic mobile 1to1 update 02"
 git push
 
-UWAGA:
-Backend bez zmian.
+UWAGA BUILD:
+Kod został złożony na aktualnej bazie referencyjnej.
+Lokalny build w środowisku ChatGPT nie wystartował z powodu brakującego natywnego
+bindingu Rolldown w dostarczonym node_modules, a nie z powodu błędu CSS/JSX.
