@@ -1,19 +1,34 @@
-PADLETIC DESKTOP BACKGROUND FIX 08
+PADLETIC — DESKTOP V2 ISOLATED / UPDATE 09
 
-Naprawa błędu z poprzedniej paczki:
-- stare zdjęcie hero z rakietą było nadal na wierzchu i zasłaniało nowe tło
-- na desktopie hero nie ma już własnego background-image
-- jedno zdjęcie kortu jest tłem całej strony Start
-- tekst KORTY / LUDZIE / GRA jest mniejszy i wyżej
-- wyszukiwarka oraz terminy są podciągnięte do góry
-- sidebar pozostaje granatowy
-- mobile nie jest zmieniany
+CEL:
+Desktop i mobile są od tej aktualizacji odseparowane technicznie.
+
+MOBILE:
+- mobile-1to1.css zostaje bez zmian
+- mobile-platform-fix.css zostaje bez zmian
+- iOS/Android nie dostają żadnych reguł z desktop-v2.css
+
+DESKTOP:
+desktop-v2.css uruchamia się WYŁĄCZNIE przy:
+- szerokości min. 901 px
+- hover: hover
+- pointer: fine (mysz / trackpad)
+
+Dzięki temu nawet szeroki telefon w orientacji poziomej nie powinien wejść w layout desktopowy.
+
+WAŻNE:
+W App.jsx stary import:
+./styles/desktop-1to1.css
+został zastąpiony przez:
+./styles/desktop-v2.css
 
 PODMIANA:
-Skopiuj folder frontend do C:\PROJEKTY\Padel-Alert i zaakceptuj zamianę.
+Skopiuj folder frontend do:
+C:\PROJEKTY\Padel-Alert
+i zaakceptuj zamianę plików.
 
 STOPKA:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic desktop background fix 08"
+git commit -m "Padletic isolate desktop v2 from mobile"
 git push

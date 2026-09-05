@@ -12,7 +12,7 @@ import "./styles/full-update.css";
 import "./styles/sport-system.css";
 import "./styles/mobile-1to1.css";
 import "./styles/mobile-platform-fix.css";
-import "./styles/desktop-1to1.css";
+import "./styles/desktop-v2.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
