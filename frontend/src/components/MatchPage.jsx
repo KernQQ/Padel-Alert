@@ -346,8 +346,8 @@ function MatchPage({
 
       <section className="matches-page-heading">
         <div>
-          <span className="eyebrow">MATCH ENGINE</span>
-          <h1>Znajdź mecz. Albo go stwórz.</h1>
+          <span className="eyebrow">MECZE · SZCZECIN</span>
+          <h1>Graj. Dołącz. Rywalizuj.</h1>
           <p>
             Dołącz do istniejącej gry, znajdź brakującego zawodnika albo
             pokaż, że jesteś dostępny teraz.
@@ -646,24 +646,17 @@ function MatchPage({
                   )}
                 </div>
 
-                <div className="match-player-dots">
-                  {Array.from({ length: match.maxPlayers }).map(
-                    (_, index) => {
-                      const player = match.participants[index];
-
-                      return (
-                        <span
-                          key={index}
-                          className={player ? "filled" : ""}
-                          title={player?.nickname || "Wolne miejsce"}
-                        >
-                          {player
-                            ? player.nickname.slice(0, 1).toUpperCase()
-                            : "＋"}
-                        </span>
-                      );
-                    }
-                  )}
+                <div className="match-lineup">
+                  {Array.from({ length: match.maxPlayers }).map((_, index) => {
+                    const player = match.participants[index];
+                    return (
+                      <div className={`match-lineup-row ${player ? "filled" : "open"}`} key={index}>
+                        <span className="match-lineup-number">{String(index + 1).padStart(2, "0")}</span>
+                        <strong>{player?.nickname || "Wolne miejsce"}</strong>
+                        <small>{player?.level || "—"}</small>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {match.note && <p className="match-note">{match.note}</p>}

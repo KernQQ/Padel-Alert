@@ -42,6 +42,15 @@ function HomeDashboard({
 }) {
   const topClubs = clubStats.slice(0, 3);
   const activePlayers = players.slice(0, 3);
+  const nearest = recommendations[0] || null;
+  const nextAvailable = recommendations
+    .filter((item, index, arr) =>
+      arr.findIndex((candidate) =>
+        candidate.startHour === item.startHour &&
+        candidate.clubName === item.clubName
+      ) === index
+    )
+    .slice(nearest ? 1 : 0, nearest ? 5 : 4);
   const [openPicker, setOpenPicker] = useState("");
   const searchRef = useRef(null);
 
@@ -107,17 +116,57 @@ function HomeDashboard({
         <button type="button" className="pd-home-search-submit" onClick={() => { setOpenPicker(""); onOpenCourts?.(); }}>Szukaj kortów <span>→</span></button>
       </section>
 
-      <section className="pd-home-section">
+      <section className="pd-home-section pd-home-availability">
         <header className="pd-home-section-head">
           <div>
-            <small>OSTATNIO SPRAWDZANE</small>
+            <small>DOSTĘPNOŚĆ</small>
             <h2>Najbliższe wolne</h2>
-            <p>Najbliższe terminy w Szczecinie.</p>
+            <p>Godzina jest najważniejsza. Reszta to jeden ruch.</p>
           </div>
-          <button type="button" onClick={onOpenCourts}>Zobacz wszystkie kluby →</button>
+          <button type="button" onClick={onOpenCourts}>Wszystkie terminy →</button>
         </header>
 
-        <div className="pd-home-clubs">
+        {nearest ? (
+          <div className="pd-nearest-layout">
+            <article className="pd-nearest-hero">
+              <div className="pd-nearest-label">NAJBLIŻSZY WOLNY KORT</div>
+              <div className="pd-nearest-time">{nearest.startHour}</div>
+              <div className="pd-nearest-meta">
+                <strong>{nearest.clubName}</strong>
+                <span>{nearest.courtName} · dzisiaj</span>
+              </div>
+              <button type="button" onClick={() => onSelectCourt(nearest)}>
+                ZAREZERWUJ <span>→</span>
+              </button>
+            </article>
+
+            <div className="pd-nearest-next">
+              <div className="pd-nearest-next-head">Kolejne terminy</div>
+              {nextAvailable.map((item) => (
+                <button
+                  type="button"
+                  key={`${item.clubName}-${item.courtKey}-${item.startHour}`}
+                  onClick={() => onSelectCourt(item)}
+                >
+                  <strong>{item.startHour}</strong>
+                  <span>{item.clubName}</span>
+                  <i>→</i>
+                </button>
+              ))}
+              <button type="button" className="pd-nearest-all" onClick={onOpenCourts}>
+                Pokaż pełną dostępność
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="pd-nearest-empty">
+            <strong>Brak szybkiego wyniku</strong>
+            <span>Sprawdź pełną dostępność klubów.</span>
+            <button type="button" onClick={onOpenCourts}>Sprawdź korty →</button>
+          </div>
+        )}
+
+        <div className="pd-home-clubs pd-home-clubs-flat">
           {topClubs.map((club, index) => {
             const slots = slotsForClub(club);
             return (
@@ -128,9 +177,7 @@ function HomeDashboard({
                   style={{ backgroundImage: `url(${imageForClub(club, index)})` }}
                   onClick={onOpenCourts}
                   aria-label={`Otwórz ${club.name}`}
-                >
-                  <span>♡</span>
-                </button>
+                />
                 <div className="pd-home-club-info">
                   <div className="pd-home-club-top">
                     <div>
@@ -142,10 +189,9 @@ function HomeDashboard({
 
                   {slots.length > 0 ? (
                     <div className="pd-home-slots">
-                      {slots.map((item, slotIndex) => (
+                      {slots.map((item) => (
                         <button
                           type="button"
-                          className={slotIndex === 0 ? "is-first" : ""}
                           key={`${item.courtKey}-${item.startHour}`}
                           onClick={() => onSelectCourt(item)}
                         >
@@ -162,13 +208,6 @@ function HomeDashboard({
               </article>
             );
           })}
-
-          {topClubs.length === 0 && (
-            <button type="button" className="pd-home-empty" onClick={onOpenCourts}>
-              <strong>Sprawdź dostępność kortów</strong>
-              <span>Dane są właśnie pobierane.</span>
-            </button>
-          )}
         </div>
       </section>
 
