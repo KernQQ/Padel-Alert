@@ -1,36 +1,23 @@
-PADLETIC — DESKTOP REAL 06
+PADLETIC — DESKTOP BACKGROUND 07
 
-Ta aktualizacja dotyczy WYŁĄCZNIE desktopu (>= 761 px).
-Mobile iOS/Android pozostaje oddzielny.
+Tylko desktop >= 761 px. Mobile iOS/Android bez zmian.
 
-NAPRAWIA:
-- usuwa zielone tło sidebara
-- usuwa obrazkową rakietę/logo z desktopowego sidebara
-- zastępuje ją prostym znakiem typograficznym P
-- likwiduje dużą pustą kolumnę między sidebarem a treścią
-- Start nie jest już rozciągniętym mobile:
-  * niższy, desktopowy banner
-  * inne zdjęcie bez rakiety
-  * inne hasło desktopowe
-  * wyszukiwarka w jednym rzędzie
-  * kluby + prawa kolumna w prawdziwym desktopowym gridzie
-- Korty:
-  * filtry poziomo
-  * lista jako rozkład/tabela
-  * szersze kolumny i kompaktowe wiersze
-- Gracze:
-  * poziome filtry
-  * wynik jako lista/tabela
-  * osobna prawa kolumna
-- nie zmienia warstwy mobile
+Zmiany:
+- zdjęcie kortu na całe tło części desktopowej Start
+- usunięcie starego prostokątnego zdjęcia/hero jako osobnego bloku
+- KORTY / LUDZIE / GRA mniejsze i przesunięte wyżej
+- wyszukiwarka w szklanym, poziomym panelu
+- sekcje Najbliższy wolny kort / Kolejne terminy podciągnięte wyżej
+- ciemne półprzezroczyste panele nad zdjęciem
+- brak dodatkowych sloganów na zdjęciu
+- mobile pozostaje nietknięte
 
 PODMIANA:
 Skopiuj folder frontend do:
 C:\PROJEKTY\Padel-Alert
-i zaakceptuj zamianę plików.
 
 STOPKA:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic real desktop layout 06"
+git commit -m "Padletic desktop full court background 07"
 git push
