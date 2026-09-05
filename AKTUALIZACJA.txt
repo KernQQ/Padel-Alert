@@ -1,34 +1,27 @@
-PADLETIC — DESKTOP V2 ISOLATED / UPDATE 09
-
-CEL:
-Desktop i mobile są od tej aktualizacji odseparowane technicznie.
-
-MOBILE:
-- mobile-1to1.css zostaje bez zmian
-- mobile-platform-fix.css zostaje bez zmian
-- iOS/Android nie dostają żadnych reguł z desktop-v2.css
-
-DESKTOP:
-desktop-v2.css uruchamia się WYŁĄCZNIE przy:
-- szerokości min. 901 px
-- hover: hover
-- pointer: fine (mysz / trackpad)
-
-Dzięki temu nawet szeroki telefon w orientacji poziomej nie powinien wejść w layout desktopowy.
+PADLETIC — DESKTOP CLEAN RESET 10
 
 WAŻNE:
-W App.jsx stary import:
-./styles/desktop-1to1.css
-został zastąpiony przez:
-./styles/desktop-v2.css
+To jest desktop-only override. Nie zastępuj nim mobile CSS.
+Ma być importowany JAKO OSTATNI CSS w frontend/src/App.jsx.
 
-PODMIANA:
-Skopiuj folder frontend do:
-C:\PROJEKTY\Padel-Alert
-i zaakceptuj zamianę plików.
+DODAJ NA KOŃCU IMPORTÓW CSS:
+import "./styles/desktop-clean-reset.css";
+
+Nie usuwaj:
+- mobile-1to1.css
+- mobile-platform-fix.css
+
+Po wdrożeniu desktop:
+- stare /premium/hero.jpg znika
+- brak limonki/zielonego brandingu
+- sidebar jest granatowo-grafitowy
+- aktywne elementy są neutralne off-white / granat
+- mobile <=900 px pozostaje bez zmian
 
 STOPKA:
 cd C:\PROJEKTY\Padel-Alert
+Remove-Item -Recurse -Force frontend\node_modules\.vite -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force frontend\dist -ErrorAction SilentlyContinue
 git add .
-git commit -m "Padletic isolate desktop v2 from mobile"
+git commit -m "Padletic desktop clean reset 10"
 git push

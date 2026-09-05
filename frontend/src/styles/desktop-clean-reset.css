@@ -1,0 +1,237 @@
+
+/* =========================================================
+   PADLETIC — DESKTOP CLEAN RESET 10
+   Desktop only. Mobile <=900px untouched.
+   MUST be imported as the LAST stylesheet.
+   ========================================================= */
+
+@media (min-width: 901px) {
+
+  /* ----- Neutral desktop palette: NO lime / green ----- */
+  :root,
+  :root[data-theme="dark"],
+  :root[data-theme="light"] {
+    --desktop-bg: #07151d;
+    --desktop-sidebar: #081820;
+    --desktop-surface: #0b1c25;
+    --desktop-surface-2: #10242e;
+    --desktop-line: #29404b;
+    --desktop-text: #eef2f1;
+    --desktop-muted: #8e9ba1;
+    --desktop-accent: #e8edeb;
+
+    --pa-acid: #e8edeb !important;
+    --primary: #e8edeb !important;
+    --primary-dark: #cbd4d1 !important;
+    --v7-green: #8e9ba1 !important;
+  }
+
+  body {
+    background: var(--desktop-bg) !important;
+    color: var(--desktop-text) !important;
+  }
+
+  .main-shell,
+  .page,
+  .pa-premium-home {
+    background: transparent !important;
+  }
+
+  /* ----- ABSOLUTELY REMOVE THE OLD HERO PHOTO ON DESKTOP ----- */
+  .pa-premium-hero,
+  .pa-rc-hero,
+  :root[data-theme="light"] .pa-rc-hero,
+  :root[data-theme="dark"] .pa-rc-hero {
+    background-image: none !important;
+    background: var(--desktop-bg) !important;
+    box-shadow: none !important;
+  }
+
+  .pa-premium-hero::before,
+  .pa-premium-hero::after,
+  .pa-rc-hero::before,
+  .pa-rc-hero::after {
+    background-image: none !important;
+  }
+
+  /* Keep the area simple while we rebuild desktop step by step */
+  .pa-premium-hero,
+  .pa-rc-hero {
+    min-height: 235px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .pa-premium-hero-copy,
+  .pa-rc-hero .pa-premium-hero-copy {
+    top: 22px !important;
+    left: 34px !important;
+  }
+
+  .pa-premium-kicker {
+    color: var(--desktop-muted) !important;
+  }
+
+  .pa-premium-hero h1,
+  .pa-rc-hero h1 {
+    color: var(--desktop-text) !important;
+  }
+
+  .pa-premium-hero h1 strong,
+  .pa-rc-hero h1 strong {
+    color: var(--desktop-text) !important;
+  }
+
+  /* ----- Sidebar neutral ----- */
+  .sidebar {
+    background: var(--desktop-sidebar) !important;
+    border-right-color: var(--desktop-line) !important;
+  }
+
+  .brand,
+  .sidebar-nav button,
+  .sidebar-actions,
+  .sidebar-profile {
+    color: var(--desktop-muted) !important;
+  }
+
+  .brand-mark,
+  .mobile-brand .brand-mark {
+    color: var(--desktop-text) !important;
+    background: #172a34 !important;
+    border-color: var(--desktop-line) !important;
+    box-shadow: none !important;
+  }
+
+  .sidebar-nav button.active {
+    color: var(--desktop-text) !important;
+    background: #182b35 !important;
+    border-color: #45606c !important;
+    box-shadow: none !important;
+  }
+
+  .sidebar-nav button.active .nav-icon {
+    color: var(--desktop-text) !important;
+  }
+
+  .sidebar-actions,
+  .sidebar-profile {
+    background: transparent !important;
+    border-color: var(--desktop-line) !important;
+  }
+
+  /* Hide green install emphasis; leave it understated */
+  .sidebar-install,
+  .install-app,
+  .install-app-button,
+  .sidebar-actions button {
+    color: var(--desktop-muted) !important;
+    background: transparent !important;
+    border-color: var(--desktop-line) !important;
+    box-shadow: none !important;
+  }
+
+  .sidebar-install *,
+  .install-app *,
+  .install-app-button *,
+  .sidebar-actions button * {
+    color: inherit !important;
+  }
+
+  /* ----- Top controls ----- */
+  .top-icon-button,
+  .account-trigger,
+  .account-dropdown,
+  .account-modal {
+    color: var(--desktop-text) !important;
+    background: var(--desktop-surface) !important;
+    border-color: var(--desktop-line) !important;
+    box-shadow: none !important;
+  }
+
+  .account-avatar {
+    color: var(--desktop-text) !important;
+    background: #233640 !important;
+    border-color: var(--desktop-line) !important;
+  }
+
+  /* ----- Search / controls: NO green ----- */
+  .pa-premium-search,
+  .pa-rc-search,
+  .consumer-search-card {
+    background: var(--desktop-surface) !important;
+    border-color: var(--desktop-line) !important;
+    box-shadow: none !important;
+  }
+
+  .pa-premium-field,
+  .pa-premium-field-time,
+  .consumer-search-card input,
+  .consumer-search-card select,
+  .consumer-search-card button:not(.search-submit) {
+    color: var(--desktop-text) !important;
+    background: transparent !important;
+    border-color: var(--desktop-line) !important;
+  }
+
+  .pa-premium-search-button,
+  .search-submit,
+  .primary-button,
+  .consumer-search-card .search-submit {
+    color: #07151d !important;
+    background: var(--desktop-accent) !important;
+    border-color: var(--desktop-accent) !important;
+    box-shadow: none !important;
+  }
+
+  /* Duration / pills / tabs */
+  .duration-options button,
+  .consumer-duration button,
+  .consumer-date-pills button,
+  .pa-premium-tabs button,
+  .pa-rc-tabs button {
+    color: var(--desktop-muted) !important;
+    background: transparent !important;
+    border-color: var(--desktop-line) !important;
+    box-shadow: none !important;
+  }
+
+  .duration-options button.active,
+  .consumer-duration button.active,
+  .consumer-date-pills button.active,
+  .pa-premium-tabs button.active,
+  .pa-rc-tabs button.active {
+    color: #07151d !important;
+    background: var(--desktop-accent) !important;
+    border-color: var(--desktop-accent) !important;
+  }
+
+  /* Generic former green accents */
+  .active,
+  .is-active,
+  [aria-selected="true"] {
+    --pa-acid: var(--desktop-accent) !important;
+  }
+
+  /* Status may still use a muted neutral dot; no brand green */
+  .online-dot,
+  .consumer-refresh-status i,
+  .status-dot {
+    background: #9aa7ac !important;
+    box-shadow: none !important;
+  }
+
+  /* Cards / rows */
+  .pa-premium-panel,
+  .pa-premium-club-card,
+  .pa-premium-feature-strip,
+  .pa-premium-players,
+  .pa-rc-nearest-card,
+  .consumer-results,
+  .saved-empty-card {
+    color: var(--desktop-text) !important;
+    background: var(--desktop-surface) !important;
+    border-color: var(--desktop-line) !important;
+    box-shadow: none !important;
+  }
+}
