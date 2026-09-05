@@ -1,185 +1,254 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import LevelBadge from "./ui/LevelBadge";
+
+const CLUB_IMAGES = {
+  "padel-arena-poludniowa": "/premium/club-1.jpg",
+  "padel-club": "/premium/club-2.jpg",
+  "fabryka-energii": "/premium/club-3.jpg"
+};
+
+function normalizeKey(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function imageForClub(club, index) {
+  const key = club?.slug || normalizeKey(club?.name);
+  return CLUB_IMAGES[key] || `/premium/club-${(index % 3) + 1}.jpg`;
+}
 
 function HomeDashboard({
-  recommendations = [],
+  nickname,
+  level,
+  countdown,
+  recommendations,
+  clubStats,
+  players,
   duration,
   date,
   from,
   onOpenCourts,
-  onChangeDate,
-  onChangeFrom,
-  onChangeDuration,
-  onSelectCourt
+  onOpenMatches,
+  onOpenPlayers,
+  onOpenSaved,
+  onSelectCourt,
+  onInvitePlayer
 }) {
-  const [openPicker, setOpenPicker] = useState("");
-  const rootRef = useRef(null);
+  const topClubs = clubStats.slice(0, 3);
+  const activePlayers = players.slice(0, 3);
 
-  const dates = useMemo(() =>
-    Array.from({ length: 7 }, (_, index) => {
-      const value = new Date();
-      value.setHours(12, 0, 0, 0);
-      value.setDate(value.getDate() + index);
-      return {
-        value: [
-          value.getFullYear(),
-          String(value.getMonth() + 1).padStart(2, "0"),
-          String(value.getDate()).padStart(2, "0")
-        ].join("-"),
-        label:
-          index === 0
-            ? "Dzisiaj"
-            : index === 1
-            ? "Jutro"
-            : value.toLocaleDateString("pl-PL", { weekday: "short", day: "numeric" })
-      };
-    }), []);
-
-  const times = useMemo(() =>
-    Array.from({ length: 32 }, (_, index) => {
-      const minutes = 8 * 60 + index * 30;
-      return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
-    }), []);
-
-  const unique = useMemo(() =>
-    recommendations.filter((item, index, all) =>
-      all.findIndex((candidate) =>
-        candidate.startHour === item.startHour &&
-        candidate.clubName === item.clubName &&
-        candidate.courtName === item.courtName
-      ) === index
-    ), [recommendations]);
-
-  const nearest = unique[0] || null;
-  const next = unique.slice(1, 5);
-
-  useEffect(() => {
-    if (!openPicker) return undefined;
-    const outside = (event) => {
-      if (!rootRef.current?.contains(event.target)) setOpenPicker("");
-    };
-    const esc = (event) => {
-      if (event.key === "Escape") setOpenPicker("");
-    };
-    document.addEventListener("pointerdown", outside);
-    document.addEventListener("keydown", esc);
-    return () => {
-      document.removeEventListener("pointerdown", outside);
-      document.removeEventListener("keydown", esc);
-    };
-  }, [openPicker]);
-
-  const choose = (setter, value) => {
-    setter?.(value);
-    setOpenPicker("");
+  const slotsForClub = (club) => {
+    const key = club?.slug || normalizeKey(club?.name);
+    return recommendations
+      .filter((item) => {
+        const itemKey = item?.clubSlug || normalizeKey(item?.clubName);
+        return itemKey === key;
+      })
+      .filter((item, index, arr) =>
+        arr.findIndex((candidate) => candidate.startHour === item.startHour) === index
+      )
+      .slice(0, 3);
   };
 
   return (
-    <div className="sport-home">
-      <section className="sport-home-hero">
-        <div className="sport-home-copy">
-          <span>SZCZECIN · PADEL · COMMUNITY</span>
-          <h1>KORTY<br />LUDZIE<br />GRA<i>.</i></h1>
-          <p>Wolne terminy. Rezerwuj. Widzimy się na korcie.</p>
-        </div>
-      </section>
+    <div className="pa-premium-home">
+      <section className="pa-premium-hero pa-premium-hero-visual" aria-label="Kort do padla" />
 
-      <section className="sport-home-search" ref={rootRef}>
-        <div className="sport-home-field">
-          <button type="button" onClick={() => setOpenPicker(openPicker === "location" ? "" : "location")}>
-            <small>Lokalizacja</small><strong>Szczecin</strong><b>⌄</b>
-          </button>
-          {openPicker === "location" && (
-            <div className="sport-popover sport-popover-one">
-              <button className="selected" type="button" onClick={() => setOpenPicker("")}>Szczecin <span>✓</span></button>
-            </div>
-          )}
-        </div>
+      <section className="pa-premium-search">
+        <button type="button" className="pa-premium-field" onClick={onOpenCourts}>
+          <small>Lokalizacja</small>
+          <strong>Szczecin</strong>
+          <span>⌄</span>
+        </button>
 
-        <div className="sport-home-field">
-          <button type="button" onClick={() => setOpenPicker(openPicker === "date" ? "" : "date")}>
-            <small>Data</small><strong>{date}</strong><b>⌄</b>
-          </button>
-          {openPicker === "date" && (
-            <div className="sport-popover sport-popover-grid">
-              {dates.map((item) => (
-                <button key={item.value} className={date === item.value ? "selected" : ""} type="button" onClick={() => choose(onChangeDate, item.value)}>
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <button type="button" className="pa-premium-field" onClick={onOpenCourts}>
+          <small>Data</small>
+          <strong>{date || "Dzisiaj"}</strong>
+          <span>⌄</span>
+        </button>
 
-        <div className="sport-home-field">
-          <button type="button" onClick={() => setOpenPicker(openPicker === "time" ? "" : "time")}>
-            <small>Od godziny</small><strong>{from || "08:00"}</strong><b>⌄</b>
-          </button>
-          {openPicker === "time" && (
-            <div className="sport-popover sport-popover-times">
-              {times.map((value) => (
-                <button key={value} className={from === value ? "selected" : ""} type="button" onClick={() => choose(onChangeFrom, value)}>
-                  {value}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <button type="button" className="pa-premium-field pa-premium-field-time" onClick={onOpenCourts}>
+          <small>Godzina od</small>
+          <strong>{from || "18:00"}</strong>
+          <span>⌄</span>
+        </button>
 
-        <div className="sport-home-field">
-          <button type="button" onClick={() => setOpenPicker(openPicker === "duration" ? "" : "duration")}>
-            <small>Czas gry</small><strong>{duration} min</strong><b>⌄</b>
-          </button>
-          {openPicker === "duration" && (
-            <div className="sport-popover sport-popover-one">
-              {[60, 90, 120].map((value) => (
-                <button key={value} className={duration === value ? "selected" : ""} type="button" onClick={() => choose(onChangeDuration, value)}>
-                  {value} min
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <button type="button" className="pa-premium-field pa-premium-field-time" onClick={onOpenCourts}>
+          <small>Czas gry</small>
+          <strong>{duration} min</strong>
+          <span>⌄</span>
+        </button>
 
-        <button type="button" className="sport-home-submit" onClick={() => { setOpenPicker(""); onOpenCourts?.(); }}>
+        <button type="button" className="pa-premium-field pa-premium-field-more" onClick={onOpenCourts}>
+          <small>Więcej</small>
+          <strong>Filtry gry</strong>
+          <span>⌄</span>
+        </button>
+
+        <button type="button" className="pa-premium-search-button" onClick={onOpenCourts}>
           Szukaj kortów <span>→</span>
         </button>
       </section>
 
-      <section className="sport-nearest">
-        <div className="sport-nearest-main">
-          <small>NAJBLIŻSZY WOLNY KORT</small>
-          {nearest ? (
-            <>
-              <strong className="sport-nearest-time">{nearest.startHour}</strong>
-              <h2>{nearest.clubName}</h2>
-              <p>{nearest.courtName} · {nearest.endHour ? `${nearest.startHour}–${nearest.endHour}` : "dzisiaj"}</p>
-              <button type="button" onClick={() => onSelectCourt?.(nearest)}>ZAREZERWUJ <span>→</span></button>
-            </>
-          ) : (
-            <>
-              <strong className="sport-nearest-time">—</strong>
-              <h2>Sprawdź dostępność</h2>
-              <p>Nie mamy jeszcze szybkiego wyniku.</p>
-              <button type="button" onClick={onOpenCourts}>ZOBACZ KORTY <span>→</span></button>
-            </>
-          )}
-        </div>
+      <div className="pa-premium-mobile-more">
+        <button type="button" onClick={onOpenCourts}>+ Więcej filtrów</button>
+      </div>
 
-        <div className="sport-nearest-list">
-          <small>KOLEJNE TERMINY</small>
-          {next.length > 0 ? next.map((item) => (
-            <button key={`${item.clubName}-${item.courtName}-${item.startHour}`} type="button" onClick={() => onSelectCourt?.(item)}>
-              <strong>{item.startHour}</strong>
-              <span>{item.clubName}</span>
-              <em>{item.courtName}</em>
-              <b>→</b>
-            </button>
-          )) : (
-            <p className="sport-nearest-muted">Pełna lista pojawi się po wyszukaniu dostępności.</p>
-          )}
-          <button className="sport-nearest-all" type="button" onClick={onOpenCourts}>Zobacz wszystkie →</button>
-        </div>
+      <section className="pa-premium-tabs">
+        <button type="button" className="active" onClick={onOpenCourts}>Dzisiaj<small>teraz</small></button>
+        <button type="button" onClick={onOpenCourts}>Jutro</button>
+        <button type="button" onClick={onOpenCourts}>Weekend</button>
+        <span>↻ odświeżenie za {countdown}s</span>
       </section>
+
+      <header className="pa-premium-section-title">
+        <div>
+          <h2>Najbliższe wolne terminy</h2>
+          <p>Wybierz klub i godzinę</p>
+        </div>
+        <button type="button" onClick={onOpenCourts}>Zobacz wszystkie →</button>
+      </header>
+
+      <div className="pa-premium-content">
+        <section className="pa-premium-club-grid">
+          {topClubs.map((club, index) => {
+            const clubSlots = slotsForClub(club);
+            return (
+              <article className="pa-premium-club-card" key={club.slug || club.name}>
+                <button
+                  type="button"
+                  className="pa-premium-club-photo"
+                  style={{ backgroundImage: `url(${imageForClub(club, index)})` }}
+                  onClick={onOpenCourts}
+                  aria-label={`Otwórz ${club.name}`}
+                >
+                  <span className="pa-premium-favorite">♡</span>
+                </button>
+
+                <div className="pa-premium-club-body">
+                  <div className="pa-premium-club-heading">
+                    <h3>{club.name}</h3>
+                    <b>{clubSlots.length > 0 ? `${clubSlots.length} wolne` : "Sprawdź"}</b>
+                  </div>
+                  <p>{Object.keys(club.courts || {}).length} kortów · Szczecin</p>
+
+                  {clubSlots.length > 0 ? (
+                    <div className="pa-premium-times">
+                      {clubSlots.map((item) => (
+                        <button
+                          type="button"
+                          key={`${item.courtKey}-${item.startHour}`}
+                          onClick={() => onSelectCourt(item)}
+                        >
+                          {item.startHour}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <button type="button" className="pa-premium-check" onClick={onOpenCourts}>
+                      Sprawdź dostępność →
+                    </button>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+
+          {topClubs.length === 0 && (
+            <div className="pa-premium-empty">
+              <strong>Ładowanie klubów…</strong>
+              <span>Dane dostępności są pobierane z BO5.</span>
+            </div>
+          )}
+        </section>
+
+        <aside className="pa-premium-rail">
+          <section className="pa-premium-panel pa-premium-club-list-panel">
+            <header>
+              <h3>Kluby w Szczecinie</h3>
+              <button type="button" onClick={onOpenCourts}>Wszystkie →</button>
+            </header>
+
+            {topClubs.map((club) => (
+              <button type="button" className="pa-premium-club-row" key={club.slug || club.name} onClick={onOpenCourts}>
+                <span>{club.name.slice(0, 1).toUpperCase()}</span>
+                <div>
+                  <strong>{club.name}</strong>
+                  <small>{Object.keys(club.courts || {}).length} kortów</small>
+                </div>
+                <b>→</b>
+              </button>
+            ))}
+          </section>
+
+          <section className="pa-premium-panel pa-premium-next-panel">
+            <header>
+              <h3>Najbliższe wolne</h3>
+              <button type="button" onClick={onOpenCourts}>Wszystkie →</button>
+            </header>
+
+            {recommendations.slice(0, 4).map((item) => (
+              <button
+                type="button"
+                className="pa-premium-next-row"
+                key={`${item.courtKey}-${item.startHour}`}
+                onClick={() => onSelectCourt(item)}
+              >
+                <time>{item.startHour}</time>
+                <div>
+                  <strong>{item.clubName}</strong>
+                  <small>{item.courtName} · {duration} min</small>
+                </div>
+                <b>→</b>
+              </button>
+            ))}
+
+            {recommendations.length === 0 && (
+              <div className="pa-premium-panel-empty">
+                Brak wyników dla ostatniego wyszukiwania.
+              </div>
+            )}
+          </section>
+        </aside>
+      </div>
+
+      <section className="pa-premium-feature-strip">
+        <button type="button" onClick={onOpenSaved}>
+          <b>◉</b><span><strong>Alerty</strong><small>Powiadomienia o wolnych kortach</small></span>
+        </button>
+        <button type="button" onClick={onOpenSaved}>
+          <b>♡</b><span><strong>Ulubione</strong><small>Zapisuj kluby i korty</small></span>
+        </button>
+        <button type="button" onClick={onOpenPlayers}>
+          <b>♧</b><span><strong>Znajomi</strong><small>Znajdź partnera do gry</small></span>
+        </button>
+        <button type="button" onClick={onOpenMatches}>
+          <b>ϟ</b><span><strong>Szybka gra</strong><small>Znajdź mecz w kilka sekund</small></span>
+        </button>
+      </section>
+
+      {activePlayers.length > 0 && (
+        <section className="pa-premium-players">
+          <header>
+            <div><h2>Gracze szukający gry</h2><p>Osoby o podobnym poziomie</p></div>
+            <button type="button" onClick={onOpenPlayers}>Wszyscy →</button>
+          </header>
+
+          <div>
+            {activePlayers.map((player) => (
+              <article key={player.id}>
+                <span className="consumer-player-avatar">{player.nickname.slice(0, 1).toUpperCase()}</span>
+                <div><strong>{player.nickname}</strong><small>{player.clubName} · {player.from}–{player.to}</small></div>
+                <LevelBadge level={player.level} compact />
+                <button type="button" onClick={() => onInvitePlayer(player)}>Zaproś</button>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
