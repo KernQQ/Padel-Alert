@@ -235,3 +235,99 @@
     box-shadow: none !important;
   }
 }
+
+/* =========================================================
+   DESKTOP CLEAN SOURCE FIX 11
+   Real selectors used by the current HomeDashboard.
+   Mobile <=900px is intentionally untouched.
+   ========================================================= */
+@media (min-width: 901px) {
+  /* Remove every legacy desktop court/photo layer. */
+  :root[data-theme="dark"] .main-shell,
+  :root[data-theme="light"] .main-shell,
+  .main-shell {
+    background: #07151d !important;
+    background-image: none !important;
+  }
+
+  :root[data-theme="dark"] .main-shell::before,
+  :root[data-theme="dark"] .main-shell::after,
+  :root[data-theme="light"] .main-shell::before,
+  :root[data-theme="light"] .main-shell::after,
+  .main-shell::before,
+  .main-shell::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+  }
+
+  .page,
+  .page:has(.ref-home),
+  .page:has(.pa-premium-home) {
+    background: #07151d !important;
+    background-image: none !important;
+  }
+
+  .page:has(.ref-home)::before,
+  .page:has(.ref-home)::after,
+  .page:has(.pa-premium-home)::before,
+  .page:has(.pa-premium-home)::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+  }
+
+  /* This is the REAL hero currently rendered by HomeDashboard.jsx. */
+  .ref-home-hero {
+    min-height: 210px !important;
+    height: 210px !important;
+    border: 1px solid #29404b !important;
+    border-radius: 12px !important;
+    background: #0b1c25 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  .ref-home-hero::before,
+  .ref-home-hero::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+  }
+
+  .ref-home-hero-copy {
+    left: 38px !important;
+    bottom: 28px !important;
+  }
+
+  .ref-home-hero-copy > span,
+  .ref-home-hero-copy p {
+    color: #8e9ba1 !important;
+  }
+
+  .ref-home-hero-copy h1 {
+    color: #eef2f1 !important;
+    font-size: 48px !important;
+  }
+
+  /* Neutral desktop install control — no green border/text/background. */
+  .sidebar-actions .install-app-button.sidebar-install,
+  .sidebar .install-app-button,
+  .sidebar [class*="install"] {
+    color: #8e9ba1 !important;
+    background: transparent !important;
+    background-image: none !important;
+    border-color: #29404b !important;
+    box-shadow: none !important;
+  }
+
+  .sidebar-actions .install-app-button.sidebar-install::after,
+  .sidebar .install-app-button::after {
+    color: #73838a !important;
+  }
+
+  .sidebar-actions .install-app-button.sidebar-install *,
+  .sidebar .install-app-button * {
+    color: inherit !important;
+  }
+}
