@@ -1307,3 +1307,143 @@
     }
   }
 }
+
+/* =========================================================
+   PADLETIC DESKTOP BACKGROUND FIX 08
+   Jeden background na cały Start. Bez osobnego hero-image.
+   ========================================================= */
+@media (min-width: 761px) {
+  .page:has(.pa-premium-home) {
+    position: relative !important;
+    background:
+      linear-gradient(90deg, rgba(5,17,25,.74) 0%, rgba(5,17,25,.45) 42%, rgba(5,17,25,.58) 100%),
+      linear-gradient(180deg, rgba(5,17,25,.08) 0%, rgba(5,17,25,.18) 56%, rgba(5,17,25,.78) 100%),
+      url('/assets/padletic-night-court.jpg') center center / cover fixed no-repeat !important;
+    min-height: 100vh !important;
+  }
+
+  .page:has(.pa-premium-home)::before,
+  .page:has(.pa-premium-home)::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .pa-premium-home {
+    position: relative !important;
+    z-index: 1 !important;
+    background: transparent !important;
+    padding-top: 30px !important;
+  }
+
+  /* Kluczowa poprawka: usunięcie starego zdjęcia/rakiety */
+  .pa-premium-hero {
+    min-height: 235px !important;
+    height: 235px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .pa-premium-hero::before,
+  .pa-premium-hero::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .pa-premium-hero-copy {
+    position: relative !important;
+    inset: auto !important;
+    width: 440px !important;
+    padding: 8px 0 0 46px !important;
+    transform: none !important;
+  }
+
+  .pa-premium-hero-copy .pa-premium-kicker,
+  .pa-premium-hero-copy > p:first-child {
+    margin: 0 0 10px !important;
+    font-size: 10px !important;
+    letter-spacing: .28em !important;
+    color: rgba(238,242,239,.76) !important;
+  }
+
+  .pa-premium-hero-copy h1 {
+    margin: 0 !important;
+    max-width: 390px !important;
+    font-size: 52px !important;
+    line-height: .88 !important;
+    letter-spacing: -.055em !important;
+    color: #f1f3f1 !important;
+  }
+
+  .pa-premium-hero-copy h1 strong {
+    display: block !important;
+    color: #f1f3f1 !important;
+  }
+
+  .pa-premium-hero-copy > p:last-child {
+    margin-top: 14px !important;
+    font-size: 15px !important;
+    color: rgba(238,242,239,.86) !important;
+  }
+
+  .pa-premium-search {
+    position: relative !important;
+    z-index: 3 !important;
+    margin-top: -4px !important;
+    background: rgba(7,22,31,.86) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    border: 1px solid rgba(210,224,228,.18) !important;
+  }
+
+  .pa-premium-tabs {
+    margin-top: 8px !important;
+    background: transparent !important;
+  }
+
+  .pa-premium-section-title {
+    margin-top: 18px !important;
+  }
+
+  .pa-premium-grid,
+  .pa-premium-content-grid,
+  .pa-premium-main-grid,
+  .pa-premium-layout {
+    margin-top: 6px !important;
+  }
+
+  .pa-premium-panel,
+  .pa-premium-nearest-card,
+  .pa-premium-next-panel,
+  .pa-premium-club-list-panel {
+    background: rgba(7,22,31,.88) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-color: rgba(210,224,228,.16) !important;
+  }
+
+  .desktop-sidebar,
+  .sidebar {
+    background: #07141c !important;
+  }
+
+  .install-app-button,
+  .sidebar-install,
+  .sidebar .install-button {
+    color: #dce3df !important;
+    border-color: #2b404a !important;
+    background: #0b1b24 !important;
+  }
+
+  .account-trigger,
+  .desktop-account-button {
+    background: #10232d !important;
+    color: #eef2ef !important;
+    border-color: #30434d !important;
+  }
+}

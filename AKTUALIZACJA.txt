@@ -1,23 +1,19 @@
-PADLETIC — DESKTOP BACKGROUND 07
+PADLETIC DESKTOP BACKGROUND FIX 08
 
-Tylko desktop >= 761 px. Mobile iOS/Android bez zmian.
-
-Zmiany:
-- zdjęcie kortu na całe tło części desktopowej Start
-- usunięcie starego prostokątnego zdjęcia/hero jako osobnego bloku
-- KORTY / LUDZIE / GRA mniejsze i przesunięte wyżej
-- wyszukiwarka w szklanym, poziomym panelu
-- sekcje Najbliższy wolny kort / Kolejne terminy podciągnięte wyżej
-- ciemne półprzezroczyste panele nad zdjęciem
-- brak dodatkowych sloganów na zdjęciu
-- mobile pozostaje nietknięte
+Naprawa błędu z poprzedniej paczki:
+- stare zdjęcie hero z rakietą było nadal na wierzchu i zasłaniało nowe tło
+- na desktopie hero nie ma już własnego background-image
+- jedno zdjęcie kortu jest tłem całej strony Start
+- tekst KORTY / LUDZIE / GRA jest mniejszy i wyżej
+- wyszukiwarka oraz terminy są podciągnięte do góry
+- sidebar pozostaje granatowy
+- mobile nie jest zmieniany
 
 PODMIANA:
-Skopiuj folder frontend do:
-C:\PROJEKTY\Padel-Alert
+Skopiuj folder frontend do C:\PROJEKTY\Padel-Alert i zaakceptuj zamianę.
 
 STOPKA:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic desktop full court background 07"
+git commit -m "Padletic desktop background fix 08"
 git push
