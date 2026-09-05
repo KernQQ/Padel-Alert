@@ -12145,3 +12145,109 @@ body {
 }
 .pd-home-search-interactive{overflow:visible!important}.pd-home-field-wrap{position:relative;min-width:0}.pd-home-field-wrap>button{width:100%;height:100%}.pd-home-picker{position:absolute;z-index:120;top:calc(100% + 8px);left:0;min-width:210px;padding:8px;border:1px solid #2b3d30;border-radius:14px;background:#09110d;box-shadow:0 20px 50px rgba(0,0,0,.45)}.pd-home-picker button{width:100%;min-height:42px;padding:0 12px;border:1px solid transparent;border-radius:9px;color:#eef3ef;background:transparent;text-align:left;font-weight:750}.pd-home-picker button.active{border-color:#4f7e21;background:#14230f;color:#b7ee75}.pd-home-picker button b{float:right}.pd-home-picker-grid{display:grid;grid-template-columns:repeat(2,minmax(82px,1fr));gap:5px;min-width:250px;max-height:330px;overflow:auto}.pd-home-picker-grid button{text-align:center}.pd-home-time-grid{grid-template-columns:repeat(3,minmax(70px,1fr));min-width:290px}
 @media(max-width:900px){.pd-home-clubs{display:flex!important;overflow-x:auto!important;scroll-snap-type:x mandatory;gap:12px!important;padding-bottom:10px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}.pd-home-clubs::-webkit-scrollbar{display:none}.pd-home-club-card{flex:0 0 84vw!important;max-width:340px!important;scroll-snap-align:start}.pd-home-field-wrap{display:block!important}.pd-home-picker{position:fixed;z-index:10001;left:14px;right:14px;top:auto;bottom:calc(92px + env(safe-area-inset-bottom));min-width:0;max-height:52vh;overflow:auto;border-radius:20px;padding:12px}.pd-home-picker-grid,.pd-home-time-grid{min-width:0;grid-template-columns:repeat(3,1fr)}.pd-home-search-interactive{grid-template-columns:1fr 1fr!important}.pd-home-search-interactive>.pd-home-field-wrap{grid-column:auto!important}.pd-home-search-interactive>.pd-home-search-submit{grid-column:1/-1!important}}
+
+
+/* =========================================================
+   PADLETIC — DESKTOP START FIX after batch update
+   Restores the intended search-field styling after fields
+   were wrapped to support local pickers on Start.
+   ========================================================= */
+@media (min-width: 901px) {
+  .pd-home-search.pd-home-search-interactive {
+    display: grid !important;
+    grid-template-columns: 1.05fr 1fr .96fr .96fr 1.16fr !important;
+    align-items: stretch;
+    overflow: visible !important;
+    background: rgba(9,17,13,.97) !important;
+    border: 1px solid rgba(255,255,255,.105) !important;
+  }
+
+  .pd-home-search-interactive > .pd-home-field-wrap {
+    position: relative;
+    min-width: 0;
+    min-height: 74px;
+    border-right: 1px solid rgba(255,255,255,.105);
+  }
+
+  .pd-home-search-interactive > .pd-home-field-wrap > button {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 74px;
+    padding: 15px 42px 13px 20px;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #eef3ef !important;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: none !important;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .pd-home-search-interactive > .pd-home-field-wrap > button:hover {
+    background: rgba(255,255,255,.025) !important;
+  }
+
+  .pd-home-search-interactive > .pd-home-field-wrap > button small {
+    display: block;
+    margin: 0 0 6px;
+    color: #7f8a84 !important;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .pd-home-search-interactive > .pd-home-field-wrap > button strong {
+    display: block;
+    color: #eef3ef !important;
+    font-size: 14px;
+    font-weight: 760;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .pd-home-search-interactive > .pd-home-field-wrap > button > span {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aab3ae;
+  }
+
+  .pd-home-search-interactive > .pd-home-search-submit {
+    min-height: 56px !important;
+    height: auto !important;
+    margin: 9px !important;
+    padding: 0 22px !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    background: #dce7dc !important;
+    color: #08100c !important;
+    box-shadow: none !important;
+  }
+
+  .pd-home-search-interactive .pd-home-picker {
+    top: calc(100% + 8px);
+    bottom: auto;
+    left: 0;
+    right: auto;
+    z-index: 500;
+    max-height: 360px;
+    overflow: auto;
+    border-radius: 14px;
+    background: #09110d;
+  }
+
+  .pd-home-search-interactive .pd-home-picker-grid {
+    grid-template-columns: repeat(2, minmax(96px, 1fr));
+    min-width: 250px;
+  }
+
+  .pd-home-search-interactive .pd-home-time-grid {
+    grid-template-columns: repeat(3, minmax(72px, 1fr));
+    min-width: 290px;
+  }
+}
