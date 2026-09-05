@@ -1,48 +1,34 @@
-PADLETIC — iOS SAFE AREA + GLOBALNE PICKERY / UPDATE 04
+PADLETIC — DESKTOP 1:1 / UPDATE 05
 
-NAPRAWIA:
-1. iOS:
-   - header nie wchodzi pod status bar / Dynamic Island
-   - treść ma prawidłowy odstęp od góry
-   - bottom nav uwzględnia safe-area
-   - modal "Edytuj profil" nie jest ucinany u góry ani na dole
-   - modal ma własny scroll i sticky header
+CEL:
+Osobny desktop od 761px w górę. Mobile iOS/Android pozostają nietknięte.
 
-2. WSZYSTKIE WYBORY / PICKERY NA ANDROID + iOS:
-   - PadleticSelect
-   - PadleticTimePicker
-   - klub
-   - poziom
-   - strona
-   - sortowanie
-   - godziny OD / DO
-   - tworzenie meczu
-   - zgłoszenia graczy
-   - filtry
-   - wybory w profilu
-
-3. PROFIL:
-   - "Najczęściej gram"
-   - "Ulubione kluby"
-   - aktywne opcje są off-white / granat zamiast limonki
-   - "Wybierz zdjęcie" i "Zapisz profil" też w neutralnym systemie
-
-WAŻNE:
-mobile-platform-fix.css jest importowany JAKO OSTATNI plik CSS w App.jsx,
-więc stare zielone style z android-selects.css nie powinny już go nadpisywać.
+CO ZMIENIA:
+- osobny desktopowy layout i proporcje
+- stały sidebar 232px
+- centralny content max 1280px
+- Start: hero + wyszukiwarka w jednym rzędzie + desktopowy grid klubów
+- Korty: filtry w jednym rzędzie, kompaktowa tabela terminów
+- Mecze: szeroki fixture/list layout zamiast pustych kart
+- Gracze: filtry poziomo + lista + prawa kolumna
+- Moje: profil + 4 skróty + osobne sekcje
+- Admin: statystyki 4 w rzędzie + płaskie listy
+- neutralne off-white CTA, bez limonki
+- osobne desktopowe pickery/popovers
+- mobile CSS pozostaje bez zmian
 
 PODMIANA:
 Skopiuj folder frontend do:
 C:\PROJEKTY\Padel-Alert
-i zaakceptuj zamianę plików.
+zaakceptuj zamianę plików.
 
 STOPKA:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic iOS safe area and neutral pickers 04"
+git commit -m "Padletic desktop 1to1 update 05"
 git push
 
-BUILD:
-Próba builda lokalnie zatrzymała się na brakującym natywnym bindingu Rolldown
-w dostarczonym node_modules (@rolldown/binding-linux-x64-gnu).
-To błąd środowiska zależności, nie błąd CSS/JSX tej poprawki.
+BUILD CHECK:
+Vite uruchomił się po nadaniu prawa wykonania, ale build w środowisku ChatGPT zatrzymał
+się na brakującym natywnym bindingu Rolldown (@rolldown/binding-linux-x64-gnu).
+To problem dostarczonego node_modules, nie błąd składni CSS tej paczki.
