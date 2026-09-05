@@ -1,35 +1,30 @@
-PADLETIC — MOBILE 1:1 / UPDATE 02
+PADLETIC — PICKERS NEUTRAL 03
 
-CEL:
-iOS i Android korzystają z jednego, identycznego layoutu zgodnego z zaakceptowaną planszą.
-Desktop NIE jest przebudowywany w tej aktualizacji.
+Globalna poprawka wszystkich custom selectorów w iOS i Android:
+- kluby
+- poziom
+- strona
+- sortowanie
+- godziny OD/DO
+- wszystkie selecty w tworzeniu meczu
+- wszystkie selecty w zgłoszeniach gracza
+- selecty profilu i filtrów
 
-CO ZMIENIA:
-- mobile header jak na referencji
-- stały dolny navbar na wszystkich 6 zakładkach
-- Start: KORTY / LUDZIE / GRA + kompaktowe wyszukiwanie + najbliższy kort
-- Korty: formularz 2-kolumnowy + lista terminów jak rozkład
-- Mecze: fixture cards z datą po lewej i CTA po prawej
-- Gracze: wyszukiwarka + kompaktowe filtry + płaska lista
-- Moje: profil + zakładki + jeden spójny pusty stan
-- Admin: 2x2 statystyki + lista użytkowników
-- brak limonkowego brandingu na mobile
-- mobile CSS jest ładowany JAKO OSTATNI, więc stare style nie powinny go nadpisywać
-- breakpoint mobile: do 760 px
-- desktop pozostaje osobną wersją
+Zmiany:
+- usunięta limonka/zieleń
+- neutralny granat + off-white
+- jeden wygląd iOS/Android
+- aktywna opcja: jasny kontrast zamiast zielonej poświaty
+- tło bottom-sheet: neutralne
+- close button i handle dopasowane do mobile 1:1
+- time grid również bez zieleni
+- kliknięcie w backdrop nadal zamyka picker
 
 PODMIANA:
-Skopiuj folder frontend do:
-C:\PROJEKTY\Padel-Alert
-i zaakceptuj zamianę plików.
+Skopiuj folder frontend do C:\PROJEKTY\Padel-Alert i zaakceptuj zamianę.
 
-STOPKA / POWERSHELL:
+STOPKA:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic mobile 1to1 update 02"
+git commit -m "Padletic neutral pickers 03"
 git push
-
-UWAGA BUILD:
-Kod został złożony na aktualnej bazie referencyjnej.
-Lokalny build w środowisku ChatGPT nie wystartował z powodu brakującego natywnego
-bindingu Rolldown w dostarczonym node_modules, a nie z powodu błędu CSS/JSX.
