@@ -349,3 +349,93 @@
     background: #0a1821 !important;
   }
 }
+
+/* =========================================================
+   MOBILE PATCH 13 — KORTY 60/90/120 + MECZE bez zieleni
+   iOS + Android only. Desktop untouched.
+   ========================================================= */
+@media (max-width: 900px) {
+  /* KORTY — zawsze pokazuj komplet 60 / 90 / 120 min */
+  .sport-courts-toolbar .sport-duration {
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  .sport-courts-toolbar .sport-duration button,
+  .sport-courts-toolbar .sport-duration button.active {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 40px !important;
+    padding: 0 6px !important;
+    border: 1px solid #2a414b !important;
+    border-radius: 8px !important;
+    background: #0c1d26 !important;
+    color: #9ca9ae !important;
+    box-shadow: none !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+  }
+
+  .sport-courts-toolbar .sport-duration button.active {
+    border-color: #e7ece9 !important;
+    background: #e7ece9 !important;
+    color: #07141c !important;
+  }
+
+  /* MECZE -> STWÓRZ MECZ — neutralne zaznaczenia, zero limonki */
+  .match-wizard .wizard-progress span.active {
+    background: #e7ece9 !important;
+  }
+
+  .match-wizard .wizard-option-grid button.active {
+    border-color: #e7ece9 !important;
+    background: #172a33 !important;
+    color: #f2f5f3 !important;
+    box-shadow: inset 0 0 0 1px rgba(231,236,233,.18) !important;
+  }
+
+  .match-wizard .wizard-option-grid button.active strong,
+  .match-wizard .wizard-option-grid button.active small {
+    color: inherit !important;
+  }
+
+  .match-wizard .wizard-game-types button.active {
+    border-color: #e7ece9 !important;
+    background: #e7ece9 !important;
+    color: #07141c !important;
+    box-shadow: none !important;
+  }
+
+  .match-wizard .wizard-next {
+    border-color: #e7ece9 !important;
+    background: #e7ece9 !important;
+    color: #07141c !important;
+    box-shadow: none !important;
+  }
+
+  .match-wizard .wizard-back {
+    border-color: #2a414b !important;
+    background: #0c1d26 !important;
+    color: #d8dfdc !important;
+    box-shadow: none !important;
+  }
+
+  /* Selecty / pickery w kreatorze meczu */
+  .match-wizard select,
+  .match-wizard input,
+  .match-wizard textarea,
+  .match-wizard button[role="combobox"] {
+    accent-color: #e7ece9 !important;
+  }
+
+  .match-wizard :is(.active, .selected, [aria-selected="true"]):not(.wizard-progress span) {
+    --primary: #e7ece9 !important;
+    --pa-acid: #e7ece9 !important;
+  }
+}

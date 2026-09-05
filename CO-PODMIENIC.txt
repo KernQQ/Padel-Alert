@@ -1,0 +1,7 @@
+PODMIEN TYLKO:
+frontend/src/styles/mobile-platform-fix.css
+
+Zmiany dotyczą tylko mobile <=900px:
+- Korty: widoczne 60 / 90 / 120 min
+- Mecze -> Stwórz mecz: usunięte zielone aktywne wybory
+- Desktop bez zmian
