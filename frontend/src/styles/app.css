@@ -10626,139 +10626,895 @@ body {
   }
 }
 
+
 /* =========================================================
-   PADLETIC — VISUAL UPDATE 2026-09-05
-   Direction: court atmosphere + neutral glass UI, no acid green
+   PADLETIC MOBILE RECOVERY — 2026-09
+   Cel: naprawa ekranów ze screenów użytkownika.
+   Nie zmienia logiki aplikacji. Tylko finalny reset UI.
    ========================================================= */
-:root,
-:root[data-theme="dark"] {
-  --v5-green:#e9eef1 !important;
-  --v7-green:#e9eef1 !important;
-  --v7-green-soft:rgba(233,238,241,.10) !important;
-  --pa-acid:#e9eef1 !important;
-  --primary:#e9eef1 !important;
-  --primary-dark:#cbd5db !important;
-  --bg:#06111a !important;
-  --surface:#0a1720 !important;
-  --surface-soft:#0d1d27 !important;
-  --surface-strong:#112630 !important;
-  --sidebar:#07131a !important;
-  --text:#f2f5f6 !important;
-  --muted:#8e9ba5 !important;
-  --line:#213642 !important;
+
+:root {
+  --pa-acid: #eef2ef !important;
+  --primary: #eef2ef !important;
+  --primary-dark: #d9e0dc !important;
+  --pa-bg: #07141c !important;
+  --pa-panel: #0a1821 !important;
+  --pa-panel-2: #0d1d27 !important;
+  --pa-line: #243842 !important;
+  --pa-text: #eef2ef !important;
+  --pa-muted: #8e9ca3 !important;
+
+  --bg: #07141c !important;
+  --surface: #0a1821 !important;
+  --surface-soft: #0d1d27 !important;
+  --surface-strong: #10232d !important;
+  --text: #eef2ef !important;
+  --muted: #8e9ca3 !important;
+  --line: #243842 !important;
+  --sidebar: #07141c !important;
 }
 
-body{background:#06111a!important;color:#f2f5f6!important}
-.app-shell{background:#06111a!important}
-.sidebar{background:#07131a!important;border-color:#1b2c36!important}
-.brand-mark{color:#f2f5f6!important;background:#101f28!important;border:1px solid #2a414d!important}
-.sidebar-nav button.active{color:#fff!important;background:#122630!important;border-color:#2c424d!important}
-.sidebar-nav button.active .nav-icon{color:#fff!important}
-.sidebar-profile,.top-icon-button,.account-trigger{background:#0a1720!important;border-color:#263b46!important;color:#f2f5f6!important}
-
-/* Home = atmosphere, not a slogan hero. */
-.pa-premium-home{position:relative}
-.pa-premium-hero-visual{
-  min-height:clamp(360px,46vh,560px)!important;
-  border:0!important;
-  border-radius:22px!important;
-  background:
-    linear-gradient(180deg,rgba(3,10,15,.08) 0%,rgba(3,10,15,.20) 50%,rgba(3,10,15,.92) 100%),
-    url("/premium/hero.jpg") center 58%/cover no-repeat!important;
-  box-shadow:inset 0 -90px 100px rgba(3,10,15,.48)!important;
+/* ZERO GREEN IN THE APP UI */
+.brand-mark,
+.mobile-brand .brand-mark,
+.sidebar-brand .brand-mark,
+.app-logo,
+.logo,
+[class*="logo"] img,
+[class*="brand"] img {
+  filter: grayscale(1) brightness(1.45) contrast(.9) !important;
 }
-.pa-premium-hero-copy{display:none!important}
-.pa-premium-search{
-  margin:-86px 24px 0!important;
-  border:1px solid rgba(189,207,217,.20)!important;
-  border-radius:16px!important;
-  background:rgba(7,20,29,.82)!important;
-  box-shadow:0 22px 60px rgba(0,0,0,.30)!important;
-  backdrop-filter:blur(20px)!important;
+
+.sidebar-nav button.active,
+.mobile-bottom-nav button.active,
+.mobile-bottom-nav button.active > span,
+.mobile-bottom-nav button.active .nav-icon,
+.mobile-bottom-nav button.active small,
+.mobile-bottom-nav button.active strong,
+.mobile-bottom-nav button.active .nav-label {
+  color: #f2f4f2 !important;
 }
-.pa-premium-field{background:transparent!important;border-color:rgba(189,207,217,.16)!important}
-.pa-premium-field small{color:#8797a2!important}
-.pa-premium-field strong{color:#f2f5f6!important}
-.pa-premium-search-button{color:#07131a!important;background:#edf1f2!important;border-color:#edf1f2!important}
-.pa-premium-tabs button.active{color:#fff!important;border-color:#e9eef1!important}
-.pa-premium-tabs button.active::after{background:#e9eef1!important}
 
-/* Courts: timetable, not a stack of green cards. */
-.consumer-courts{max-width:1120px!important}
-.consumer-page-header p,.consumer-refresh-status i{color:#8e9ba5!important}
-.consumer-search-card{border-color:#213642!important;background:#0a1720!important;box-shadow:none!important}
-.consumer-date-pills button.active{color:#07131a!important;border-color:#edf1f2!important;background:#edf1f2!important}
-.consumer-search-form input,.consumer-search-form select,.consumer-search-form .duration-picker button{background:#0d1d27!important;border-color:#29414d!important}
-.consumer-search-form .duration-picker button.active{color:#07131a!important;border-color:#edf1f2!important;background:#edf1f2!important}
-.consumer-search-form .search-submit{color:#07131a!important;background:#edf1f2!important}
-.consumer-toolbar{border-bottom:1px solid #213642!important;padding-bottom:14px!important}
-.consumer-time-group{border-color:#213642!important;background:transparent!important}
-.consumer-time-column{background:transparent!important;border-color:#213642!important}
-.consumer-time-column strong{color:#f2f5f6!important}
-.consumer-time-column small{color:#7f909b!important}
-.consumer-court-options button{border-color:#1f3440!important;background:transparent!important;box-shadow:none!important}
-.consumer-court-options button:hover{background:#0d1d27!important}
-.consumer-court-options button b{color:#dbe4e8!important;background:transparent!important}
+.sidebar-nav button.active {
+  background: #17252d !important;
+  border-color: #30434d !important;
+}
 
-/* Neutral actions everywhere. */
-button[class*="primary"],.center-ready.active,.match-chat-compose button{background:#edf1f2!important;color:#07131a!important;border-color:#edf1f2!important}
+button.primary,
+.primary-button,
+.cta-primary,
+.match-primary,
+.pa-premium-search-button,
+.consumer-search-button,
+.partners-heading > button,
+.profile-edit-button,
+[class*="primary"][class*="button"] {
+  background: #edf1ee !important;
+  color: #07141c !important;
+  border-color: #edf1ee !important;
+  box-shadow: none !important;
+}
 
-@media(max-width:900px){
-  body{background:#06111a!important}
-  .mobile-topbar{
-    min-height:74px!important;
-    background:rgba(7,19,26,.88)!important;
-    border-bottom-color:#203540!important;
-    backdrop-filter:blur(20px)!important;
+a,
+button,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* GENERAL MOBILE */
+@media (max-width: 760px) {
+  html, body, #root {
+    background: #07141c !important;
   }
-  .mobile-brand .brand-mark{background:#101f28!important;border:1px solid #2b414c!important;color:#fff!important}
-  .page{width:100%!important;padding:0 16px calc(104px + env(safe-area-inset-bottom))!important}
-  .pa-premium-home{margin:0 -16px!important}
-  .pa-premium-hero-visual{
-    min-height:430px!important;
-    border-radius:0!important;
+
+  body {
+    overflow-x: hidden !important;
+  }
+
+  .app-shell,
+  .main-shell,
+  .page {
+    background: #07141c !important;
+  }
+
+  .main-shell {
+    min-width: 0 !important;
+  }
+
+  .page {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 72px 20px 104px !important;
+    margin: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  /* TOPBAR */
+  .mobile-topbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    padding: 8px 18px !important;
+    background: rgba(8, 20, 27, .94) !important;
+    border-bottom: 1px solid #253943 !important;
+    backdrop-filter: blur(18px) !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-brand {
+    gap: 10px !important;
+    min-width: 0 !important;
+  }
+
+  .mobile-brand .brand-mark {
+    width: 39px !important;
+    height: 39px !important;
+    min-width: 39px !important;
+    border-radius: 9px !important;
+    background: transparent !important;
+    border: 1px solid #314650 !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-brand strong {
+    font-size: 18px !important;
+    letter-spacing: -.02em !important;
+    color: #eef2ef !important;
+  }
+
+  .mobile-topbar-actions {
+    gap: 7px !important;
+  }
+
+  .mobile-icon-button,
+  .account-trigger {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    border: 1px solid #2b404a !important;
+    border-radius: 10px !important;
+    background: #0d1b23 !important;
+    color: #eef2ef !important;
+    box-shadow: none !important;
+  }
+
+  .account-trigger {
+    border-radius: 50% !important;
+  }
+
+  /* BOTTOM NAV — ALWAYS VISIBLE, SMALLER, NEVER COVERS CONTENT */
+  .mobile-bottom-nav {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    z-index: 1100 !important;
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    width: auto !important;
+    height: 68px !important;
+    min-height: 68px !important;
+    padding: 5px !important;
+    margin: 0 !important;
+    border: 1px solid #2a3d46 !important;
+    border-radius: 16px !important;
+    background: rgba(12, 25, 31, .96) !important;
+    backdrop-filter: blur(20px) !important;
+    box-shadow: 0 12px 34px rgba(0,0,0,.32) !important;
+    transform: none !important;
+  }
+
+  .mobile-bottom-nav button {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 56px !important;
+    padding: 4px 2px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 11px !important;
+    background: transparent !important;
+    color: #89979d !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .mobile-bottom-nav button:nth-child(3) {
+    transform: none !important;
+  }
+
+  .mobile-bottom-nav button.active {
+    background: #1b2b33 !important;
+    color: #f2f4f2 !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-bottom-nav button > span,
+  .mobile-bottom-nav .nav-icon {
+    width: 22px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    font-size: 19px !important;
+    color: inherit !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .mobile-bottom-nav small,
+  .mobile-bottom-nav strong,
+  .mobile-bottom-nav .nav-label {
+    display: block !important;
+    margin: 0 !important;
+    color: inherit !important;
+    font-size: 8.5px !important;
+    line-height: 1 !important;
+    font-weight: 700 !important;
+  }
+
+  /* TYPOGRAPHY / HEADERS */
+  .consumer-page-header,
+  .partners-heading,
+  .saved-heading,
+  .admin-header,
+  .matches-header,
+  .match-page-header {
+    margin: 0 0 18px !important;
+    padding: 10px 0 16px !important;
+    border-bottom: 1px solid #263a43 !important;
+  }
+
+  .consumer-page-header h1,
+  .partners-heading h1,
+  .saved-heading h1,
+  .admin-header h1,
+  .match-page-header h1 {
+    margin: 0 !important;
+    font-size: 32px !important;
+    line-height: 1 !important;
+    letter-spacing: -.045em !important;
+    color: #eef2ef !important;
+  }
+
+  .consumer-page-header p,
+  .partners-heading p,
+  .saved-heading p,
+  .admin-header p {
+    margin: 7px 0 0 !important;
+    color: #8e9ca3 !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  /* HOME — NO GIANT HERO/CARD EFFECT */
+  .pa-premium-home {
+    width: calc(100% + 40px) !important;
+    margin-left: -20px !important;
+  }
+
+  .pa-premium-hero {
+    min-height: 330px !important;
+    height: 330px !important;
+    margin: -8px 0 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
     background:
-      linear-gradient(180deg,rgba(3,10,15,.02) 0%,rgba(3,10,15,.12) 48%,#06111a 100%),
-      url("/premium/hero.jpg") 62% center/cover no-repeat!important;
+      linear-gradient(180deg, rgba(5,15,21,.04) 0%, rgba(5,15,21,.15) 55%, #07141c 100%),
+      url("/premium/hero.jpg") 68% center / cover no-repeat !important;
+    box-shadow: none !important;
   }
-  .pa-premium-search{
-    grid-template-columns:1fr 1fr!important;
-    margin:-78px 16px 0!important;
-    overflow:hidden!important;
-    border-radius:14px!important;
-  }
-  .pa-premium-field{min-height:72px!important;border-bottom:1px solid rgba(189,207,217,.16)!important}
-  .pa-premium-search-button{grid-column:1/-1!important;min-height:58px!important;border-radius:0!important}
-  .pa-premium-mobile-more{display:none!important}
-  .pa-premium-tabs{margin:24px 16px 0!important}
-  .pa-premium-section-title,.pa-premium-availability,.pa-premium-feature-strip,.pa-premium-players{margin-left:16px!important;margin-right:16px!important}
 
-  .consumer-courts{padding-top:28px!important}
-  .consumer-page-header{padding:0 22px 18px!important;margin:0!important;border-bottom:1px solid #213642!important}
-  .consumer-page-header p{display:none!important}
-  .consumer-page-header h1{font-size:38px!important}
-  .consumer-refresh-status{font-size:11px!important}
-  .consumer-search-card{margin:18px 22px 0!important;padding:0!important;border:0!important;background:transparent!important}
-  .consumer-date-pills{overflow:auto!important;padding-bottom:4px!important}
-  .consumer-search-form{grid-template-columns:1fr 1fr!important;gap:10px!important}
-  .consumer-search-form>label:first-child{grid-column:1/-1!important}
-  .consumer-search-form .duration-picker{grid-column:1/-1!important}
-  .consumer-search-form .duration-picker>div{display:grid!important;grid-template-columns:repeat(3,1fr)!important}
-  .consumer-search-form .search-submit{grid-column:1/-1!important;min-height:54px!important;font-size:16px!important}
-  .consumer-toolbar{margin:14px 22px 0!important;overflow-x:auto!important;white-space:nowrap!important}
-  .consumer-results{margin:0 22px!important}
-  .consumer-results>header{display:none!important}
-  .consumer-time-group{display:grid!important;grid-template-columns:92px minmax(0,1fr)!important;border-top:1px solid #213642!important;border-radius:0!important}
-  .consumer-time-column{padding:22px 12px 0 0!important;border-right:1px solid #213642!important;text-align:left!important}
-  .consumer-time-column strong{font-size:30px!important;letter-spacing:-.04em!important}
-  .consumer-court-options button{min-height:76px!important;padding:14px 8px 14px 14px!important;border:0!important;border-bottom:1px solid #1d323d!important;border-radius:0!important;text-align:left!important}
-  .consumer-court-options button span strong{font-size:14px!important}
-  .consumer-court-options button span small{margin-top:3px!important;color:#82919b!important}
-  .consumer-court-options button b{font-size:11px!important}
-
-  .mobile-bottom-nav{
-    right:16px!important;left:16px!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;
-    border-color:#263b46!important;border-radius:16px!important;background:rgba(9,23,31,.92)!important;box-shadow:0 16px 44px rgba(0,0,0,.35)!important
+  .pa-premium-hero-copy {
+    display: none !important;
   }
-  .mobile-bottom-nav button.active{color:#fff!important;background:#142a35!important}
+
+  .pa-premium-search {
+    position: relative !important;
+    z-index: 3 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    width: calc(100% - 28px) !important;
+    min-height: 0 !important;
+    margin: -74px 14px 0 !important;
+    overflow: hidden !important;
+    border: 1px solid #2b404a !important;
+    border-radius: 14px !important;
+    background: rgba(8,23,31,.96) !important;
+    box-shadow: 0 18px 38px rgba(0,0,0,.26) !important;
+    backdrop-filter: blur(16px) !important;
+  }
+
+  .pa-premium-field {
+    min-height: 58px !important;
+    padding: 10px 12px !important;
+    border: 0 !important;
+    border-right: 1px solid #243a44 !important;
+    border-bottom: 1px solid #243a44 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  .pa-premium-field:nth-of-type(2n) {
+    border-right: 0 !important;
+  }
+
+  .pa-premium-field small {
+    font-size: 9px !important;
+    color: #7f9098 !important;
+  }
+
+  .pa-premium-field strong {
+    font-size: 13px !important;
+    color: #eef2ef !important;
+  }
+
+  .pa-premium-field-more,
+  .pa-premium-mobile-more,
+  .pa-premium-tabs {
+    display: none !important;
+  }
+
+  .pa-premium-search-button {
+    grid-column: 1 / -1 !important;
+    min-height: 50px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #eef2ef !important;
+    color: #07141c !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+  }
+
+  .pa-premium-section-title,
+  .pa-premium-section-title + * {
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+  }
+
+  .pa-premium-section-title {
+    margin-top: 32px !important;
+    padding: 0 0 12px !important;
+    border-bottom: 1px solid #243842 !important;
+  }
+
+  .pa-premium-section-title h2 {
+    font-size: 22px !important;
+    line-height: 1.05 !important;
+  }
+
+  .pa-premium-section-title button {
+    color: #aab5b9 !important;
+  }
+
+  /* COURTS — FLAT / COMPACT, NO GREEN ISLAND */
+  .consumer-courts {
+    width: 100% !important;
+  }
+
+  .consumer-refresh-status {
+    display: none !important;
+  }
+
+  .consumer-search-card {
+    margin: 0 0 18px !important;
+    padding: 0 0 16px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .consumer-date-pills {
+    display: flex !important;
+    gap: 6px !important;
+    padding: 0 0 12px !important;
+    overflow-x: auto !important;
+  }
+
+  .consumer-date-pills button {
+    min-height: 34px !important;
+    padding: 0 13px !important;
+    border: 1px solid #2c4049 !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    color: #8d9ba1 !important;
+    white-space: nowrap !important;
+  }
+
+  .consumer-date-pills button.active {
+    background: #eef2ef !important;
+    color: #07141c !important;
+    border-color: #eef2ef !important;
+  }
+
+  .consumer-search-form {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .consumer-search-form .field,
+  .consumer-search-form label {
+    min-width: 0 !important;
+  }
+
+  .consumer-search-form label:first-child,
+  .consumer-search-form .club-field,
+  .consumer-search-form .search-club {
+    grid-column: 1 / -1 !important;
+  }
+
+  .consumer-search-form input,
+  .consumer-search-form select,
+  .consumer-search-form button:not(.consumer-search-button) {
+    width: 100% !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    border: 1px solid #2a404a !important;
+    border-radius: 8px !important;
+    background: #0a1a23 !important;
+    color: #eef2ef !important;
+    box-shadow: none !important;
+    font-size: 14px !important;
+  }
+
+  .duration-buttons,
+  .consumer-duration-buttons {
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .duration-buttons button,
+  .consumer-duration-buttons button {
+    min-height: 40px !important;
+    background: #0a1a23 !important;
+    color: #97a4aa !important;
+    border: 1px solid #2a404a !important;
+  }
+
+  .duration-buttons button.active,
+  .consumer-duration-buttons button.active {
+    background: #eef2ef !important;
+    color: #07141c !important;
+    border-color: #eef2ef !important;
+  }
+
+  .consumer-search-button {
+    grid-column: 1 / -1 !important;
+    min-height: 46px !important;
+    border-radius: 8px !important;
+    background: #eef2ef !important;
+    color: #07141c !important;
+    font-weight: 800 !important;
+  }
+
+  .consumer-search-actions,
+  .search-secondary-actions {
+    display: flex !important;
+    gap: 12px !important;
+    overflow-x: auto !important;
+    padding: 10px 0 2px !important;
+    border: 0 !important;
+  }
+
+  .consumer-search-actions button,
+  .search-secondary-actions button,
+  .consumer-search-actions label {
+    min-width: max-content !important;
+    min-height: 30px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #9ba8ad !important;
+    font-size: 10px !important;
+    box-shadow: none !important;
+  }
+
+  .availability-list,
+  .consumer-results,
+  .availability-groups {
+    border-top: 1px solid #263a43 !important;
+  }
+
+  .availability-time-group,
+  .consumer-time-group {
+    display: grid !important;
+    grid-template-columns: 74px minmax(0,1fr) !important;
+    border-bottom: 1px solid #263a43 !important;
+    background: transparent !important;
+  }
+
+  .availability-time,
+  .consumer-time-label {
+    padding: 16px 10px 16px 0 !important;
+    border-right: 1px solid #263a43 !important;
+    background: transparent !important;
+  }
+
+  .availability-time strong,
+  .consumer-time-label strong {
+    font-size: 28px !important;
+    line-height: 1 !important;
+    color: #eef2ef !important;
+  }
+
+  .availability-time small,
+  .consumer-time-label small {
+    color: #819097 !important;
+    font-size: 9px !important;
+  }
+
+  .availability-row,
+  .consumer-court-row,
+  .proposal-row {
+    min-height: 62px !important;
+    padding: 10px 0 10px 14px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #233741 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .availability-row strong,
+  .consumer-court-row strong,
+  .proposal-row strong {
+    font-size: 13px !important;
+  }
+
+  .availability-row button,
+  .consumer-court-row button,
+  .proposal-row button {
+    color: #eef2ef !important;
+    background: transparent !important;
+    border: 0 !important;
+    font-size: 10px !important;
+  }
+
+  /* MATCHES */
+  .matches-page,
+  .match-page,
+  .smart-match-page {
+    width: 100% !important;
+    min-height: auto !important;
+  }
+
+  .matches-hero,
+  .matchmaker-panel,
+  .match-metrics {
+    border-radius: 0 !important;
+    background: transparent !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .match-tabs,
+  .matches-tabs {
+    display: flex !important;
+    gap: 22px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: 1px solid #263a43 !important;
+    overflow-x: auto !important;
+  }
+
+  .match-tabs button,
+  .matches-tabs button {
+    min-height: 44px !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #8d9ba1 !important;
+    padding: 0 !important;
+  }
+
+  .match-tabs button.active,
+  .matches-tabs button.active {
+    color: #eef2ef !important;
+    background: transparent !important;
+    border-bottom: 2px solid #eef2ef !important;
+  }
+
+  .match-card,
+  .match-list article,
+  .match-row {
+    margin: 0 !important;
+    padding: 15px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #263a43 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .match-empty-state,
+  .empty-state,
+  .my-match-message {
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 24px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #263a43 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* PLAYERS — REMOVE MASSIVE FILTER CARD */
+  .partners-page,
+  .partners-shell {
+    width: 100% !important;
+  }
+
+  .partners-heading {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: end !important;
+    gap: 12px !important;
+  }
+
+  .partners-heading > button {
+    min-height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 7px !important;
+    background: #eef2ef !important;
+    color: #07141c !important;
+    font-size: 10px !important;
+  }
+
+  .partner-metrics {
+    display: none !important;
+  }
+
+  .partner-filter-panel {
+    margin: 0 !important;
+    padding: 14px 0 !important;
+    border: 0 !important;
+    border-top: 1px solid #263a43 !important;
+    border-bottom: 1px solid #263a43 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .partner-filter-heading {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin: 0 0 10px !important;
+  }
+
+  .partner-filter-heading h2 {
+    margin: 0 !important;
+    font-size: 15px !important;
+  }
+
+  .partner-filter-heading p,
+  .partner-filter-heading > span {
+    display: none !important;
+  }
+
+  .partner-filter-heading > button {
+    min-height: 30px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #9aa7ac !important;
+    font-size: 10px !important;
+  }
+
+  .partner-filter-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .partner-filter-grid label {
+    min-width: 0 !important;
+  }
+
+  .partner-filter-grid label:first-child {
+    grid-column: 1 / -1 !important;
+  }
+
+  .partner-filter-grid label > span {
+    margin-bottom: 5px !important;
+    color: #84939a !important;
+    font-size: 8px !important;
+  }
+
+  .partner-filter-grid input,
+  .partner-filter-grid select,
+  .partner-filter-grid button {
+    width: 100% !important;
+    min-height: 42px !important;
+    height: 42px !important;
+    border: 1px solid #2a404a !important;
+    border-radius: 7px !important;
+    background: #0a1a23 !important;
+    color: #eef2ef !important;
+    box-shadow: none !important;
+    font-size: 13px !important;
+  }
+
+  .partner-content-layout {
+    display: block !important;
+  }
+
+  .partner-side-column {
+    display: none !important;
+  }
+
+  .partner-results-header {
+    margin-top: 14px !important;
+    padding: 0 0 10px !important;
+    border-bottom: 1px solid #263a43 !important;
+  }
+
+  .partner-card,
+  .partner-result,
+  .partner-list article {
+    margin: 0 !important;
+    padding: 13px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #263a43 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* MY — REMOVE 4 BIG GREEN CARDS */
+  .saved-page,
+  .saved-shell {
+    width: 100% !important;
+  }
+
+  .saved-profile-card,
+  .profile-summary-card {
+    margin: 0 0 16px !important;
+    padding: 14px 0 !important;
+    border: 0 !important;
+    border-top: 1px solid #263a43 !important;
+    border-bottom: 1px solid #263a43 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .saved-grid,
+  .my-center-grid,
+  .secondary-saved-grid {
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  .saved-panel {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .saved-panel > article,
+  .saved-panel > button,
+  .saved-quick-card,
+  .saved-grid > button,
+  .saved-grid > article {
+    width: 100% !important;
+    min-height: 58px !important;
+    margin: 0 !important;
+    padding: 11px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #263a43 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .saved-panel.wide,
+  .my-matches-panel,
+  .smart-my-matches {
+    margin-top: 18px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* ADMIN — COMPACT, FLAT */
+  .admin-panel,
+  .admin-page {
+    width: 100% !important;
+  }
+
+  .admin-summary,
+  .admin-stats {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    margin: 0 !important;
+    border-top: 1px solid #263a43 !important;
+    border-bottom: 1px solid #263a43 !important;
+  }
+
+  .admin-summary > *,
+  .admin-stats > * {
+    min-height: 84px !important;
+    padding: 14px !important;
+    border: 0 !important;
+    border-right: 1px solid #263a43 !important;
+    border-bottom: 1px solid #263a43 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .admin-summary > *:nth-child(2n),
+  .admin-stats > *:nth-child(2n) {
+    border-right: 0 !important;
+  }
+
+  .admin-card,
+  .admin-match-card,
+  .admin-user-card {
+    margin: 0 !important;
+    padding: 14px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #263a43 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Any leftover green-like highlight becomes neutral */
+  [style*="#6FAF18"],
+  [style*="#d1f632"],
+  [style*="#90c514"],
+  [style*="#45a966"] {
+    color: #eef2ef !important;
+  }
+}
+
+/* Slightly tighter on smaller phones */
+@media (max-width: 390px) {
+  .page {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .mobile-bottom-nav {
+    left: 8px !important;
+    right: 8px !important;
+  }
+
+  .mobile-bottom-nav small,
+  .mobile-bottom-nav strong,
+  .mobile-bottom-nav .nav-label {
+    font-size: 8px !important;
+  }
+
+  .pa-premium-home {
+    width: calc(100% + 32px) !important;
+    margin-left: -16px !important;
+  }
+
+  .pa-premium-section-title,
+  .pa-premium-section-title + * {
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+  }
 }

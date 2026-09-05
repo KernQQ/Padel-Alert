@@ -1,0 +1,23 @@
+PADLETIC RECOVERY 01
+
+Co naprawia:
+- usuwa zielony kolor z UI
+- zmniejsza i stabilizuje bottom nav na wszystkich zakładkach
+- dodaje prawidłowy padding, żeby menu nie zasłaniało treści
+- Start: bez tekstowego hero, mniej ciężki formularz
+- Korty: bez wielkiej zielonej wyspy; kompaktowe filtry i płaska lista
+- Mecze: płaskie sekcje i normalny pusty/loading state
+- Gracze: usuwa ogromną kartę filtrów i zmniejsza inputy
+- Moje: usuwa wielkie kafle/wyspy
+- Admin: kompaktowy, płaski układ
+
+PODMIANA:
+Skopiuj folder frontend do:
+C:\PROJEKTY\Padel-Alert
+i zaakceptuj zamianę pliku.
+
+STOPKA / POWERSHELL:
+cd C:\PROJEKTY\Padel-Alert
+git add .
+git commit -m "Padletic recovery mobile UI 01"
+git push
