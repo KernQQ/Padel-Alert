@@ -344,7 +344,7 @@
     isolation: isolate;
     overflow: hidden;
     min-height: 100vh;
-    background: #07151d !important;
+    background: #07151d url("/padel-bg-fallback.png") center center / cover no-repeat !important;
   }
 
   .ref-home {
@@ -359,6 +359,7 @@
     inset: 0;
     overflow: hidden;
     pointer-events: none;
+    background: url("/padel-bg-fallback.png") center center / cover no-repeat;
   }
 
   .desktop-home-video-media {
