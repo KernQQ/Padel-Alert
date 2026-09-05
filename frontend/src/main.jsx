@@ -1,3 +1,4 @@
+import "./styles/sport-system.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
@@ -25,7 +26,7 @@ createRoot(document.getElementById("root")).render(
 
 const themeMeta = document.querySelector('meta[name="theme-color"]') || document.createElement("meta");
 themeMeta.name = "theme-color";
-themeMeta.content = "#08111c";
+themeMeta.content = "#07131a";
 if (!themeMeta.parentNode) document.head.appendChild(themeMeta);
 
 const viewportMeta = document.querySelector('meta[name="viewport"]');

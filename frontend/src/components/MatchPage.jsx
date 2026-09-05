@@ -334,400 +334,71 @@ function MatchPage({
 
   return (
     <>
-      <MatchmakerPanel
-        ownerToken={ownerToken}
-        clubs={clubs}
-        profile={profile}
-        onCreateMatch={(prefill) => {
-          setMatchmakerPrefill(prefill);
-          setShowWizard(true);
-        }}
-      />
+      <section className="sport-matches">
+        <header className="sport-page-head sport-page-head-action">
+          <div>
+            <span>Mecze</span>
+            <h1>Mecze</h1>
+            <p>Graj. Dołącz. Poznaj ludzi.</p>
+          </div>
+          <button type="button" onClick={() => { setMatchmakerPrefill(null); setShowWizard(true); }}>+ Utwórz mecz</button>
+        </header>
 
-      <section className="matches-page-heading">
-        <div>
-          <span className="eyebrow">MECZE · SZCZECIN</span>
-          <h1>Graj. Dołącz. Rywalizuj.</h1>
-          <p>
-            Dołącz do istniejącej gry, znajdź brakującego zawodnika albo
-            pokaż, że jesteś dostępny teraz.
-          </p>
+        <div className="sport-match-tabs">
+          <button className={!showArchive ? "active" : ""} onClick={() => setShowArchive(false)}>Nadchodzące</button>
+          <button onClick={() => setFilters({ ...filters, date: "" })}>Wszystkie</button>
+          <button className={showArchive ? "active" : ""} onClick={() => setShowArchive(true)}>Historia</button>
+          <label><input type="date" value={filters.date} onChange={(event) => setFilters({ ...filters, date: event.target.value })} /></label>
         </div>
 
-        <div className="matches-heading-actions">
-          {myNow ? (
-            <button className="now-active-button" onClick={stopPlayingNow}>
-              <span className="live-dot" />
-              Gram teraz — wyłącz
-            </button>
-          ) : (
-            <button className="now-button" onClick={setPlayingNow}>
-              ⚡ Gram teraz
-            </button>
-          )}
+        {message && <button className="sport-message" onClick={() => setMessage("")}>{message} ×</button>}
 
-          <button
-            className="create-match-button"
-            onClick={() => {
-              setMatchmakerPrefill(null);
-              setShowWizard(true);
-            }}
-          >
-            ＋ Utwórz mecz
-          </button>
-        </div>
-      </section>
-
-      {message && (
-        <button
-          className="match-inline-message"
-          onClick={() => setMessage("")}
-        >
-          {message}
-          <span>×</span>
-        </button>
-      )}
-
-      <section className="matches-stats">
-        <article>
-          <span></span>
-          <div>
-            <strong>
-              {
-                matches.filter(
-                  (match) =>
-                    match.status === "open" || match.status === "full"
-                ).length
-              }
-            </strong>
-            <small>aktywnych meczów</small>
-          </div>
-        </article>
-
-        <article>
-          <span></span>
-          <div>
-            <strong>{urgentMatches.length}</strong>
-            <small>meczów 3/4</small>
-          </div>
-        </article>
-
-        <article>
-          <span>⚡</span>
-          <div>
-            <strong>{nowPlayers.length}</strong>
-            <small>graczy „Gram teraz”</small>
-          </div>
-        </article>
-
-        <article>
-          <span>✓</span>
-          <div>
-            <strong>
-              {matches.filter((match) => match.isJoined).length}
-            </strong>
-            <small>Twoich meczów</small>
-          </div>
-        </article>
-      </section>
-
-      {urgentMatches.length > 0 && (
-        <section className="urgent-match-section">
-          <div className="match-section-heading">
-            <div>
-              <span className="section-kicker">Szybka okazja</span>
-              <h2>Brakuje tylko jednej osoby</h2>
-            </div>
-          </div>
-
-          <div className="urgent-match-grid">
-            {urgentMatches.map((match) => (
-              <article key={match.id} className="urgent-match-card">
-                <span className="urgent-flame"></span>
-
-                <div>
-                  <strong>
-                    {match.from}–{match.to}
-                  </strong>
-                  <h3>{match.clubName}</h3>
-                  <p>
-                    {match.level} · {match.gameType}
-                  </p>
-                </div>
-
-                <div className="urgent-player-count">
-                  <strong>{match.playersCount}/4</strong>
-                  <small>skład</small>
-                </div>
-
-                <button onClick={() => joinMatch(match)}>Dołącz</button>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section className="now-players-section">
-        <div className="match-section-heading">
-          <div>
-            <span className="section-kicker">Na żywo</span>
-            <h2>Dostępni teraz</h2>
-          </div>
-
-          <span className="live-count">
-            <span className="live-dot" />
-            {nowPlayers.length} aktywnych
-          </span>
-        </div>
-
-        {nowPlayers.length > 0 ? (
-          <div className="now-player-strip">
-            {nowPlayers.map((player, index) => (
-              <article key={`${player.nickname}-${index}`}>
-                <span className="now-avatar">
-                  {player.nickname.slice(0, 1).toUpperCase()}
-                </span>
-
-                <div>
-                  <strong>{player.nickname}</strong>
-                  <small>
-                    {player.level} · {player.clubName}
-                  </small>
-                </div>
-
-                {player.isMe && <span className="my-now-badge">Ty</span>}
-              </article>
-            ))}
-          </div>
+        {myNow ? (
+          <button className="sport-now sport-now-active" onClick={stopPlayingNow}>● Gram teraz — wyłącz</button>
         ) : (
-          <div className="matches-empty-mini">
-            Nikt nie zaznaczył jeszcze „Gram teraz”.
-          </div>
+          <button className="sport-now" onClick={setPlayingNow}>● Gram teraz</button>
         )}
-      </section>
 
-      <section className="matches-filter-panel">
-        <label>
-          <span>Klub</span>
-          <PadleticSelect
-            value={filters.clubSlug}
-            onChange={(event) =>
-              setFilters({ ...filters, clubSlug: event.target.value })
-            }
-          >
-            <option value="all">Wszystkie kluby</option>
-            {clubs.map((club) => (
-              <option key={club.slug} value={club.slug}>
-                {club.name}
-              </option>
-            ))}
-          </PadleticSelect>
-        </label>
-
-        <label>
-          <span>Data</span>
-          <input
-            type="date"
-            min={today}
-            value={filters.date}
-            onChange={(event) =>
-              setFilters({ ...filters, date: event.target.value })
-            }
-          />
-        </label>
-
-        <label>
-          <span>Poziom</span>
-          <LevelSelect
-            includeAll
-            value={filters.level}
-            onChange={(value) =>
-              setFilters({ ...filters, level: value })
-            }
-          />
-        </label>
-
-        <button
-          onClick={() =>
-            setFilters({
-              clubSlug: "all",
-              date: "",
-              level: "all"
-            })
-          }
-        >
-          Wyczyść
-        </button>
-      </section>
-
-      <div className="match-archive-switch">
-        <button
-          type="button"
-          className={!showArchive ? "active" : ""}
-          onClick={() => setShowArchive(false)}
-        >
-          Aktywne
-        </button>
-        <button
-          type="button"
-          className={showArchive ? "active" : ""}
-          onClick={() => setShowArchive(true)}
-        >
-          Archiwum
-        </button>
-      </div>
-
-      <section className="all-matches-section">
-        <div className="match-section-heading">
-          <div>
-            <span className="section-kicker">Mecze</span>
-            <h2>
-              {filteredMatches.length}{" "}
-              {filteredMatches.length === 1 ? "mecz" : "meczów"}
-            </h2>
-          </div>
-
-          <button className="refresh-matches-button" onClick={load}>
-            ↻ Odśwież
-          </button>
-        </div>
-
-        {loading ? (
-          <div className="match-loading-grid">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="match-skeleton" />
-            ))}
-          </div>
-        ) : filteredMatches.length > 0 ? (
-          <div className="match-card-grid">
-            {filteredMatches.map((match) => (
-              <article
-                key={match.id}
-                className={`match-card match-status-${match.status}`}
-              >
-                <header>
-                  <div>
-                    <span className="match-status-pill">
-                      {match.status === "full"
-                        ? "Komplet"
-                        : match.status === "confirmed"
-                        ? "Potwierdzony"
-                        : match.status === "completed"
-                        ? "Zakończony"
-                        : "Szukamy graczy"}
-                    </span>
-
-                    <h3>
-                      {match.from}–{match.to}
-                    </h3>
-                  </div>
-
-                  <div className="match-capacity">
-                    <strong>
-                      {match.playersCount}/{match.maxPlayers}
-                    </strong>
-                    <small>graczy</small>
-                  </div>
-                </header>
-
-                <div className="match-club">
-                  <span>📍</span>
-                  <div>
-                    <strong>{match.clubName}</strong>
-                    <small>{match.date}</small>
-                  </div>
+        <section className="sport-fixtures">
+          {loading ? (
+            <div className="sport-loading">Ładowanie meczów…</div>
+          ) : filteredMatches.length > 0 ? filteredMatches.map((match) => (
+            <article key={match.id} className="sport-fixture">
+              <div className="sport-fixture-time">{match.from}</div>
+              <div className="sport-fixture-main">
+                <div className="sport-fixture-title">
+                  <h2>{match.clubName}</h2>
+                  <span>{match.courtName || "Kort"} · poziom {match.level}</span>
                 </div>
-
-                <div className="match-tags">
-                  <LevelBadge level={match.level} compact />
-                  <span> {match.gameType}</span>
-                  {match.spotsLeft > 0 && (
-                    <span> Brakuje {match.spotsLeft}</span>
-                  )}
-                </div>
-
-                <div className="match-lineup">
+                <div className="sport-fixture-players">
                   {Array.from({ length: match.maxPlayers }).map((_, index) => {
                     const player = match.participants[index];
                     return (
-                      <div className={`match-lineup-row ${player ? "filled" : "open"}`} key={index}>
-                        <span className="match-lineup-number">{String(index + 1).padStart(2, "0")}</span>
-                        <strong>{player?.nickname || "Wolne miejsce"}</strong>
+                      <div key={index} className={player ? "" : "open"}>
+                        <span>{player ? player.nickname.slice(0,1).toUpperCase() : "○"}</span>
+                        <strong>{player?.nickname || "Wolne"}</strong>
                         <small>{player?.level || "—"}</small>
                       </div>
                     );
                   })}
                 </div>
-
-                {match.note && <p className="match-note">{match.note}</p>}
-
-                <div className="match-card-actions">
-                  <button
-                    className="match-details-button"
-                    onClick={() => setSelectedMatch(match)}
-                  >
-                    Centrum meczu
-                    {chatUnread[match.id] > 0 && (
-                      <span className="match-chat-unread-badge">{chatUnread[match.id] > 9 ? "9+" : chatUnread[match.id]}</span>
-                    )}
-                  </button>
-
-                  {!match.isJoined &&
-                    !match.isWaiting &&
-                    (match.status === "open" || match.status === "full") && (
-                      <button
-                        className="match-join-button"
-                        onClick={() => joinMatch(match)}
-                      >
-                        {match.status === "full"
-                          ? "Lista oczekujących"
-                          : "Dołącz"}
-                      </button>
-                    )}
-
-                  {match.isJoined && !match.isOwner && (
-                    <button
-                      className="match-leave-button"
-                      onClick={() => leaveMatch(match)}
-                    >
-                      Opuść
-                    </button>
-                  )}
-
-                  {match.isWaiting && (
-                    <span className="waiting-label">
-                      Na liście oczekujących
-                    </span>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="matches-empty-state">
-            <span></span>
-            <h2>{showArchive ? "Archiwum jest puste" : "Nie ma jeszcze pasujących meczów"}</h2>
-            <p>
-              {showArchive
-                ? "Zakończone i anulowane mecze pojawią się tutaj automatycznie."
-                : "Utwórz pierwszy mecz albo zaznacz „Gram teraz”."}
-            </p>
-            {!showArchive && (
-              <button onClick={() => setShowWizard(true)}>
-                Utwórz mecz
-              </button>
-            )}
-          </div>
-        )}
+              </div>
+              <div className="sport-fixture-action">
+                <small>{match.spotsLeft > 0 ? `${match.spotsLeft} ${match.spotsLeft === 1 ? "miejsce wolne" : "miejsca wolne"}` : "komplet"}</small>
+                {!match.isJoined && !match.isWaiting && (match.status === "open" || match.status === "full") ? (
+                  <button className="primary" onClick={() => joinMatch(match)}>{match.status === "full" ? "Lista oczekujących" : "Dołącz →"}</button>
+                ) : (
+                  <button onClick={() => setSelectedMatch(match)}>Szczegóły →</button>
+                )}
+              </div>
+            </article>
+          )) : (
+            <div className="sport-empty"><strong>{showArchive ? "Historia jest pusta." : "Brak meczów."}</strong><p>Utwórz mecz i zaproś graczy.</p><button onClick={() => setShowWizard(true)}>Utwórz mecz →</button></div>
+          )}
+        </section>
       </section>
 
-      <button
-        className="match-floating-action"
-        onClick={() => setShowWizard(true)}
-        title="Utwórz mecz"
-      >
-        ＋
-      </button>
+      <button className="match-floating-action" onClick={() => setShowWizard(true)} title="Utwórz mecz">＋</button>
 
       {showWizard && (
         <MatchWizard

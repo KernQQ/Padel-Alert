@@ -1,18 +1,15 @@
-PADLETIC REBRAND
+PADLETIC REFERENCE REBUILD V1
 
-Zmienia wyłącznie branding frontendu:
-- PadelAlert -> PADLETIC w widocznych tekstach
-- znak PA -> P w istniejącym layoucie
-- nazwa PWA / manifest
-- tytuł i opis strony
-- favicon + ikony PWA w obecnej zielonej stylistyce
+Ta paczka jest przebudową struktury widoków na bazie Padel-Alert(4).zip.
+Nie jest to kolejny override starego layoutu.
 
-NIE zmienia:
-- BO5
-- API / endpointów
-- logiki meczów, czatu, powiadomień
-- localStorage keys (celowo zostają padelalert-* dla kompatybilności)
-- eventów realtime i bazy danych
+Przebudowane:
+- HomeDashboard.jsx
+- Korty w App.jsx (availability board)
+- Gracze w App.jsx (lista/tabela zamiast kart)
+- Moje w App.jsx (zakładki zamiast kafelków)
+- MatchPage.jsx (fixtures zamiast dashboardu)
+- AdminPanel.jsx (tabela + statystyki)
+- sport-system.css jako nowy izolowany system UI
 
-Uruchom APPLY-PADLETIC-REBRAND.bat.
-Skrypt robi backup i automatyczny rollback, jeśli lokalny npm run build nie przejdzie.
+Backend bez zmian.
