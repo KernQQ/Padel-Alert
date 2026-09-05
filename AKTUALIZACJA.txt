@@ -1,34 +1,36 @@
-PADLETIC — DESKTOP 1:1 / UPDATE 05
+PADLETIC — DESKTOP REAL 06
 
-CEL:
-Osobny desktop od 761px w górę. Mobile iOS/Android pozostają nietknięte.
+Ta aktualizacja dotyczy WYŁĄCZNIE desktopu (>= 761 px).
+Mobile iOS/Android pozostaje oddzielny.
 
-CO ZMIENIA:
-- osobny desktopowy layout i proporcje
-- stały sidebar 232px
-- centralny content max 1280px
-- Start: hero + wyszukiwarka w jednym rzędzie + desktopowy grid klubów
-- Korty: filtry w jednym rzędzie, kompaktowa tabela terminów
-- Mecze: szeroki fixture/list layout zamiast pustych kart
-- Gracze: filtry poziomo + lista + prawa kolumna
-- Moje: profil + 4 skróty + osobne sekcje
-- Admin: statystyki 4 w rzędzie + płaskie listy
-- neutralne off-white CTA, bez limonki
-- osobne desktopowe pickery/popovers
-- mobile CSS pozostaje bez zmian
+NAPRAWIA:
+- usuwa zielone tło sidebara
+- usuwa obrazkową rakietę/logo z desktopowego sidebara
+- zastępuje ją prostym znakiem typograficznym P
+- likwiduje dużą pustą kolumnę między sidebarem a treścią
+- Start nie jest już rozciągniętym mobile:
+  * niższy, desktopowy banner
+  * inne zdjęcie bez rakiety
+  * inne hasło desktopowe
+  * wyszukiwarka w jednym rzędzie
+  * kluby + prawa kolumna w prawdziwym desktopowym gridzie
+- Korty:
+  * filtry poziomo
+  * lista jako rozkład/tabela
+  * szersze kolumny i kompaktowe wiersze
+- Gracze:
+  * poziome filtry
+  * wynik jako lista/tabela
+  * osobna prawa kolumna
+- nie zmienia warstwy mobile
 
 PODMIANA:
 Skopiuj folder frontend do:
 C:\PROJEKTY\Padel-Alert
-zaakceptuj zamianę plików.
+i zaakceptuj zamianę plików.
 
 STOPKA:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic desktop 1to1 update 05"
+git commit -m "Padletic real desktop layout 06"
 git push
-
-BUILD CHECK:
-Vite uruchomił się po nadaniu prawa wykonania, ale build w środowisku ChatGPT zatrzymał
-się na brakującym natywnym bindingu Rolldown (@rolldown/binding-linux-x64-gnu).
-To problem dostarczonego node_modules, nie błąd składni CSS tej paczki.
