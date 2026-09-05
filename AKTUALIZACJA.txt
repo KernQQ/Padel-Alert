@@ -1,30 +1,48 @@
-PADLETIC — PICKERS NEUTRAL 03
+PADLETIC — iOS SAFE AREA + GLOBALNE PICKERY / UPDATE 04
 
-Globalna poprawka wszystkich custom selectorów w iOS i Android:
-- kluby
-- poziom
-- strona
-- sortowanie
-- godziny OD/DO
-- wszystkie selecty w tworzeniu meczu
-- wszystkie selecty w zgłoszeniach gracza
-- selecty profilu i filtrów
+NAPRAWIA:
+1. iOS:
+   - header nie wchodzi pod status bar / Dynamic Island
+   - treść ma prawidłowy odstęp od góry
+   - bottom nav uwzględnia safe-area
+   - modal "Edytuj profil" nie jest ucinany u góry ani na dole
+   - modal ma własny scroll i sticky header
 
-Zmiany:
-- usunięta limonka/zieleń
-- neutralny granat + off-white
-- jeden wygląd iOS/Android
-- aktywna opcja: jasny kontrast zamiast zielonej poświaty
-- tło bottom-sheet: neutralne
-- close button i handle dopasowane do mobile 1:1
-- time grid również bez zieleni
-- kliknięcie w backdrop nadal zamyka picker
+2. WSZYSTKIE WYBORY / PICKERY NA ANDROID + iOS:
+   - PadleticSelect
+   - PadleticTimePicker
+   - klub
+   - poziom
+   - strona
+   - sortowanie
+   - godziny OD / DO
+   - tworzenie meczu
+   - zgłoszenia graczy
+   - filtry
+   - wybory w profilu
+
+3. PROFIL:
+   - "Najczęściej gram"
+   - "Ulubione kluby"
+   - aktywne opcje są off-white / granat zamiast limonki
+   - "Wybierz zdjęcie" i "Zapisz profil" też w neutralnym systemie
+
+WAŻNE:
+mobile-platform-fix.css jest importowany JAKO OSTATNI plik CSS w App.jsx,
+więc stare zielone style z android-selects.css nie powinny już go nadpisywać.
 
 PODMIANA:
-Skopiuj folder frontend do C:\PROJEKTY\Padel-Alert i zaakceptuj zamianę.
+Skopiuj folder frontend do:
+C:\PROJEKTY\Padel-Alert
+i zaakceptuj zamianę plików.
 
 STOPKA:
 cd C:\PROJEKTY\Padel-Alert
 git add .
-git commit -m "Padletic neutral pickers 03"
+git commit -m "Padletic iOS safe area and neutral pickers 04"
 git push
+
+BUILD:
+Próba builda lokalnie zatrzymała się na brakującym natywnym bindingu Rolldown
+w dostarczonym node_modules (@rolldown/binding-linux-x64-gnu).
+To błąd środowiska zależności, nie błąd CSS/JSX tej poprawki.

@@ -11,6 +11,7 @@ import "./styles/mobile-stability.css";
 import "./styles/full-update.css";
 import "./styles/sport-system.css";
 import "./styles/mobile-1to1.css";
+import "./styles/mobile-platform-fix.css";
 
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {

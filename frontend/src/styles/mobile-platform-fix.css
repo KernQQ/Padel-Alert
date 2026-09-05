@@ -1,0 +1,351 @@
+/* =========================================================
+   PADLETIC MOBILE PLATFORM FIX — iOS + Android
+   MUST BE IMPORTED LAST.
+   Safe areas + unified neutral pickers/chips.
+   ========================================================= */
+
+@media (max-width: 760px), (pointer: coarse) {
+  :root {
+    --pf-bg: #07141c;
+    --pf-panel: #0b1a23;
+    --pf-panel-2: #0e202a;
+    --pf-line: #2a3e48;
+    --pf-line-soft: rgba(180,196,202,.16);
+    --pf-text: #eef2ef;
+    --pf-muted: #93a1a7;
+    --pf-white: #eef2ef;
+    --pf-ink: #07141c;
+  }
+
+  /* ---------- iOS SAFE AREAS ---------- */
+  .mobile-topbar {
+    top: 0 !important;
+    height: calc(62px + env(safe-area-inset-top)) !important;
+    min-height: calc(62px + env(safe-area-inset-top)) !important;
+    padding-top: calc(8px + env(safe-area-inset-top)) !important;
+    padding-bottom: 8px !important;
+    padding-left: max(18px, env(safe-area-inset-left)) !important;
+    padding-right: max(18px, env(safe-area-inset-right)) !important;
+    box-sizing: border-box !important;
+  }
+
+  .page {
+    padding-top: calc(76px + env(safe-area-inset-top)) !important;
+    padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .mobile-bottom-nav {
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* ---------- ALL SELECT / TIME PICKER SHEETS ---------- */
+  .padletic-select-layer,
+  .padletic-picker-layer {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483000 !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding-top: calc(10px + env(safe-area-inset-top)) !important;
+    padding-right: max(10px, env(safe-area-inset-right)) !important;
+    padding-bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    padding-left: max(10px, env(safe-area-inset-left)) !important;
+  }
+
+  .padletic-select-backdrop,
+  .padletic-picker-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0 !important;
+    background: rgba(3, 10, 14, .74) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  .padletic-select-sheet,
+  .padletic-picker-sheet {
+    position: relative !important;
+    width: min(100%, 560px) !important;
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 28px) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    border: 1px solid var(--pf-line) !important;
+    border-radius: 22px !important;
+    background: #0a1821 !important;
+    background-image: none !important;
+    box-shadow: 0 -16px 48px rgba(0,0,0,.38) !important;
+    color: var(--pf-text) !important;
+  }
+
+  .padletic-select-sheet::before,
+  .padletic-picker-sheet::before {
+    content: "" !important;
+    display: block !important;
+    width: 42px !important;
+    height: 4px !important;
+    margin: 8px auto 1px !important;
+    border-radius: 999px !important;
+    background: rgba(238,242,239,.24) !important;
+  }
+
+  .padletic-select-sheet-head,
+  .padletic-picker-sheet header {
+    min-height: 64px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+    padding: 8px 14px 12px 16px !important;
+    border-bottom: 1px solid var(--pf-line-soft) !important;
+    background: transparent !important;
+  }
+
+  .padletic-select-sheet-head > div,
+  .padletic-picker-sheet header > div {
+    display: grid !important;
+    gap: 2px !important;
+  }
+
+  .padletic-select-sheet-head span,
+  .padletic-picker-sheet header small {
+    color: var(--pf-muted) !important;
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: .16em !important;
+  }
+
+  .padletic-select-sheet-head strong,
+  .padletic-picker-sheet header strong {
+    color: var(--pf-text) !important;
+    font-size: 20px !important;
+    line-height: 1.12 !important;
+    font-weight: 800 !important;
+  }
+
+  .padletic-select-close,
+  .padletic-picker-sheet header > button {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    padding: 0 !important;
+    border: 1px solid var(--pf-line) !important;
+    border-radius: 11px !important;
+    background: #0d2029 !important;
+    color: #dfe6e3 !important;
+    font-size: 26px !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+  }
+
+  .padletic-select-options,
+  .padletic-picker-options,
+  .padletic-select-options.compact {
+    display: grid !important;
+    gap: 7px !important;
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 112px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    padding: 10px 12px max(12px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .padletic-select-option,
+  .padletic-picker-options > button {
+    width: 100% !important;
+    min-height: 50px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 0 14px !important;
+    border: 1px solid var(--pf-line) !important;
+    border-radius: 10px !important;
+    background: #0b1b24 !important;
+    background-image: none !important;
+    color: #dfe6e3 !important;
+    box-shadow: none !important;
+    font: inherit !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+  }
+
+  .padletic-select-option i,
+  .padletic-picker-options > button i {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 1px solid #42545d !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    color: transparent !important;
+    font-style: normal !important;
+    box-shadow: none !important;
+  }
+
+  .padletic-select-option.active,
+  .padletic-picker-options > button.active {
+    border-color: #dfe5e2 !important;
+    background: #e9eeeb !important;
+    background-image: none !important;
+    color: #07141c !important;
+    box-shadow: none !important;
+  }
+
+  .padletic-select-option.active i,
+  .padletic-picker-options > button.active i {
+    border-color: #07141c !important;
+    background: #07141c !important;
+    color: #eef2ef !important;
+  }
+
+  /* Time grid uses exactly the same neutral selected state. */
+  .padletic-picker-options.time-grid {
+    grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .padletic-picker-options.time-grid > button {
+    min-height: 44px !important;
+    justify-content: center !important;
+    padding: 7px 4px !important;
+    border-radius: 9px !important;
+  }
+
+  .padletic-picker-options.time-grid > button i {
+    display: none !important;
+  }
+
+  .padletic-picker-options.time-grid > button.active {
+    border-color: #eef2ef !important;
+    background: #eef2ef !important;
+    color: #07141c !important;
+    box-shadow: none !important;
+  }
+
+  /* Triggers in forms also neutral. */
+  .padletic-select-trigger,
+  .padletic-picker-trigger {
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--pf-line) !important;
+    border-radius: 8px !important;
+    background: #0b1b24 !important;
+    color: var(--pf-text) !important;
+    box-shadow: none !important;
+  }
+
+  .padletic-select-trigger:focus-visible,
+  .padletic-picker-trigger:focus-visible {
+    outline: 2px solid rgba(238,242,239,.52) !important;
+    outline-offset: 2px !important;
+  }
+
+  .padletic-select-chevron,
+  .padletic-picker-trigger > span:last-child {
+    color: var(--pf-muted) !important;
+  }
+
+  /* ---------- PROFILE: ALL CHOICES ---------- */
+  .profile-chip-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .profile-chip-row button {
+    min-height: 38px !important;
+    padding: 0 13px !important;
+    border: 1px solid var(--pf-line) !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    color: #aab5b9 !important;
+    box-shadow: none !important;
+  }
+
+  .profile-chip-row button.active {
+    border-color: #eef2ef !important;
+    background: #eef2ef !important;
+    color: #07141c !important;
+    box-shadow: none !important;
+  }
+
+  .profile-photo-pick,
+  .profile-save-button {
+    border-color: #eef2ef !important;
+    background: #eef2ef !important;
+    color: #07141c !important;
+    box-shadow: none !important;
+  }
+
+  .profile-photo-editor,
+  .profile-editor-avatar,
+  .profile-editor-panel {
+    border-color: var(--pf-line) !important;
+  }
+
+  /* ---------- PROFILE MODAL / iOS CLIPPING ---------- */
+  .profile-modal-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147482000 !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    padding-top: calc(env(safe-area-inset-top) + 8px) !important;
+    padding-right: max(8px, env(safe-area-inset-right)) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 84px) !important;
+    padding-left: max(8px, env(safe-area-inset-left)) !important;
+    background: rgba(3,10,14,.76) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-editor-modal {
+    width: min(100%, 620px) !important;
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 100px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    margin: 0 !important;
+    padding: 18px 16px 26px !important;
+    border: 1px solid var(--pf-line) !important;
+    border-radius: 18px !important;
+    background: #0b1519 !important;
+    box-shadow: 0 18px 60px rgba(0,0,0,.42) !important;
+  }
+
+  .profile-modal-head {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 3 !important;
+    margin: -18px -16px 12px !important;
+    padding: 16px 16px 12px !important;
+    background: #0b1519 !important;
+    border-bottom: 1px solid var(--pf-line-soft) !important;
+  }
+
+  .profile-modal-head .section-kicker {
+    color: var(--pf-muted) !important;
+  }
+
+  .profile-modal-head > button {
+    width: 40px !important;
+    height: 40px !important;
+    border: 1px solid var(--pf-line) !important;
+    border-radius: 10px !important;
+    background: #0e2028 !important;
+  }
+
+  .profile-photo-editor {
+    background: #0a1821 !important;
+  }
+}
