@@ -99,3 +99,459 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
   .sport-my{padding-top:18px}.sport-my-profile{align-items:flex-start}.sport-my-profile>button{font-size:10px}.sport-my-tabs{overflow-x:auto}.sport-my-list>article{grid-template-columns:54px 1fr auto}.sport-my-list article>span{display:none}.sport-my-list article>div:last-child{grid-column:2/4}
   .sport-admin-stats{grid-template-columns:1fr 1fr}.sport-admin-stats>div{border-bottom:1px solid var(--sp-line)}.sport-admin-table .head{display:none}.sport-admin-table article{grid-template-columns:1fr auto;padding:12px 0}.sport-admin-table article>*{grid-column:auto}.sport-admin-table .actions{grid-column:1/-1}.sport-admin-matches article{grid-template-columns:1fr auto}
 }
+
+
+/* ================================================================
+   PADLETIC MOBILE REFERENCE PASS 2
+   Loaded LAST on purpose. Mirrors the approved reference board.
+   ================================================================ */
+@media (max-width: 900px) {
+  :root { --mobile-nav-h: 58px; }
+
+  .main-shell { min-height: 100dvh !important; background: var(--sp-bg) !important; }
+  .page {
+    min-height: calc(100dvh - 58px) !important;
+    padding: 0 0 calc(var(--mobile-nav-h) + 14px + env(safe-area-inset-bottom)) !important;
+    background: var(--sp-bg) !important;
+  }
+
+  /* Header: compact brand bar, no oversized avatar/card treatment */
+  .mobile-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 80 !important;
+    min-height: 58px !important;
+    height: 58px !important;
+    padding: 0 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    border-bottom: 1px solid #1d313a !important;
+    background: #081820 !important;
+    backdrop-filter: none !important;
+  }
+  .mobile-brand { gap: 9px !important; min-height: 44px !important; }
+  .mobile-brand .brand-mark {
+    width: 34px !important; height: 34px !important; border-radius: 7px !important;
+    background-size: cover !important;
+  }
+  .mobile-brand strong { font-size: 16px !important; letter-spacing: -.02em !important; }
+  .mobile-topbar-actions { gap: 5px !important; }
+  .mobile-icon-button { width: 38px !important; height: 38px !important; }
+  .mobile-topbar .account-trigger { min-width: 40px !important; min-height: 40px !important; padding: 0 !important; border: 0 !important; }
+  .mobile-topbar .account-avatar { width: 36px !important; height: 36px !important; font-size: 11px !important; background: #1b2a33 !important; color: #e9eee9 !important; box-shadow: none !important; }
+  .mobile-topbar .account-trigger-copy { display: none !important; }
+
+  /* Bottom navigation: small utility bar, no large active tile */
+  .mobile-bottom-nav {
+    position: fixed !important;
+    left: 0 !important; right: 0 !important; bottom: 0 !important;
+    z-index: 90 !important;
+    min-height: var(--mobile-nav-h) !important;
+    height: calc(var(--mobile-nav-h) + env(safe-area-inset-bottom)) !important;
+    padding: 3px 7px env(safe-area-inset-bottom) !important;
+    grid-template-columns: repeat(6, minmax(0,1fr)) !important;
+    border: 0 !important;
+    border-top: 1px solid #1c3038 !important;
+    background: #081820 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+  .mobile-bottom-nav > button {
+    min-height: 52px !important;
+    height: 52px !important;
+    padding: 4px 1px 3px !important;
+    border-radius: 0 !important;
+    color: #87969c !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .mobile-bottom-nav > button.active {
+    color: #e9eee9 !important;
+    background: transparent !important;
+    box-shadow: inset 0 2px 0 #879f77 !important;
+  }
+  .mobile-nav-icon { width: 22px !important; height: 22px !important; }
+  .mobile-bottom-nav small { font-size: 9px !important; margin-top: 2px !important; font-weight: 650 !important; }
+  .mobile-bottom-nav .nav-admin small { font-size: 9px !important; }
+
+  /* HOME */
+  .sport-home { width: 100% !important; padding: 0 0 24px !important; overflow-x: hidden !important; }
+  .sport-home-hero {
+    height: 218px !important;
+    min-height: 218px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background:
+      linear-gradient(90deg, rgba(4,15,22,.94) 0%, rgba(4,15,22,.66) 48%, rgba(4,15,22,.08) 78%),
+      linear-gradient(180deg, rgba(4,15,22,.04) 0%, rgba(4,15,22,.14) 62%, #07131a 100%),
+      url('/premium/hero-clean.jpg') 62% 50% / cover no-repeat !important;
+  }
+  .sport-home-copy { left: 18px !important; right: 14px !important; bottom: 18px !important; }
+  .sport-home-copy > span { font-size: 7px !important; letter-spacing: .22em !important; }
+  .sport-home-copy h1 {
+    margin: 8px 0 7px !important;
+    font-size: 37px !important;
+    line-height: .84 !important;
+    max-width: 210px !important;
+  }
+  .sport-home-copy p { max-width: 280px !important; font-size: 10px !important; line-height: 1.35 !important; }
+
+  .sport-home-search {
+    width: auto !important;
+    margin: 0 12px !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1px !important;
+    background: #21363f !important;
+    border: 1px solid #21363f !important;
+  }
+  .sport-home-field > button {
+    min-height: 51px !important;
+    padding: 8px 27px 7px 10px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #0a1b24 !important;
+  }
+  .sport-home-field small { font-size: 8px !important; margin-bottom: 3px !important; }
+  .sport-home-field strong { font-size: 12px !important; }
+  .sport-home-submit {
+    grid-column: 1/-1 !important;
+    min-height: 46px !important;
+    border-radius: 0 !important;
+    background: #e7ece8 !important;
+    color: #07131a !important;
+    font-size: 13px !important;
+  }
+  .sport-nearest {
+    margin: 20px 14px 0 !important;
+    display: block !important;
+    border-top: 1px solid #253b44 !important;
+    border-bottom: 0 !important;
+  }
+  .sport-nearest-main { padding: 18px 0 20px !important; border: 0 !important; }
+  .sport-nearest-main > small { font-size: 8px !important; letter-spacing: .2em !important; }
+  .sport-nearest-time { margin: 8px 0 0 !important; font-size: 58px !important; line-height: .92 !important; }
+  .sport-nearest-main h2 { margin: 8px 0 1px !important; font-size: 15px !important; }
+  .sport-nearest-main p { font-size: 10px !important; }
+  .sport-nearest-main > button { margin-top: 15px !important; font-size: 10px !important; }
+  .sport-nearest-list { padding: 16px 0 0 !important; border-top: 1px solid #253b44 !important; }
+  .sport-nearest-list > button:not(.sport-nearest-all) { min-height: 42px !important; grid-template-columns: 48px 1fr 70px 14px !important; }
+  .sport-nearest-list button strong { font-size: 14px !important; }
+
+  /* HOME popovers: bottom sheet and true neutral selection */
+  .sport-popover {
+    position: fixed !important; left: 12px !important; right: 12px !important; top: auto !important;
+    bottom: calc(var(--mobile-nav-h) + 10px + env(safe-area-inset-bottom)) !important;
+    max-height: 46dvh !important; overflow: auto !important;
+    border: 1px solid #2a414b !important; background: #0a1b24 !important; box-shadow: 0 18px 46px rgba(0,0,0,.42) !important;
+  }
+  .sport-popover button.selected { background: #172a31 !important; color: #eef2ef !important; box-shadow: inset 3px 0 0 #829578 !important; }
+
+  /* COURTS: compact search first, then timetable immediately */
+  .sport-courts { padding: 0 14px 20px !important; }
+  .sport-courts .sport-page-head { padding: 18px 0 12px !important; align-items: flex-end !important; }
+  .sport-courts .sport-page-head > div > span { display: none !important; }
+  .sport-courts .sport-page-head h1 { font-size: 28px !important; }
+  .sport-courts .sport-page-head p { display: none !important; }
+  .sport-page-date { font-size: 10px !important; max-width: 135px !important; text-align: right !important; }
+  .sport-courts-toolbar {
+    padding: 10px 0 !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 6px !important;
+    border-bottom: 1px solid #253b44 !important;
+  }
+  .sport-filter-club { grid-column: 1/-1 !important; }
+  .sport-filter > span { font-size: 7px !important; margin-bottom: 4px !important; }
+  .sport-filter input, .sport-filter select, .sport-filter button {
+    min-height: 39px !important; height: 39px !important; font-size: 11px !important; border-radius: 4px !important;
+  }
+  .sport-duration { grid-column: 3 !important; gap: 0 !important; }
+  .sport-duration button { display: none !important; }
+  .sport-duration button.active { display: block !important; width: 100% !important; height: 39px !important; background: #14272d !important; color: #e9eee9 !important; border-color: #28414a !important; }
+  .sport-search-action {
+    grid-column: 1/-1 !important; height: 42px !important; background: #e7ece8 !important; color: #07131a !important; font-size: 12px !important;
+  }
+  .sport-courts-tools {
+    min-height: 38px !important; padding: 8px 0 !important; gap: 13px !important;
+    font-size: 9px !important; border-bottom: 1px solid #253b44 !important;
+    scrollbar-width: none;
+  }
+  .sport-courts-tools::-webkit-scrollbar { display: none; }
+  .sport-time-block { grid-template-columns: 68px 1fr !important; }
+  .sport-time-heading { padding: 14px 8px 14px 0 !important; }
+  .sport-time-heading strong { font-size: 25px !important; }
+  .sport-time-heading span { font-size: 8px !important; color: #91ad7d !important; }
+  .sport-court-rows > button { min-height: 54px !important; padding: 8px 5px 8px 10px !important; }
+  .sport-court-name strong { font-size: 12px !important; line-height: 1.15 !important; }
+  .sport-court-name small { font-size: 9px !important; margin-top: 2px !important; }
+  .sport-court-rows b { color: #96ae82 !important; font-size: 9px !important; }
+
+  /* MATCHES: reference-style fixtures, compact empty state */
+  .sport-matches { padding: 0 14px 22px !important; }
+  .sport-matches .sport-page-head { padding: 18px 0 13px !important; }
+  .sport-matches .sport-page-head > div > span { display: none !important; }
+  .sport-matches .sport-page-head h1 { font-size: 28px !important; }
+  .sport-matches .sport-page-head p { font-size: 10px !important; }
+  .sport-matches .sport-page-head-action > button { min-height: 36px !important; padding: 0 11px !important; font-size: 10px !important; background: #e7ece8 !important; color: #07131a !important; }
+  .sport-match-tabs { height: 44px !important; gap: 20px !important; }
+  .sport-match-tabs button { height: 44px !important; font-size: 11px !important; }
+  .sport-now { margin: 10px 0 !important; font-size: 11px !important; }
+  .sport-fixtures { margin-top: 2px !important; }
+  .sport-fixture { grid-template-columns: 58px 1fr !important; gap: 10px !important; padding: 13px 0 !important; }
+  .sport-fixture-time { font-size: 23px !important; }
+  .sport-fixture-title { display: block !important; }
+  .sport-fixture-title h2 { font-size: 14px !important; }
+  .sport-fixture-title span { display: block !important; margin-top: 2px !important; font-size: 9px !important; }
+  .sport-fixture-players { margin-top: 10px !important; gap: 8px !important; }
+  .sport-fixture-players > div { min-width: 0 !important; flex: 1 1 42% !important; }
+  .sport-fixture-action { grid-column: 2 !important; display: flex !important; justify-content: space-between !important; align-items: center !important; }
+  .sport-fixture-action small { margin: 0 !important; font-size: 9px !important; }
+  .sport-fixture-action button { min-height: 34px !important; font-size: 10px !important; }
+  .sport-matches .sport-empty { padding: 24px 0 !important; min-height: 0 !important; }
+  .sport-matches .sport-empty strong { font-size: 20px !important; }
+  .sport-matches .sport-empty p { margin: 7px 0 14px !important; font-size: 11px !important; }
+  .match-floating-action { display: none !important; }
+
+  /* PLAYERS: compact list */
+  .sport-players { padding: 0 14px 22px !important; }
+  .sport-players .sport-page-head { padding: 18px 0 12px !important; }
+  .sport-player-filters { padding: 9px 0 !important; gap: 5px !important; }
+  .sport-player-list article { min-height: 54px !important; }
+  .sport-avatar { width: 30px !important; height: 30px !important; }
+
+  /* MY: remove giant empty card and keep sports list hierarchy */
+  .sport-my { padding: 16px 14px 22px !important; }
+  .sport-my-profile { padding-bottom: 14px !important; }
+  .sport-avatar-large { width: 44px !important; height: 44px !important; }
+  .sport-my-person h1 { font-size: 24px !important; }
+  .sport-my-person p { font-size: 9px !important; }
+  .sport-my-profile > button { height: 34px !important; font-size: 9px !important; }
+  .sport-my-tabs { gap: 20px !important; }
+  .sport-my-tabs button { height: 44px !important; font-size: 11px !important; }
+  .sport-my-content { padding-top: 12px !important; }
+  .sport-my .my-matches-panel { padding: 0 !important; margin: 0 !important; border: 0 !important; background: transparent !important; }
+  .sport-my .section-heading { margin: 0 0 8px !important; }
+  .sport-my .section-heading h2 { font-size: 21px !important; margin: 2px 0 !important; }
+  .sport-my .section-kicker { font-size: 8px !important; color: var(--sp-muted) !important; }
+  .sport-my .v6-match-summary { margin: 0 0 8px !important; gap: 16px !important; }
+  .sport-my .v6-match-summary span { font-size: 9px !important; color: var(--sp-muted) !important; }
+  .sport-my .v6-match-summary strong { color: var(--sp-text) !important; }
+  .sport-my .my-matches-empty {
+    min-height: 0 !important; margin: 0 !important; padding: 18px 0 !important;
+    border: 0 !important; border-top: 1px solid #253b44 !important; border-bottom: 1px solid #253b44 !important;
+    border-radius: 0 !important; background: transparent !important; box-shadow: none !important;
+  }
+  .sport-my .my-matches-empty .my-empty-icon { display: none !important; }
+  .sport-my .my-matches-empty strong { font-size: 15px !important; }
+  .sport-my .my-matches-empty p { margin: 3px 0 0 !important; color: var(--sp-muted) !important; font-size: 10px !important; }
+  .sport-my .my-match-card {
+    display: grid !important; grid-template-columns: 62px 1fr auto !important; gap: 10px !important;
+    padding: 11px 0 !important; border: 0 !important; border-bottom: 1px solid #253b44 !important;
+    border-radius: 0 !important; background: transparent !important; box-shadow: none !important;
+  }
+  .sport-my .my-match-date { border-right: 1px solid #253b44 !important; }
+  .sport-my .my-match-date strong { font-size: 17px !important; }
+  .sport-my .my-match-title-row strong { font-size: 12px !important; }
+  .sport-my .my-match-status { border-radius: 3px !important; background: #173028 !important; color: #a9c39a !important; }
+
+  /* ADMIN: dashboard allowed, but quieter and denser */
+  .sport-admin { padding: 0 14px 22px !important; }
+  .sport-admin .sport-page-head { padding: 18px 0 12px !important; }
+  .sport-admin .sport-page-head > div > span { display: none !important; }
+  .sport-admin .sport-page-head h1 { font-size: 28px !important; max-width: 240px !important; }
+  .sport-admin .sport-page-head p { font-size: 9px !important; }
+  .sport-admin .sport-page-head-action > button {
+    min-height: 34px !important; padding: 0 11px !important;
+    border: 1px solid #29404a !important; background: transparent !important; color: #e9eee9 !important; font-size: 9px !important;
+  }
+  .sport-admin-stats { grid-template-columns: 1fr 1fr !important; }
+  .sport-admin-stats > div { padding: 13px 10px !important; }
+  .sport-admin-stats strong { font-size: 24px !important; }
+  .sport-admin-stats span { font-size: 8px !important; }
+  .sport-admin-tabs button { height: 42px !important; font-size: 11px !important; }
+  .sport-admin-table article { padding: 10px 0 !important; min-height: 0 !important; font-size: 10px !important; }
+  .sport-admin-table .actions button { min-height: 30px !important; font-size: 9px !important; }
+}
+
+@media (max-width: 390px) {
+  .mobile-topbar { padding: 0 10px !important; }
+  .mobile-brand strong { font-size: 15px !important; }
+  .sport-home-copy h1 { font-size: 34px !important; }
+  .sport-nearest-time { font-size: 54px !important; }
+  .sport-court-name strong { font-size: 11px !important; }
+}
+
+
+/* ==========================================================
+   PADLETIC HOME HERO RESET V3
+   Deliberately replaces the previous overlaid hero.
+   Desktop: editorial split panel.
+   Mobile: compact photo hero with controlled crop.
+   ========================================================== */
+
+.sport-home-hero {
+  position: relative !important;
+  height: 350px !important;
+  min-height: 350px !important;
+  display: grid !important;
+  grid-template-columns: minmax(360px, 42%) minmax(0, 58%) !important;
+  overflow: hidden !important;
+  border: 1px solid #1d313a !important;
+  border-radius: 0 !important;
+  background: #081820 !important;
+}
+
+.sport-home-hero::after {
+  content: "" !important;
+  display: block !important;
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  background:
+    linear-gradient(90deg, rgba(8,24,32,.12), rgba(8,24,32,0) 24%),
+    linear-gradient(180deg, rgba(0,0,0,.02), rgba(4,13,18,.16)),
+    url("/premium/hero-clean.jpg") 72% center / cover no-repeat !important;
+}
+
+.sport-home-copy {
+  position: relative !important;
+  inset: auto !important;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  z-index: 2 !important;
+  padding: 50px 42px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  background: #081820 !important;
+}
+
+.sport-home-copy::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: -72px !important;
+  bottom: 0 !important;
+  width: 74px !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  background: linear-gradient(90deg, #081820 0%, rgba(8,24,32,.88) 44%, rgba(8,24,32,0) 100%) !important;
+}
+
+.sport-home-copy > span {
+  position: relative !important;
+  z-index: 4 !important;
+  color: #84959d !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .25em !important;
+}
+
+.sport-home-copy h1 {
+  position: relative !important;
+  z-index: 4 !important;
+  max-width: none !important;
+  margin: 17px 0 15px !important;
+  font-size: clamp(52px, 4.3vw, 72px) !important;
+  line-height: .84 !important;
+  letter-spacing: -.055em !important;
+  color: #edf1ed !important;
+}
+
+.sport-home-copy h1 i {
+  color: #91a785 !important;
+}
+
+.sport-home-copy p {
+  position: relative !important;
+  z-index: 4 !important;
+  max-width: 330px !important;
+  margin: 0 !important;
+  color: #b5c0c3 !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+/* Search becomes a separate deliberate bar, not part of the image. */
+.sport-home-search {
+  margin: 0 !important;
+  border-left: 1px solid #1d313a !important;
+  border-right: 1px solid #1d313a !important;
+  border-bottom: 1px solid #1d313a !important;
+  background: #1d313a !important;
+}
+
+@media (max-width: 900px) {
+  .sport-home-hero {
+    height: 245px !important;
+    min-height: 245px !important;
+    display: block !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    background:
+      linear-gradient(180deg,
+        rgba(4,14,20,.08) 0%,
+        rgba(4,14,20,.12) 36%,
+        rgba(4,14,20,.66) 74%,
+        #07131a 100%),
+      linear-gradient(90deg, rgba(4,14,20,.28), rgba(4,14,20,.02)),
+      url("/premium/hero-clean.jpg") 79% 50% / cover no-repeat !important;
+  }
+
+  .sport-home-hero::after {
+    display: none !important;
+  }
+
+  .sport-home-copy {
+    position: absolute !important;
+    inset: 0 !important;
+    padding: 0 18px 22px !important;
+    justify-content: flex-end !important;
+    background: transparent !important;
+  }
+
+  .sport-home-copy::after {
+    display: none !important;
+  }
+
+  .sport-home-copy > span {
+    font-size: 7px !important;
+    letter-spacing: .22em !important;
+  }
+
+  .sport-home-copy h1 {
+    max-width: 190px !important;
+    margin: 9px 0 8px !important;
+    font-size: 36px !important;
+    line-height: .84 !important;
+  }
+
+  .sport-home-copy p {
+    max-width: 270px !important;
+    font-size: 10px !important;
+  }
+
+  .sport-home-search {
+    margin: 0 10px !important;
+    border: 1px solid #20343d !important;
+    background: #20343d !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .sport-home-hero {
+    height: 228px !important;
+    min-height: 228px !important;
+    background-position: 81% 50% !important;
+  }
+
+  .sport-home-copy {
+    padding: 0 16px 18px !important;
+  }
+
+  .sport-home-copy h1 {
+    font-size: 33px !important;
+  }
+}
