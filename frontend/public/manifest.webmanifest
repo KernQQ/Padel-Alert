@@ -1,32 +1,14 @@
 {
-  "name": "PADLETIC — padel w jednym miejscu",
+  "name": "PADLETIC",
   "short_name": "PADLETIC",
-  "description": "Znajdź kort, mecz i graczy do padla.",
-  "start_url": "/?source=pwa",
-  "scope": "/",
+  "description": "Padel w jednym miejscu",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#041008",
-  "theme_color": "#07110c",
-  "orientation": "portrait-primary",
+  "background_color": "#050b07",
+  "theme_color": "#08110c",
   "icons": [
-    {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-512-maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "id": "/"
+    {"src":"/icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"/icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"/icons/icon-512-maskable.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
 }

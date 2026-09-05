@@ -44,7 +44,15 @@ export default function PadleticTimePicker({
     if (mobile) document.body.style.overflow = "hidden";
     const onKey = (event) => event.key === "Escape" && setOpen(false);
     const outside = (event) => {
-      if (!mobile && rootRef.current && !rootRef.current.contains(event.target)) setOpen(false);
+      if (mobile) return;
+
+      const target = event.target;
+      const clickedTrigger = rootRef.current?.contains(target);
+      const clickedDesktopPicker = target?.closest?.(".padletic-picker-popover-portal");
+
+      if (!clickedTrigger && !clickedDesktopPicker) {
+        setOpen(false);
+      }
     };
     document.addEventListener("keydown", onKey);
     document.addEventListener("pointerdown", outside);

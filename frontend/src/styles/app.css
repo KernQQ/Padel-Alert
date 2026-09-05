@@ -12112,3 +12112,36 @@ body {
     margin-top: 16px;
   }
 }
+
+/* ===== PADLETIC BATCH UPDATE 2026-09-05 ===== */
+:root{--pd-surface:#0b130e;--pd-surface-2:#111a14;--pd-line:#26352b;--pd-muted:#8e9a92;--pd-lime:#79c512;--pd-soft:#dce8dd}
+.consumer-search-card,.partner-filter-panel,.match-card,.owner-post-card,.saved-card,.profile-editor-panel,.admin-panel,.match-filter-panel{background:var(--pd-surface-2)!important;border-color:var(--pd-line)!important;box-shadow:none!important}
+.consumer-page-header h1,.partners-heading h1,.match-page h1,.saved-page h1{letter-spacing:-.045em!important}
+.consumer-search-card button,.partner-filter-panel button,.match-page button,.saved-page button{border-radius:12px}
+
+.pa-home-search-interactive{overflow:visible!important}
+.pa-home-field-wrap{position:relative;min-width:0}
+.pa-home-field-wrap>.pa-premium-field{width:100%;height:100%}
+.pa-home-picker{position:absolute;z-index:120;top:calc(100% + 8px);left:0;min-width:210px;padding:8px;border:1px solid #2b3d30;border-radius:14px;background:#09110d;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.pa-home-picker button{width:100%;min-height:42px;padding:0 12px;border:1px solid transparent;border-radius:9px;color:#eef3ef;background:transparent;text-align:left;font-weight:750;cursor:pointer}
+.pa-home-picker button:hover,.pa-home-picker button.active{border-color:#4f7e21;background:#14230f;color:#b7ee75}
+.pa-home-picker button b{float:right}
+.pa-home-picker-grid{display:grid;grid-template-columns:repeat(2,minmax(82px,1fr));gap:5px;min-width:250px;max-height:330px;overflow:auto}
+.pa-home-picker-grid button{text-align:center}
+.pa-home-time-grid{grid-template-columns:repeat(3,minmax(70px,1fr));min-width:290px}
+
+.photo-crop-backdrop{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(14px)}
+.photo-crop-panel{width:min(520px,100%);padding:22px;border:1px solid #315026;border-radius:24px;background:#09110d;color:#f5f7f5;box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.photo-crop-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.photo-crop-head small{color:#82d51b;font-weight:900;letter-spacing:.22em}.photo-crop-head h2{margin:4px 0 0;font-size:28px}.photo-crop-head>button{width:42px;height:42px;border:1px solid #304238;border-radius:12px;background:#101a14;color:white;font-size:26px}
+.photo-crop-stage{position:relative;width:min(360px,78vw);aspect-ratio:1;margin:auto;border-radius:50%;overflow:hidden;border:3px solid #79c512;box-shadow:0 0 0 999px rgba(0,0,0,.08);touch-action:none;cursor:grab}.photo-crop-stage canvas{width:100%;height:100%;display:block}
+.photo-crop-panel>p{text-align:center;color:#91a097;font-size:12px}.photo-crop-zoom{display:flex;align-items:center;gap:10px;color:#91a097;font-size:11px}.photo-crop-zoom input{flex:1;accent-color:#79c512}.photo-crop-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.photo-crop-actions button{min-height:48px;border:1px solid #304238;border-radius:12px;background:#111a14;color:white;font-weight:850}.photo-crop-actions .primary{background:#79c512;color:#071007;border-color:#79c512}
+
+@media(max-width:900px){
+ .pa-premium-club-grid{display:flex!important;overflow-x:auto!important;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;gap:12px!important;padding:0 14px 8px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}.pa-premium-club-grid::-webkit-scrollbar{display:none}.pa-premium-club-card{flex:0 0 84vw!important;max-width:340px!important;scroll-snap-align:start}.pa-premium-content{overflow:visible!important}
+ .pa-home-field-wrap{display:block!important}.pa-home-picker{position:fixed;z-index:10001;left:14px;right:14px;top:auto;bottom:calc(92px + env(safe-area-inset-bottom));min-width:0;max-height:52vh;overflow:auto;border-radius:20px;padding:12px}.pa-home-picker-grid,.pa-home-time-grid{min-width:0;grid-template-columns:repeat(3,1fr)}
+ .pa-home-search-interactive{grid-template-columns:1fr 1fr!important}.pa-home-search-interactive>.pa-home-field-wrap{grid-column:auto!important}.pa-home-search-interactive>.pa-premium-search-button{grid-column:1/-1!important}
+ .pa-premium-field:nth-child(1){grid-column:auto!important}
+ .photo-crop-panel{padding:18px;border-radius:22px}.photo-crop-stage{width:min(330px,76vw)}
+}
+.pd-home-search-interactive{overflow:visible!important}.pd-home-field-wrap{position:relative;min-width:0}.pd-home-field-wrap>button{width:100%;height:100%}.pd-home-picker{position:absolute;z-index:120;top:calc(100% + 8px);left:0;min-width:210px;padding:8px;border:1px solid #2b3d30;border-radius:14px;background:#09110d;box-shadow:0 20px 50px rgba(0,0,0,.45)}.pd-home-picker button{width:100%;min-height:42px;padding:0 12px;border:1px solid transparent;border-radius:9px;color:#eef3ef;background:transparent;text-align:left;font-weight:750}.pd-home-picker button.active{border-color:#4f7e21;background:#14230f;color:#b7ee75}.pd-home-picker button b{float:right}.pd-home-picker-grid{display:grid;grid-template-columns:repeat(2,minmax(82px,1fr));gap:5px;min-width:250px;max-height:330px;overflow:auto}.pd-home-picker-grid button{text-align:center}.pd-home-time-grid{grid-template-columns:repeat(3,minmax(70px,1fr));min-width:290px}
+@media(max-width:900px){.pd-home-clubs{display:flex!important;overflow-x:auto!important;scroll-snap-type:x mandatory;gap:12px!important;padding-bottom:10px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}.pd-home-clubs::-webkit-scrollbar{display:none}.pd-home-club-card{flex:0 0 84vw!important;max-width:340px!important;scroll-snap-align:start}.pd-home-field-wrap{display:block!important}.pd-home-picker{position:fixed;z-index:10001;left:14px;right:14px;top:auto;bottom:calc(92px + env(safe-area-inset-bottom));min-width:0;max-height:52vh;overflow:auto;border-radius:20px;padding:12px}.pd-home-picker-grid,.pd-home-time-grid{min-width:0;grid-template-columns:repeat(3,1fr)}.pd-home-search-interactive{grid-template-columns:1fr 1fr!important}.pd-home-search-interactive>.pd-home-field-wrap{grid-column:auto!important}.pd-home-search-interactive>.pd-home-search-submit{grid-column:1/-1!important}}
