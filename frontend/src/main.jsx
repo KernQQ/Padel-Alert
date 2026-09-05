@@ -25,7 +25,7 @@ createRoot(document.getElementById("root")).render(
 
 const themeMeta = document.querySelector('meta[name="theme-color"]') || document.createElement("meta");
 themeMeta.name = "theme-color";
-themeMeta.content = "#07110c";
+themeMeta.content = "#07111c";
 if (!themeMeta.parentNode) document.head.appendChild(themeMeta);
 
 const viewportMeta = document.querySelector('meta[name="viewport"]');
