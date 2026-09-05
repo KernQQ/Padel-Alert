@@ -15,6 +15,14 @@ function HomeDashboard({ recommendations = [], onOpenCourts, onSelectCourt }) {
 
   return (
     <div className="ref-home">
+      <div className="desktop-home-video" aria-hidden="true">
+        <video className="desktop-home-video-media" autoPlay muted loop playsInline preload="metadata">
+          <source src="/padel-bg.webm" type="video/webm" />
+          <source src="/padel-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="desktop-home-video-shade" />
+      </div>
+
       <section className="ref-home-hero">
         <div className="ref-home-hero-copy">
           <span>SZCZECIN · PADEL · COMMUNITY</span>

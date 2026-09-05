@@ -331,3 +331,119 @@
     color: inherit !important;
   }
 }
+
+
+/* =========================================================
+   PADLETIC — DESKTOP VIDEO HOME 1
+   Desktop-only cinematic background. Mobile <=900px untouched.
+   Video files: /public/padel-bg.webm and/or /public/padel-bg.mp4
+   ========================================================= */
+@media (min-width: 901px) {
+  .page:has(.ref-home) {
+    position: relative !important;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 100vh;
+    background: #07151d !important;
+  }
+
+  .ref-home {
+    position: relative;
+    z-index: 1;
+    min-height: calc(100vh - 1px);
+  }
+
+  .desktop-home-video {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .desktop-home-video-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    filter: saturate(.72) brightness(.68) contrast(1.04);
+    transform: scale(1.015);
+  }
+
+  .desktop-home-video-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(4,15,21,.66) 0%, rgba(4,15,21,.28) 46%, rgba(4,15,21,.34) 100%),
+      linear-gradient(180deg, rgba(4,15,21,.18) 0%, rgba(4,15,21,.28) 55%, rgba(4,15,21,.58) 100%);
+    backdrop-filter: blur(1.2px);
+  }
+
+  /* Hero becomes transparent: the moving court is the hero. */
+  .ref-home-hero {
+    min-height: 245px !important;
+    height: 245px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .ref-home-hero-copy {
+    left: 38px !important;
+    top: 30px !important;
+    bottom: auto !important;
+  }
+
+  .ref-home-hero-copy > span {
+    color: #b2bdc1 !important;
+    letter-spacing: .20em !important;
+  }
+
+  .ref-home-hero-copy h1 {
+    margin-top: 15px !important;
+    margin-bottom: 12px !important;
+    font-size: clamp(38px, 3.0vw, 52px) !important;
+    line-height: .88 !important;
+    letter-spacing: -.045em !important;
+    text-shadow: 0 2px 18px rgba(0,0,0,.28);
+  }
+
+  .ref-home-hero-copy p {
+    color: #c0c9cc !important;
+    text-shadow: 0 1px 12px rgba(0,0,0,.38);
+  }
+
+  /* Glass controls over the video. */
+  .ref-home-search,
+  .ref-nearest-card,
+  .ref-home-next > button {
+    background: rgba(9, 27, 36, .78) !important;
+    border-color: rgba(101, 126, 137, .42) !important;
+    box-shadow: 0 14px 40px rgba(0,0,0,.12) !important;
+    backdrop-filter: blur(16px) saturate(110%);
+    -webkit-backdrop-filter: blur(16px) saturate(110%);
+  }
+
+  .ref-home-nearest header,
+  .ref-home-next h3 {
+    text-shadow: 0 2px 14px rgba(0,0,0,.52);
+  }
+
+  .ref-home-nearest,
+  .ref-home-next,
+  .ref-home-search {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Keep the content compact and high, like the approved visual direction. */
+  .ref-home-search { margin-top: -4px !important; }
+  .ref-home-nearest { margin-top: 24px !important; }
+  .ref-home-next { margin-top: 24px !important; }
+}
+
+@media (max-width: 900px) {
+  .desktop-home-video { display: none !important; }
+}

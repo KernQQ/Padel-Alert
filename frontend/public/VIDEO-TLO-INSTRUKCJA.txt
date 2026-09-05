@@ -1,0 +1,19 @@
+PADLETIC — wideo tła desktopu
+
+Wrzuć tutaj gotowy materiał jako:
+  padel-bg.mp4
+LUB (najlepiej dodatkowo):
+  padel-bg.webm
+
+Kod jest już podłączony. Wideo działa TYLKO na desktopie (>900 px).
+Mobile iOS/Android nie korzysta z tego tła i pozostaje bez zmian.
+
+Zalecenia do materiału:
+- 1920x1080 lub 2560x1440
+- 8–15 sekund, płynna pętla
+- nieruchoma kamera
+- 2–4 osoby grające w padla
+- bez napisów, reklam i logotypów
+- bez dźwięku
+- ciemny / wieczorny klimat
+- MP4 H.264, najlepiej 5–12 MB
