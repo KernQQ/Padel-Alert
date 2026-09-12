@@ -1,6 +1,12 @@
 import { useMemo } from "react";
 
-function HomeDashboard({ recommendations = [], onOpenCourts, onSelectCourt }) {
+function HomeDashboard({
+  recommendations = [],
+  onOpenCourts,
+  onSelectCourt,
+  onOpenMatches,
+  onOpenPlayers
+}) {
   const unique = useMemo(() =>
     recommendations.filter((item, index, all) =>
       all.findIndex((candidate) =>
@@ -43,27 +49,35 @@ function HomeDashboard({ recommendations = [], onOpenCourts, onSelectCourt }) {
         {nearest ? (
           <button className="ref-nearest-card" type="button" onClick={() => onSelectCourt?.(nearest)}>
             <time>{nearest.startHour}</time>
-            <div><strong>{nearest.clubName}</strong><small>{nearest.courtName} · {nearest.startHour}{nearest.endHour ? ` – ${nearest.endHour}` : ""}</small></div>
-            <b>›</b>
+            <div className="ref-nearest-copy"><strong>{nearest.clubName}</strong><small>{nearest.courtName} · {nearest.startHour}{nearest.endHour ? ` – ${nearest.endHour}` : ""}</small></div>
+            <b className="ref-mobile-arrow">›</b>
+            <span className="ref-nearest-badge ref-desktop-only">WOLNY</span>
+            <span className="ref-nearest-cta ref-desktop-only">Zarezerwuj <b>→</b></span>
           </button>
         ) : (
           <button className="ref-nearest-card" type="button" onClick={onOpenCourts}>
-            <time>—</time><div><strong>Sprawdź dostępność</strong><small>Znajdź najbliższy wolny kort.</small></div><b>›</b>
+            <time>—</time><div className="ref-nearest-copy"><strong>Sprawdź dostępność</strong><small>Znajdź najbliższy wolny kort.</small></div><b className="ref-mobile-arrow">›</b><span className="ref-nearest-cta ref-desktop-only">Sprawdź <b>→</b></span>
           </button>
         )}
       </section>
 
       <section className="ref-home-next">
-        <h3>Kolejne terminy</h3>
+        <div className="ref-home-next-head"><h3>Kolejne terminy</h3><button type="button" onClick={onOpenCourts}>Zobacz wszystkie →</button></div>
         {next.length > 0 ? next.map((item) => (
           <button key={`${item.clubName}-${item.courtName}-${item.startHour}`} type="button" onClick={() => onSelectCourt?.(item)}>
-            <time>{item.startHour}</time><div><strong>{item.clubName}</strong><small>{item.courtName}</small></div><b>→</b>
+            <time>{item.startHour}</time><div><strong>{item.clubName}</strong><small>{item.courtName}</small></div><span className="ref-free ref-desktop-only"><i />Wolny</span><b>→</b>
           </button>
         )) : (
           <button type="button" onClick={onOpenCourts}>
-            <time>—</time><div><strong>Zobacz wszystkie terminy</strong><small>Sprawdź dostępność kortów.</small></div><b>→</b>
+            <time>—</time><div><strong>Zobacz wszystkie terminy</strong><small>Sprawdź dostępność kortów.</small></div><span className="ref-free ref-desktop-only"><i />Sprawdź</span><b>→</b>
           </button>
         )}
+      </section>
+
+      <section className="ref-home-actions ref-desktop-only" aria-label="Szybkie akcje">
+        <button type="button" onClick={onOpenCourts}><span className="ref-action-icon">▣</span><span><strong>Zobacz wszystkie terminy</strong><small>Sprawdź dostępność na wszystkich kortach.</small></span><b>→</b></button>
+        <button type="button" onClick={onOpenPlayers}><span className="ref-action-icon">♙</span><span><strong>Znajdź graczy</strong><small>Dołącz do meczów i poznaj nowych ludzi.</small></span><b>→</b></button>
+        <button type="button" onClick={onOpenMatches}><span className="ref-action-icon">♜</span><span><strong>Weź udział w meczu</strong><small>Graj, zdobywaj doświadczenie, baw się!</small></span><b>→</b></button>
       </section>
     </div>
   );

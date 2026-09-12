@@ -448,3 +448,86 @@
 @media (max-width: 900px) {
   .desktop-home-video { display: none !important; }
 }
+
+/* =========================================================
+   PADLETIC — DESKTOP HOME VISUAL PASS 2026-09-12
+   Desktop only. Mobile <=900px is intentionally untouched.
+   ========================================================= */
+@media (min-width: 901px) {
+  .page:has(.ref-home) { padding: 0 32px 28px !important; }
+  .ref-home { max-width: 1500px; margin: 0 auto; padding: 0 0 28px; }
+
+  .desktop-home-video-media {
+    filter: saturate(.92) brightness(.78) contrast(1.06) !important;
+    object-position: center 48% !important;
+  }
+  .desktop-home-video-shade {
+    background:
+      linear-gradient(90deg, rgba(3,14,20,.66) 0%, rgba(3,14,20,.22) 42%, rgba(3,14,20,.24) 100%),
+      linear-gradient(180deg, rgba(3,14,20,.08) 0%, rgba(3,14,20,.16) 52%, rgba(3,14,20,.62) 100%) !important;
+    backdrop-filter: blur(.35px) !important;
+  }
+
+  .ref-home-hero { height: 285px !important; min-height: 285px !important; }
+  .ref-home-hero-copy { left: 54px !important; top: 34px !important; max-width: 500px !important; }
+  .ref-home-hero-copy > span { font-size: 10px !important; letter-spacing: .27em !important; color: #c2cdd0 !important; }
+  .ref-home-hero-copy h1 { margin: 20px 0 14px !important; font-size: clamp(54px,4vw,72px) !important; line-height: .78 !important; letter-spacing: -.06em !important; }
+  .ref-home-hero-copy p { font-size: 14px !important; color: #e0e6e5 !important; }
+
+  .ref-home-search {
+    min-height: 58px !important; margin: 0 0 34px !important; padding: 0 20px !important;
+    grid-template-columns: 30px 1fr 24px !important; border-radius: 10px !important;
+    background: rgba(7,28,38,.78) !important; border: 1px solid rgba(126,158,170,.46) !important;
+  }
+  .ref-home-search strong { font-size: 14px !important; }
+
+  .ref-home-nearest { margin-top: 0 !important; }
+  .ref-home-nearest header { margin-bottom: 11px !important; }
+  .ref-home-nearest h2,.ref-home-next h3 { font-size: 20px !important; }
+  .ref-home-nearest header button,.ref-home-next-head button { border:0;background:transparent;color:#b7c4c8;font-size:11px;cursor:pointer; }
+
+  .ref-nearest-card {
+    grid-template-columns: 155px 1fr 180px !important; min-height: 106px !important;
+    border-radius: 11px !important; background: rgba(7,29,39,.82) !important; overflow: hidden;
+  }
+  .ref-nearest-time { height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;border-right:1px solid rgba(126,158,170,.28); }
+  .ref-nearest-time time { height:auto !important;border:0 !important;font-size:35px !important;line-height:1 !important; }
+  .ref-nearest-time span { margin-top:9px;padding:3px 9px;border-radius:999px;background:#3da966;color:#f4fff6;font-size:8px;font-weight:900;letter-spacing:.06em; }
+  .ref-nearest-copy { padding: 0 28px !important; }
+  .ref-nearest-copy strong { font-size:16px !important; }
+  .ref-nearest-copy small { margin-top:7px !important;font-size:11px !important;color:#a8b7bc !important; }
+  .ref-nearest-cta { justify-self:end;margin-right:22px;min-width:145px;height:48px;border:1px solid #b8c8cd;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:20px;font-size:12px;font-weight:800; }
+
+  .ref-home-next { margin-top: 25px !important; }
+  .ref-home-next-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:9px; }
+  .ref-home-next-head h3 { margin:0 !important; }
+  .ref-home-next > button { grid-template-columns: 90px 1fr 100px 28px !important; min-height: 54px !important; padding:0 16px !important;background:rgba(7,29,39,.76) !important; }
+  .ref-home-next > button:first-of-type { border-radius:10px 10px 0 0; }
+  .ref-home-next > button:last-of-type { border-radius:0 0 10px 10px; }
+  .ref-home-next time { font-size:14px !important;font-weight:850; }
+  .ref-home-next strong { font-size:12px !important; }
+  .ref-home-next small { font-size:9px !important; }
+  .ref-free { display:flex;align-items:center;gap:8px;color:#dbe7e1;font-size:10px; }
+  .ref-free i { width:8px;height:8px;border-radius:50%;background:#55c878;box-shadow:0 0 10px rgba(85,200,120,.25); }
+
+  .ref-home-actions { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:26px; }
+  .ref-home-actions > button { min-height:94px;display:grid;grid-template-columns:52px 1fr 22px;gap:16px;align-items:center;padding:0 20px;border:1px solid rgba(126,158,170,.35);border-radius:11px;background:rgba(7,29,39,.78);color:#edf2f1;text-align:left;backdrop-filter:blur(16px);cursor:pointer; }
+  .ref-home-actions > button:hover,.ref-nearest-card:hover,.ref-home-next > button:hover,.ref-home-search:hover { border-color:rgba(181,207,216,.7) !important;background:rgba(10,35,46,.88) !important; }
+  .ref-action-icon { width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(20,55,69,.8);font-size:19px;color:#edf2f1; }
+  .ref-home-actions strong,.ref-home-actions small { display:block; }
+  .ref-home-actions strong { font-size:13px; }
+  .ref-home-actions small { margin-top:5px;color:#9fb0b6;font-size:10px;line-height:1.35; }
+  .ref-home-actions b { font-weight:400;font-size:18px; }
+}
+
+/* Desktop-only additions stay completely out of the mobile layout. */
+.ref-desktop-only { display: none; }
+@media (min-width: 901px) {
+  .ref-desktop-only { display: flex; }
+  .ref-home-actions.ref-desktop-only { display: grid; }
+  .ref-nearest-card { position: relative; grid-template-columns: 155px 1fr 180px !important; }
+  .ref-nearest-card > time { height:100% !important;display:grid !important;place-items:center !important;border-right:1px solid rgba(126,158,170,.28) !important;font-size:35px !important;line-height:1 !important; }
+  .ref-nearest-badge { position:absolute;left:54px;bottom:15px;padding:3px 9px;border-radius:999px;background:#3da966;color:#f4fff6;font-size:8px;font-weight:900;letter-spacing:.06em; }
+  .ref-nearest-card > .ref-mobile-arrow { display:none !important; }
+  .ref-nearest-cta { grid-column:3;grid-row:1; }
+}
