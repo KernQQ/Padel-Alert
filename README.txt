@@ -1,8 +1,14 @@
-PADLETIC — DESKTOP RESTORE / MOBILE KEEP
+PADLETIC — DESKTOP I MOBILE ROZDZIELONE
 
-Podmień tylko:
-1. frontend/src/components/HomeDashboard.jsx
-2. frontend/src/styles/desktop-clean-reset.css
+Desktop:
+- frontend/src/components/DesktopHomeDashboard.jsx
+- frontend/src/styles/desktop-clean-reset.css
 
-Ten hotfix przywraca ostatni poprawny desktop i zostawia nowy mobile osobno.
-Nie podmieniaj App.jsx ani mobile-final-2026.css.
+Mobile:
+- frontend/src/components/MobileHomeDashboard.jsx
+- frontend/src/styles/mobile-final-2026.css
+
+Wrapper:
+- frontend/src/components/HomeDashboard.jsx wybiera komponent przez matchMedia <= 900px.
+
+App.jsx zawiera domyślne wyszukiwanie: jutro od 16:00 oraz nowe srebrne logo.
