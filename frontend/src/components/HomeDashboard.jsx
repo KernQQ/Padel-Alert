@@ -1,5 +1,13 @@
 import { useMemo } from "react";
 
+function getClubPhoto(clubName = "") {
+  const name = String(clubName).toLowerCase();
+  if (name.includes("arena południowa") || name.includes("arena poludniowa")) return "/premium/club-1.jpg";
+  if (name.includes("padel club")) return "/premium/club-2.jpg";
+  if (name.includes("fabryka energii")) return "/premium/club-3.jpg";
+  return "/premium/hero-clean.jpg";
+}
+
 function HomeDashboard({
   recommendations = [],
   players = [],
@@ -133,7 +141,7 @@ function HomeDashboard({
       {/* Mobile home — redesigned for iOS + Android. Desktop remains isolated above. */}
       <div className="ref-home-mobile pdm-home">
         <section className="pdm-hero">
-          <div className="pdm-hero-photo" aria-hidden="true" />
+          <div className="pdm-hero-photo" aria-hidden="true" style={{ backgroundImage: `url(${getClubPhoto(nearest?.clubName)})` }} />
           <div className="pdm-hero-shade" aria-hidden="true" />
           <div className="pdm-hero-content">
             <div className="pdm-kicker">Szczecin</div>
@@ -154,7 +162,7 @@ function HomeDashboard({
           </header>
           {nearest ? (
             <button className="pdm-nearest-card" type="button" onClick={() => onSelectCourt?.(nearest)}>
-              <div className="pdm-nearest-thumb" aria-hidden="true" />
+              <div className="pdm-nearest-thumb" aria-hidden="true" style={{ backgroundImage: `url(${getClubPhoto(nearest.clubName)})` }} />
               <div className="pdm-nearest-info">
                 <span className="pdm-free-pill"><i /> Wolny</span>
                 <time>{nearest.startHour}{nearest.endHour ? ` – ${nearest.endHour}` : ""}</time>
@@ -180,7 +188,13 @@ function HomeDashboard({
           </header>
           <div className="pdm-next-list">
             {next.length > 0 ? next.map((item) => (
-              <button key={`${item.clubName}-${item.courtName}-${item.startHour}`} type="button" onClick={() => onSelectCourt?.(item)}>
+              <button
+                key={`${item.clubName}-${item.courtName}-${item.startHour}`}
+                type="button"
+                onClick={() => onSelectCourt?.(item)}
+                style={{ "--pdm-club-photo": `url(${getClubPhoto(item.clubName)})` }}
+              >
+                <span className="pdm-next-thumb" aria-hidden="true" />
                 <time>{item.startHour}</time>
                 <div><strong>{item.clubName}</strong><small>{item.courtName}</small></div>
                 <span className="pdm-free-dot"><i /> Wolny</span>
