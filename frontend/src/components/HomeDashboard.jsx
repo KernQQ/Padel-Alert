@@ -215,7 +215,6 @@ function HomeDashboard({
           </div>
         </section>
       </div>
-      </div>
     </div>
   );
 }
