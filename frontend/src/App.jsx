@@ -14,6 +14,7 @@ import "./styles/mobile-1to1.css";
 import "./styles/mobile-platform-fix.css";
 import "./styles/desktop-v2.css";
 import "./styles/desktop-clean-reset.css";
+import "./styles/mobile-redesign-2026.css";
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
   getToday,
