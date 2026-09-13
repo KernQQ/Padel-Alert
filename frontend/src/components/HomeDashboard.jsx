@@ -81,6 +81,7 @@ function HomeDashboard({
                 className={`pd-slot ${index === 0 ? "is-primary" : ""}`}
                 key={`${item.clubName}-${item.courtName}-${item.startHour}`}
                 onClick={() => onSelectCourt?.(item)}
+                style={{ "--pd-club-photo": `url(${getClubPhoto(item.clubName)})` }}
               >
                 <time>{item.startHour}</time>
                 <small>{item.courtName}</small>
@@ -141,7 +142,7 @@ function HomeDashboard({
       {/* Mobile home — redesigned for iOS + Android. Desktop remains isolated above. */}
       <div className="ref-home-mobile pdm-home">
         <section className="pdm-hero">
-          <div className="pdm-hero-photo" aria-hidden="true" style={{ backgroundImage: `url(${getClubPhoto(nearest?.clubName)})` }} />
+          <div className="pdm-hero-photo" aria-hidden="true" style={{ backgroundImage: "url(/assets/padletic-players-sunset.jpg)" }} />
           <div className="pdm-hero-shade" aria-hidden="true" />
           <div className="pdm-hero-content">
             <div className="pdm-kicker">Szczecin</div>
