@@ -139,3 +139,259 @@
   .sport-page-head h1 { font-size: 27px !important; }
   .sport-page-head-action > button { padding: 0 9px !important; font-size: 9px !important; }
 }
+
+/* === PADLETIC 2026: compact mobile courts view (approved visual) === */
+@media (max-width: 900px) {
+  .sport-courts {
+    margin: 0 20px !important;
+    padding-top: 18px !important;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .sport-courts > .sport-page-head {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 8px 0 18px !important;
+    border-bottom: 1px solid rgba(122, 154, 166, .26) !important;
+  }
+  .sport-courts > .sport-page-head > div:first-child { display:block !important; }
+  .sport-courts .sport-page-head h1 {
+    margin: 0 !important;
+    font-size: 34px !important;
+    line-height: 1 !important;
+    letter-spacing: -.045em !important;
+  }
+  .sport-courts .sport-page-head p { display:none !important; }
+  .sport-courts .sport-page-date {
+    margin-top: 8px !important;
+    color: #8ea0a7 !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+  }
+
+  .sport-courts-toolbar {
+    display:grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    padding: 18px 0 12px !important;
+    border-bottom: 0 !important;
+  }
+  .sport-courts-toolbar .sport-filter-club { grid-column:1/-1 !important; }
+  .sport-courts-toolbar .sport-filter > span {
+    display:block !important;
+    margin:0 0 7px !important;
+    color:#899ba2 !important;
+    font-size:9px !important;
+    font-weight:800 !important;
+    letter-spacing:.14em !important;
+    text-transform:uppercase !important;
+  }
+  .sport-courts-toolbar .sport-filter input,
+  .sport-courts-toolbar .sport-filter select,
+  .sport-courts-toolbar .sport-filter button {
+    height: 48px !important;
+    min-height: 48px !important;
+    border:1px solid rgba(122,154,166,.30) !important;
+    border-radius:10px !important;
+    background:#081c25 !important;
+    color:#e9efed !important;
+    font-size:14px !important;
+    box-shadow:none !important;
+  }
+  .sport-courts-toolbar .sport-duration {
+    grid-column:1/-1 !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,1fr) !important;
+    gap:8px !important;
+  }
+  .sport-courts-toolbar .sport-duration button {
+    height:46px !important;
+    min-width:0 !important;
+    border:1px solid rgba(122,154,166,.28) !important;
+    border-radius:10px !important;
+    background:#081c25 !important;
+    color:#91a1a7 !important;
+    font-size:13px !important;
+    font-weight:800 !important;
+  }
+  .sport-courts-toolbar .sport-duration button.active {
+    background:#edf1ee !important;
+    border-color:#edf1ee !important;
+    color:#07151b !important;
+  }
+  .sport-courts .sport-search-action {
+    grid-column:1/-1 !important;
+    width:100% !important;
+    height:50px !important;
+    border:0 !important;
+    border-radius:10px !important;
+    background:#edf1ee !important;
+    color:#07151b !important;
+    font-size:15px !important;
+    font-weight:900 !important;
+  }
+
+  .sport-courts-tools {
+    display:grid !important;
+    grid-template-columns:1fr 1fr auto auto !important;
+    gap:0 !important;
+    overflow:visible !important;
+    padding:12px 0 !important;
+    border-top:1px solid rgba(122,154,166,.22) !important;
+    border-bottom:1px solid rgba(122,154,166,.22) !important;
+    white-space:normal !important;
+    align-items:center !important;
+  }
+  .sport-courts-tools button,
+  .sport-courts-tools label,
+  .sport-courts-tools > span {
+    min-height:34px !important;
+    display:flex !important;
+    align-items:center !important;
+    color:#94a4aa !important;
+    font-size:10px !important;
+  }
+  .sport-courts-tools button { justify-content:flex-start !important; }
+  .sport-courts-tools button:nth-of-type(3) { display:none !important; }
+  .sport-courts-tools label { justify-content:flex-end !important; gap:6px !important; }
+  .sport-courts-tools > span { justify-content:flex-end !important; padding-left:7px !important; }
+
+  .sport-availability-board {
+    margin-top:0 !important;
+    border-top:0 !important;
+  }
+  .sport-time-block {
+    display:grid !important;
+    grid-template-columns:72px 1fr !important;
+    border-bottom:1px solid rgba(122,154,166,.25) !important;
+    background:transparent !important;
+  }
+  .sport-time-heading {
+    padding:16px 8px 16px 0 !important;
+    border-right:1px solid rgba(122,154,166,.25) !important;
+  }
+  .sport-time-heading strong {
+    display:block !important;
+    font-size:26px !important;
+    line-height:1 !important;
+    letter-spacing:-.05em !important;
+  }
+  .sport-time-heading span {
+    display:block !important;
+    margin-top:6px !important;
+    color:#8fa1a8 !important;
+    font-size:9px !important;
+  }
+  .sport-court-rows { border-left:0 !important; }
+  .sport-court-rows > button {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    gap:10px !important;
+    align-items:center !important;
+    width:100% !important;
+    min-height:61px !important;
+    padding:9px 7px 9px 12px !important;
+    border:0 !important;
+    border-bottom:1px solid rgba(122,154,166,.22) !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    color:#edf1ef !important;
+    text-align:left !important;
+    box-shadow:none !important;
+  }
+  .sport-court-rows > button:last-child { border-bottom:0 !important; }
+  .sport-court-name strong {
+    display:block !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    font-size:12px !important;
+    line-height:1.2 !important;
+  }
+  .sport-court-name small {
+    display:block !important;
+    margin-top:3px !important;
+    color:#8fa1a8 !important;
+    font-size:10px !important;
+  }
+  .sport-court-name::after {
+    content:'●  Wolny';
+    display:block;
+    margin-top:5px;
+    color:#55e396;
+    font-size:9px;
+    font-weight:700;
+  }
+  .sport-court-duration { display:none !important; }
+  .sport-court-rows b {
+    min-width:86px !important;
+    padding:10px 8px !important;
+    border:1px solid rgba(122,154,166,.28) !important;
+    border-radius:9px !important;
+    color:#edf1ef !important;
+    font-size:10px !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+  }
+
+  /* Compact account popover on every mobile tab. */
+  .mobile-topbar .account-menu { position:relative !important; }
+  .mobile-topbar .account-dropdown {
+    position:fixed !important;
+    top:calc(var(--pdm-topbar-h) + env(safe-area-inset-top) + 8px) !important;
+    right:16px !important;
+    left:auto !important;
+    width:min(270px, calc(100vw - 32px)) !important;
+    padding:10px !important;
+    border:1px solid rgba(97,141,90,.46) !important;
+    border-radius:14px !important;
+    background:rgba(4,25,24,.97) !important;
+    box-shadow:0 18px 60px rgba(0,0,0,.38) !important;
+    backdrop-filter:blur(20px) saturate(1.1) !important;
+    -webkit-backdrop-filter:blur(20px) saturate(1.1) !important;
+    z-index:9999 !important;
+  }
+  .mobile-topbar .account-dropdown-user {
+    padding:6px 6px 10px !important;
+    margin-bottom:4px !important;
+    gap:10px !important;
+  }
+  .mobile-topbar .account-dropdown-user .account-avatar.large {
+    width:38px !important;
+    height:38px !important;
+  }
+  .mobile-topbar .account-dropdown-user strong { font-size:13px !important; }
+  .mobile-topbar .account-dropdown-user small {
+    max-width:175px !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    color:#91a2a8 !important;
+    font-size:9px !important;
+  }
+  .mobile-topbar .account-dropdown > button {
+    min-height:40px !important;
+    padding:0 8px !important;
+    font-size:12px !important;
+  }
+}
+
+/* FINAL 2026-09-13 — compact empty state + admin polish */
+@media (max-width:900px){
+  .sport-empty{margin:18px 0 0!important;padding:20px 0!important;border-top:1px solid rgba(128,157,168,.24)!important;border-bottom:1px solid rgba(128,157,168,.18)!important;min-height:0!important}
+  .sport-empty>strong{display:block!important;font-size:20px!important;line-height:1.15!important;letter-spacing:-.02em!important;max-width:310px!important}
+  .sport-empty>p{margin:8px 0 14px!important;font-size:12px!important;color:#8fa1a8!important}
+  .sport-empty>div{display:flex!important;gap:8px!important;flex-wrap:wrap!important}
+  .sport-empty button{min-height:38px!important;padding:0 13px!important;border:1px solid rgba(126,157,168,.3)!important;border-radius:10px!important;background:#0a2029!important;color:#eef2f1!important;font-size:11px!important;font-weight:700!important}
+  .admin-page{padding:18px 20px calc(104px + env(safe-area-inset-bottom))!important}
+  .admin-heading{align-items:flex-end!important;margin-bottom:18px!important;gap:12px!important}
+  .admin-heading .eyebrow{display:none!important}.admin-heading h1{margin:0!important;font-size:29px!important;line-height:1!important}.admin-heading p{margin-top:7px!important;font-size:11px!important}
+  .admin-heading>button{min-height:38px!important;padding:0 12px!important;border-radius:10px!important;font-size:10px!important}
+  .admin-metrics{grid-template-columns:1fr 1fr!important;gap:0!important;margin:0 0 14px!important;border-top:1px solid #263c45!important;border-bottom:1px solid #263c45!important}
+  .admin-metrics article{min-height:82px!important;padding:14px 12px!important;border:0!important;border-radius:0!important;background:transparent!important}
+  .admin-metrics article:nth-child(odd){border-right:1px solid #263c45!important}.admin-metrics article:nth-child(-n+2){border-bottom:1px solid #263c45!important}
+  .admin-metrics strong{font-size:26px!important;color:#f1f3f2!important}.admin-metrics small{font-size:9px!important;color:#83969d!important}
+  .admin-tabs{border-bottom:1px solid #263c45!important;margin-bottom:0!important;gap:18px!important}.admin-tabs button{border:0!important;background:transparent!important;padding:0 0 10px!important;min-height:36px!important;border-radius:0!important;color:#899aa0!important;font-size:11px!important}.admin-tabs button.active{background:transparent!important;color:#f1f3f2!important;border-bottom:2px solid #d9e0df!important}
+  .admin-user-list{gap:0!important}.admin-user-list article{padding:14px 0!important;border:0!important;border-bottom:1px solid #263c45!important;border-radius:0!important;background:transparent!important;align-items:center!important}.admin-user-list strong{font-size:13px!important}.admin-user-list small{font-size:9px!important}.admin-user-list select{min-height:38px!important;border-radius:9px!important;background:#0a2029!important}
+}

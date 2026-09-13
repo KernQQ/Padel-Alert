@@ -343,16 +343,21 @@ function App() {
   const [profiles, setProfiles] = useState([]);
 
   const [clubSlug, setClubSlug] = useState("all");
-  const [date, setDate] = useState(today);
-  const [from, setFrom] = useState("08:00");
+  const getTomorrow = () => {
+    const d = new Date(`${today}T12:00:00`);
+    d.setDate(d.getDate() + 1);
+    return [d.getFullYear(), String(d.getMonth()+1).padStart(2,"0"), String(d.getDate()).padStart(2,"0")].join("-");
+  };
+  const [date, setDate] = useState(getTomorrow);
+  const [from, setFrom] = useState("16:00");
   const [to, setTo] = useState("23:59");
   const [duration, setDuration] = useState(120);
   const [courtType, setCourtType] = useState("all");
 
   const [activeSearch, setActiveSearch] = useState({
     club: "all",
-    date: today,
-    from: "08:00",
+    date: getTomorrow(),
+    from: "16:00",
     to: "23:59",
     courtType: "all"
   });
@@ -1674,8 +1679,8 @@ function App() {
                       const base = new Date(`${date}T12:00:00`);
                       base.setDate(base.getDate() + 1);
                       const nextDate = [base.getFullYear(), String(base.getMonth()+1).padStart(2,"0"), String(base.getDate()).padStart(2,"0")].join("-");
-                      setDate(nextDate); setSelectedProposal(null);
-                      setActiveSearch((current) => ({ ...current, club: clubSlug, date: nextDate, from, to, courtType }));
+                      setDate(nextDate); setFrom("16:00"); setTo("22:00"); setSelectedProposal(null);
+                      setActiveSearch((current) => ({ ...current, club: clubSlug, date: nextDate, from: "16:00", to: "22:00", courtType }));
                     }}>Sprawdź jutro</button>
                   </div>
                 </section>
