@@ -844,3 +844,94 @@
     white-space: nowrap;
   }
 }
+
+/* =========================================================
+   PADLETIC — CINEMATIC DESKTOP HOTFIX 2
+   Desktop only: cleaner logo, 4 wider court cards, brighter
+   lower section and better use of the full content width.
+   Mobile <=900px untouched.
+   ========================================================= */
+@media (min-width: 901px) {
+  /* Let the photography breathe across the canvas instead of ending early. */
+  .pd-home-bg {
+    background:
+      url('/assets/padletic-players-sunset.jpg') right top / cover no-repeat,
+      #061118 !important;
+  }
+  .pd-home-bg::after {
+    background:
+      linear-gradient(90deg, #061118 0%, rgba(6,17,24,.94) 15%, rgba(6,17,24,.64) 36%, rgba(6,17,24,.20) 68%, rgba(6,17,24,.22) 100%),
+      linear-gradient(180deg, rgba(6,17,24,.03) 0%, rgba(6,17,24,.08) 45%, rgba(6,17,24,.46) 72%, rgba(6,17,24,.82) 94%, #061118 100%) !important;
+  }
+  .pd-home-bg > span {
+    background:
+      radial-gradient(circle at 79% 18%, transparent 0 24%, rgba(6,17,24,.05) 48%, rgba(6,17,24,.18) 75%) !important;
+  }
+
+  /* Slightly tighter hero = more useful content visible without losing the photo. */
+  .pd-intro {
+    width: min(560px, 43vw) !important;
+    margin-top: 42px !important;
+  }
+  .pd-intro h1 {
+    font-size: clamp(50px, 4vw, 68px) !important;
+  }
+  .pd-courts { margin-top: 30px !important; }
+
+  /* 4 intentionally wider cards, not a tiny card strip lost on the left. */
+  .pd-slot-row {
+    grid-template-columns: repeat(4, minmax(190px, 1fr)) !important;
+    gap: 16px !important;
+    max-width: none !important;
+  }
+  .pd-slot {
+    min-height: 188px !important;
+    padding: 18px 18px 15px !important;
+  }
+  .pd-slot:nth-child(4) {
+    background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%),url('/premium/club-1.jpg') !important;
+  }
+  .pd-slot time { font-size: 31px !important; }
+  .pd-slot strong { font-size: 12px !important; }
+
+  /* Club filters and matches no longer disappear into a black hole. */
+  .pd-clubs {
+    margin-top: 20px !important;
+    padding: 0 0 24px !important;
+    border-bottom-color: rgba(164,183,190,.22) !important;
+  }
+  .pd-matches {
+    margin-top: 20px !important;
+    padding: 2px 0 10px;
+  }
+  .pd-match-list { gap: 18px !important; }
+  .pd-match-row {
+    background: rgba(8,25,33,.72) !important;
+    border-color: rgba(160,181,188,.26) !important;
+  }
+  .pd-footer {
+    margin-top: 22px !important;
+    padding-bottom: 8px;
+    color: #a6b2b6 !important;
+  }
+
+  /* Cleaner rack-shaped P. No circles, dots or decorative bubbles. */
+  .sidebar .brand {
+    grid-template-columns: 48px 1fr !important;
+    gap: 10px !important;
+    min-height: 70px !important;
+  }
+  .sidebar .brand .brand-mark {
+    width: 46px !important;
+    height: 54px !important;
+    min-width: 46px !important;
+    background-image: url('/assets/padletic-padel-logo.svg') !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+  }
+  .sidebar .brand strong {
+    font-size: 13px !important;
+    letter-spacing: .015em !important;
+  }
+}

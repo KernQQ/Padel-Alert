@@ -19,7 +19,7 @@ function HomeDashboard({
     ), [recommendations]);
 
   const nearest = unique[0] || null;
-  const next = unique.slice(1, 6);
+  const next = unique.slice(1, 4);
 
   const clubNames = useMemo(() => {
     const names = unique.map((item) => item.clubName).filter(Boolean);
