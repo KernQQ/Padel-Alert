@@ -4,6 +4,8 @@ function HomeDashboard({
   recommendations = [],
   players = [],
   date,
+  from,
+  duration,
   onOpenCourts,
   onSelectCourt,
   onOpenMatches,
@@ -39,6 +41,14 @@ function HomeDashboard({
     return new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "short" }).format(parsed);
   }, [date]);
 
+  const clubPhoto = (clubName = "") => {
+    const key = String(clubName).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (key.includes("fabryka energii")) return "/premium/club-3.jpg";
+    if (key.includes("padel arena")) return "/premium/club-1.jpg";
+    if (key.includes("padel club")) return "/premium/club-2.jpg";
+    return "/premium/hero-clean.jpg";
+  };
+
   return (
     <div className="ref-home">
       {/* Desktop-only home. Mobile version below remains structurally unchanged. */}
@@ -72,6 +82,7 @@ function HomeDashboard({
                 type="button"
                 className={`pd-slot ${index === 0 ? "is-primary" : ""}`}
                 key={`${item.clubName}-${item.courtName}-${item.startHour}`}
+                style={{ "--pd-slot-photo": `url("${clubPhoto(item.clubName)}")` }}
                 onClick={() => onSelectCourt?.(item)}
               >
                 <time>{item.startHour}</time>
@@ -130,66 +141,85 @@ function HomeDashboard({
         </footer>
       </div>
 
-      {/* Existing mobile home — intentionally untouched in content and behaviour. */}
-      <div className="ref-home-mobile">
-        <div className="desktop-home-video" aria-hidden="true">
-          <video className="desktop-home-video-media" autoPlay muted loop playsInline preload="metadata">
-            <source src="/padel-bg.webm" type="video/webm" />
-            <source src="/padel-bg.mp4" type="video/mp4" />
-          </video>
-          <div className="desktop-home-video-shade" />
-        </div>
-
-        <section className="ref-home-hero">
-          <div className="ref-home-hero-copy">
-            <span>SZCZECIN · PADEL · COMMUNITY</span>
-            <h1>KORTY<br />LUDZIE<br />GRA.</h1>
-            <p>Wolne terminy. Rezerwuj. Widzimy się na korcie.</p>
+      {/* Mobile home — compact iOS / Android layout. */}
+      <div className="ref-home-mobile pdm-home">
+        <section className="pdm-hero">
+          <div
+            className="pdm-hero-photo"
+            style={{ backgroundImage: 'url("/premium/hero-clean.jpg")' }}
+            aria-hidden="true"
+          />
+          <div className="pdm-hero-shade" aria-hidden="true" />
+          <div className="pdm-hero-content">
+            <div className="pdm-kicker">SZCZECIN</div>
+            <h1>Padel<br />bliżej Ciebie<span>.</span></h1>
+            <p>Wolne terminy. Prawdziwi ludzie.</p>
           </div>
         </section>
 
-        <button className="ref-home-search" type="button" onClick={onOpenCourts}>
-          <span>⌕</span><strong>Szczecin</strong><b>→</b>
-        </button>
+        <div className="pdm-filters">
+          <button type="button" onClick={onOpenCourts}><span>⌖</span><strong>Szczecin</strong><b>⌄</b></button>
+          <button type="button" onClick={onOpenCourts}><span>▣</span><strong>{displayDate}</strong><b>›</b></button>
+        </div>
 
-        <section className="ref-home-nearest">
-          <header>
-            <h2>Najbliższy wolny kort</h2>
-            <button type="button" onClick={onOpenCourts}>Zobacz wszystkie →</button>
-          </header>
+        <section className="pdm-nearest">
+          <div className="pdm-section-head"><h2>Najbliższy wolny kort</h2><button type="button" onClick={onOpenCourts}>Wszystkie <span>→</span></button></div>
           {nearest ? (
-            <button className="ref-nearest-card" type="button" onClick={() => onSelectCourt?.(nearest)}>
-              <time>{nearest.startHour}</time>
-              <div className="ref-nearest-copy"><strong>{nearest.clubName}</strong><small>{nearest.courtName} · {nearest.startHour}{nearest.endHour ? ` – ${nearest.endHour}` : ""}</small></div>
-              <b className="ref-mobile-arrow">›</b>
-              <span className="ref-nearest-badge ref-desktop-only">WOLNY</span>
-              <span className="ref-nearest-cta ref-desktop-only">Zarezerwuj <b>→</b></span>
+            <button className="pdm-nearest-card" type="button" onClick={() => onSelectCourt?.(nearest)}>
+              <div className="pdm-nearest-thumb" style={{ backgroundImage: `url("${clubPhoto(nearest.clubName)}")` }} />
+              <div className="pdm-nearest-info">
+                <span className="pdm-free-pill"><i />Wolny</span>
+                <time>{nearest.startHour}{nearest.endHour ? ` – ${nearest.endHour}` : ""}</time>
+                <strong>{nearest.clubName}</strong>
+                <small>{nearest.courtName}</small>
+                <span className="pdm-book">Zarezerwuj <b>→</b></span>
+              </div>
             </button>
           ) : (
-            <button className="ref-nearest-card" type="button" onClick={onOpenCourts}>
-              <time>—</time><div className="ref-nearest-copy"><strong>Sprawdź dostępność</strong><small>Znajdź najbliższy wolny kort.</small></div><b className="ref-mobile-arrow">›</b><span className="ref-nearest-cta ref-desktop-only">Sprawdź <b>→</b></span>
+            <button className="pdm-nearest-card pdm-nearest-empty" type="button" onClick={onOpenCourts}>
+              <div className="pdm-nearest-info">
+                <time>—</time>
+                <strong>Sprawdź dostępność</strong>
+                <small>Znajdź najbliższy wolny kort.</small>
+                <span className="pdm-book">Szukaj <b>→</b></span>
+              </div>
             </button>
           )}
         </section>
 
-        <section className="ref-home-next">
-          <div className="ref-home-next-head"><h3>Kolejne terminy</h3><button type="button" onClick={onOpenCourts}>Zobacz wszystkie →</button></div>
-          {next.length > 0 ? next.map((item) => (
-            <button key={`${item.clubName}-${item.courtName}-${item.startHour}`} type="button" onClick={() => onSelectCourt?.(item)}>
-              <time>{item.startHour}</time><div><strong>{item.clubName}</strong><small>{item.courtName}</small></div><span className="ref-free ref-desktop-only"><i />Wolny</span><b>→</b>
-            </button>
-          )) : (
-            <button type="button" onClick={onOpenCourts}>
-              <time>—</time><div><strong>Zobacz wszystkie terminy</strong><small>Sprawdź dostępność kortów.</small></div><span className="ref-free ref-desktop-only"><i />Sprawdź</span><b>→</b>
-            </button>
-          )}
+        <section className="pdm-next">
+          <div className="pdm-section-head"><h2>Kolejne terminy</h2><button type="button" onClick={onOpenCourts}>Wszystkie <span>→</span></button></div>
+          <div className="pdm-next-list">
+            {next.length > 0 ? next.map((item) => (
+              <button key={`${item.clubName}-${item.courtName}-${item.startHour}`} type="button" onClick={() => onSelectCourt?.(item)}>
+                <span className="pdm-next-thumb" style={{ "--pdm-club-photo": `url("${clubPhoto(item.clubName)}")`, backgroundImage: `url("${clubPhoto(item.clubName)}")` }} />
+                <time>{item.startHour}</time>
+                <div><strong>{item.clubName}</strong><small>{item.courtName}</small></div>
+                <span className="pdm-free-dot"><i />Wolny</span><b>›</b>
+              </button>
+            )) : (
+              <button type="button" onClick={onOpenCourts}>
+                <time>{from || "16:00"}</time><div><strong>Sprawdź jutro</strong><small>{duration || 120} min · Szczecin</small></div><b>›</b>
+              </button>
+            )}
+          </div>
         </section>
 
-        <section className="ref-home-actions ref-desktop-only" aria-label="Szybkie akcje">
-          <button type="button" onClick={onOpenCourts}><span className="ref-action-icon">▣</span><span><strong>Zobacz wszystkie terminy</strong><small>Sprawdź dostępność na wszystkich kortach.</small></span><b>→</b></button>
-          <button type="button" onClick={onOpenPlayers}><span className="ref-action-icon">♙</span><span><strong>Znajdź graczy</strong><small>Dołącz do meczów i poznaj nowych ludzi.</small></span><b>→</b></button>
-          <button type="button" onClick={onOpenMatches}><span className="ref-action-icon">♜</span><span><strong>Weź udział w meczu</strong><small>Graj, zdobywaj doświadczenie, baw się!</small></span><b>→</b></button>
-        </section>
+        {openMatches.length > 0 && (
+          <section className="pdm-matches">
+            <div className="pdm-section-head"><h2>Mecze — szukają graczy</h2><button type="button" onClick={onOpenMatches}>Wszystkie <span>→</span></button></div>
+            <div className="pdm-match-list">
+              {openMatches.map((post) => (
+                <button type="button" key={post.id} onClick={onOpenMatches}>
+                  <div className="pdm-match-time"><small>{post.date === date ? "Dziś" : "Mecz"}</small><strong>{post.from || "—"}</strong></div>
+                  <span className="pdm-match-icon">◎</span>
+                  <div className="pdm-match-copy"><strong>{post.clubName || "Padel"}</strong><small>{post.playersNeeded ? `Szukają ${post.playersNeeded} gracza` : "Szukają graczy"}</small></div>
+                  <span className="pdm-join">Zobacz</span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
