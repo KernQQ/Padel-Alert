@@ -531,3 +531,68 @@
   .ref-nearest-card > .ref-mobile-arrow { display:none !important; }
   .ref-nearest-cta { grid-column:3;grid-row:1; }
 }
+
+/* =========================================================
+   PADLETIC — DESKTOP HOTFIX 2026-09-12
+   Removes the accidental UI/screen-recording background layer.
+   Desktop only; mobile <=900px untouched.
+   ========================================================= */
+@media (min-width: 901px) {
+  /* Never use a local padel-bg video here. If that file is a screen recording,
+     it creates the duplicated/ghost UI visible behind the real dashboard. */
+  .desktop-home-video-media {
+    display: none !important;
+  }
+
+  .desktop-home-video,
+  .page:has(.ref-home) {
+    background-image:
+      linear-gradient(90deg, rgba(3,14,20,.48) 0%, rgba(3,14,20,.18) 48%, rgba(3,14,20,.28) 100%),
+      linear-gradient(180deg, rgba(3,14,20,.06) 0%, rgba(3,14,20,.10) 50%, rgba(3,14,20,.55) 100%),
+      url('/assets/padletic-night-court.jpg') !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+  }
+
+  .desktop-home-video-shade {
+    background: linear-gradient(180deg, rgba(3,14,20,.02), rgba(3,14,20,.22) 58%, rgba(3,14,20,.46)) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Keep the approved desktop composition crisp and prevent old sizing rules
+     from making the hero headline collide with itself. */
+  .ref-home-hero {
+    height: 250px !important;
+    min-height: 250px !important;
+  }
+
+  .ref-home-hero-copy {
+    left: 48px !important;
+    top: 28px !important;
+    max-width: 430px !important;
+  }
+
+  .ref-home-hero-copy h1 {
+    margin: 16px 0 12px !important;
+    font-size: clamp(50px, 3.55vw, 64px) !important;
+    line-height: .82 !important;
+    letter-spacing: -.055em !important;
+  }
+
+  .ref-home-hero-copy p {
+    font-size: 13px !important;
+  }
+
+  .ref-home-search {
+    margin-top: 0 !important;
+    margin-bottom: 30px !important;
+  }
+
+  /* Ensure only the current dashboard layers are visible above the photo. */
+  .ref-home > :not(.desktop-home-video) {
+    position: relative;
+    z-index: 2;
+  }
+}
