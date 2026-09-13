@@ -612,3 +612,235 @@
   .padletic-desktop-home { display: none !important; }
   .ref-home-mobile { display: block !important; }
 }
+
+/* =========================================================
+   PADLETIC — CINEMATIC HOME FINAL 2026-09-13
+   Desktop only. Explicit photo asset + clean padel logo.
+   ========================================================= */
+@media (min-width: 901px) {
+  :root {
+    --pd-bg: #061118;
+    --pd-panel: rgba(6, 20, 27, .74);
+    --pd-panel-strong: rgba(7, 22, 29, .88);
+    --pd-line: rgba(160, 181, 188, .26);
+    --pd-line-strong: rgba(191, 207, 212, .48);
+    --pd-text: #f3f5f4;
+    --pd-muted: #aab6ba;
+    --pd-green: #62dc8f;
+  }
+
+  .page:has(.padletic-desktop-home) {
+    background: var(--pd-bg) !important;
+    overflow: hidden !important;
+  }
+  .padletic-desktop-home {
+    min-height: 100vh !important;
+    padding: 26px 44px 24px !important;
+    background: transparent !important;
+  }
+
+  /* Guaranteed still-photo background: no missing video / empty backdrop. */
+  .pd-home-bg {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: -2 !important;
+    background:
+      url('/assets/padletic-players-sunset.jpg') right top / min(73vw, 1180px) auto no-repeat,
+      #061118 !important;
+  }
+  .pd-home-bg video { display: none !important; }
+  .pd-home-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, #061118 0%, rgba(6,17,24,.94) 18%, rgba(6,17,24,.58) 43%, rgba(6,17,24,.18) 70%, rgba(6,17,24,.34) 100%),
+      linear-gradient(180deg, rgba(6,17,24,.06) 0%, rgba(6,17,24,.05) 42%, rgba(6,17,24,.74) 72%, #061118 91%);
+    pointer-events: none;
+  }
+  .pd-home-bg > span {
+    position: absolute !important;
+    inset: 0 !important;
+    background: radial-gradient(circle at 76% 18%, transparent 0 18%, rgba(6,17,24,.08) 42%, rgba(6,17,24,.26) 66%) !important;
+  }
+
+  .pd-topline { height: 44px !important; gap: 30px !important; }
+  .pd-city { font-size: 16px !important; }
+  .pd-manifesto { color: rgba(239,244,243,.86) !important; }
+
+  .pd-intro {
+    width: min(580px, 46vw) !important;
+    margin-top: 48px !important;
+  }
+  .pd-intro h1 {
+    font-size: clamp(52px, 4.3vw, 74px) !important;
+    line-height: .92 !important;
+    letter-spacing: -.055em !important;
+  }
+  .pd-intro h1 em { color: #c7ced0 !important; }
+  .pd-intro p {
+    margin-top: 16px !important;
+    color: #e2e7e5 !important;
+    font-size: 15px !important;
+    text-shadow: 0 2px 16px rgba(0,0,0,.32);
+  }
+  .pd-intro h1::after {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-left: 8px;
+    border-radius: 50%;
+    background: var(--pd-green);
+    box-shadow: 0 0 18px rgba(98,220,143,.28);
+  }
+
+  .pd-hero-filters {
+    display: flex;
+    gap: 14px;
+    margin-top: 22px;
+  }
+  .pd-hero-filters button {
+    min-width: 245px;
+    height: 48px;
+    display: grid;
+    grid-template-columns: 26px 1fr 18px;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    border: 1px solid var(--pd-line);
+    border-radius: 10px;
+    background: rgba(5,20,28,.68);
+    color: var(--pd-text);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    cursor: pointer;
+    text-align: left;
+  }
+  .pd-hero-filters button:nth-child(2) { min-width: 220px; }
+  .pd-hero-filters button strong { font-size: 12px; }
+  .pd-hero-filters button b { justify-self: end; color: var(--pd-muted); }
+  .pd-hero-filters button:hover { border-color: var(--pd-line-strong); background: rgba(9,28,37,.8); }
+
+  .pd-courts { margin-top: 34px !important; }
+  .pd-section-head { margin-bottom: 13px !important; }
+  .pd-section-head h2 { font-size: 20px !important; }
+
+  .pd-slot-row {
+    grid-template-columns: repeat(5, minmax(155px, 1fr)) !important;
+    gap: 16px !important;
+  }
+  .pd-slot {
+    position: relative;
+    isolation: isolate;
+    min-height: 184px !important;
+    overflow: hidden;
+    padding: 18px 16px 14px !important;
+    border: 1px solid rgba(166,186,193,.3) !important;
+    border-radius: 12px !important;
+    background-color: var(--pd-panel-strong) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    box-shadow: 0 18px 42px rgba(0,0,0,.12);
+  }
+  .pd-slot:nth-child(1) { background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%),url('/premium/club-1.jpg') !important; }
+  .pd-slot:nth-child(2) { background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%),url('/premium/club-2.jpg') !important; }
+  .pd-slot:nth-child(3) { background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%),url('/premium/club-3.jpg') !important; }
+  .pd-slot:nth-child(4) { background-image: linear-gradient(180deg,rgba(5,17,24,.28),rgba(5,17,24,.88) 66%),url('/premium/club-1.jpg') !important; }
+  .pd-slot:nth-child(5) { background-image: linear-gradient(180deg,rgba(5,17,24,.28),rgba(5,17,24,.88) 66%),url('/premium/club-2.jpg') !important; }
+  .pd-slot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg,rgba(4,15,21,.18),transparent 55%);
+  }
+  .pd-slot.is-primary {
+    border-color: var(--pd-green) !important;
+    box-shadow: inset 0 0 0 1px rgba(98,220,143,.12), 0 18px 42px rgba(0,0,0,.16) !important;
+  }
+  .pd-slot time { font-size: 29px !important; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+  .pd-slot small { color: #d4dcde !important; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+  .pd-status { color: #e3e9e7 !important; }
+  .pd-slot strong {
+    height: 40px !important;
+    background: rgba(5,18,25,.65) !important;
+    border-color: rgba(195,211,216,.3) !important;
+    backdrop-filter: blur(10px);
+  }
+  .pd-slot.is-primary strong {
+    color: #08140e !important;
+    background: #f4f3ed !important;
+    border-color: #f4f3ed !important;
+  }
+
+  .pd-clubs { margin-top: 22px !important; padding-bottom: 22px !important; }
+  .pd-clubs > div { gap: 10px !important; }
+  .pd-clubs button { background: rgba(7,21,28,.72) !important; backdrop-filter: blur(10px); }
+
+  .pd-matches {
+    max-width: none !important;
+    margin-top: 18px !important;
+  }
+  .pd-match-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 24px;
+    border-top: 0 !important;
+  }
+  .pd-match-row {
+    min-height: 70px !important;
+    grid-template-columns: 78px 44px minmax(0,1fr) 108px !important;
+    padding: 8px 14px !important;
+    border: 1px solid rgba(148,165,171,.18) !important;
+    border-radius: 10px;
+    background: rgba(6,20,27,.46) !important;
+    backdrop-filter: blur(12px);
+  }
+  .pd-match-row:hover { border-color: rgba(188,204,209,.4) !important; background: rgba(8,26,34,.66) !important; }
+
+  .pd-footer { margin-top: 28px !important; }
+
+  /* Clean desktop sidebar logo: stylized P made from a padel racket. */
+  .sidebar .brand {
+    display: grid !important;
+    grid-template-columns: 56px 1fr !important;
+    align-items: center !important;
+    gap: 11px !important;
+    min-height: 72px !important;
+    padding: 12px 12px !important;
+  }
+  .sidebar .brand .brand-mark {
+    width: 54px !important;
+    height: 54px !important;
+    min-width: 54px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent url('/assets/padletic-padel-logo.svg') center / contain no-repeat !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+  .sidebar .brand .brand-mark::before,
+  .sidebar .brand .brand-mark::after {
+    content: none !important;
+    display: none !important;
+  }
+  .sidebar .brand > span:last-child { min-width: 0; }
+  .sidebar .brand strong {
+    display: block;
+    color: #f1f4f3 !important;
+    font-size: 14px !important;
+    line-height: 1.05;
+    letter-spacing: .02em;
+  }
+  .sidebar .brand small {
+    display: block;
+    margin-top: 5px;
+    color: #829197 !important;
+    font-size: 9px !important;
+    white-space: nowrap;
+  }
+}

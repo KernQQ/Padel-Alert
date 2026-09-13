@@ -29,20 +29,21 @@ function HomeDashboard({
   const openMatches = useMemo(() => {
     return players
       .filter((post) => post && post.status !== "closed" && post.autoclosed !== true)
-      .slice(0, 3);
+      .slice(0, 2);
   }, [players]);
+
+  const displayDate = useMemo(() => {
+    if (!date) return "Dzisiaj";
+    const parsed = new Date(`${date}T12:00:00`);
+    if (Number.isNaN(parsed.getTime())) return date;
+    return new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "short" }).format(parsed);
+  }, [date]);
 
   return (
     <div className="ref-home">
       {/* Desktop-only home. Mobile version below remains structurally unchanged. */}
       <div className="padletic-desktop-home">
-        <div className="pd-home-bg" aria-hidden="true">
-          <video autoPlay muted loop playsInline preload="metadata">
-            <source src="/padel-bg.webm" type="video/webm" />
-            <source src="/padel-bg.mp4" type="video/mp4" />
-          </video>
-          <span />
-        </div>
+        <div className="pd-home-bg" aria-hidden="true"><span /></div>
 
         <header className="pd-topline">
           <button type="button" className="pd-city" onClick={onOpenCourts}>Szczecin <span>⌄</span></button>
@@ -50,8 +51,12 @@ function HomeDashboard({
         </header>
 
         <section className="pd-intro">
-          <h1>Znajdź kort.<br /><em>Zagraj.</em></h1>
-          <p>Szybka rezerwacja. Prawdziwi ludzie.</p>
+          <h1>Padel<br /><em>bliżej Ciebie.</em></h1>
+          <p>Wolne terminy. Prawdziwi ludzie. Padel w Twoim mieście.</p>
+          <div className="pd-hero-filters">
+            <button type="button" onClick={onOpenCourts}><span className="pd-pin">⌖</span><strong>Szczecin</strong><b>⌄</b></button>
+            <button type="button" onClick={onOpenCourts}><span>▣</span><strong>{displayDate}</strong><b>⌄</b></button>
+          </div>
         </section>
 
         <section className="pd-courts">
@@ -60,10 +65,6 @@ function HomeDashboard({
             <button type="button" onClick={onOpenCourts}>Zobacz wszystkie <span>→</span></button>
           </div>
 
-          <div className="pd-filters">
-            <button type="button" onClick={onOpenCourts}>{nearest?.clubName || "Wszystkie kluby"}<span>⌄</span></button>
-            <button type="button" onClick={onOpenCourts}><span>▣</span>{date || "Dzisiaj"}<b>›</b></button>
-          </div>
 
           <div className="pd-slot-row">
             {(nearest ? [nearest, ...next] : []).map((item, index) => (
