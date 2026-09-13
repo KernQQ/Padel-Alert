@@ -14,7 +14,7 @@ import "./styles/mobile-1to1.css";
 import "./styles/mobile-platform-fix.css";
 import "./styles/desktop-v2.css";
 import "./styles/desktop-clean-reset.css";
-import "./styles/mobile-redesign-2026.css";
+import "./styles/mobile-final-2026.css";
 import { API_URL, REFRESH_SECONDS, DURATIONS, NAVIGATION } from "./config/app";
 import {
   getToday,
@@ -280,33 +280,21 @@ function BellIcon() {
   );
 }
 
+
+function addDaysIso(value, days) {
+  const base = new Date(`${value}T12:00:00`);
+  base.setDate(base.getDate() + days);
+  return [
+    base.getFullYear(),
+    String(base.getMonth() + 1).padStart(2, "0"),
+    String(base.getDate()).padStart(2, "0")
+  ].join("-");
+}
+
 function App() {
   const today = getToday();
 
   const [activeTab, setActiveTab] = useState("home");
-
-  // Mobile navigation should always open a tab at its real top.
-  // iOS Safari/PWA and Android Chrome preserve the document scroll position
-  // between conditional tab views, which made headers appear cut underneath
-  // the fixed app bar after switching from a scrolled screen.
-  useEffect(() => {
-    const resetMobileScroll = () => {
-      if (typeof window === "undefined" || window.innerWidth > 900) return;
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      const shell = document.querySelector(".main-shell");
-      if (shell && typeof shell.scrollTo === "function") shell.scrollTo(0, 0);
-    };
-
-    resetMobileScroll();
-    const frame = window.requestAnimationFrame(resetMobileScroll);
-    const timer = window.setTimeout(resetMobileScroll, 40);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearTimeout(timer);
-    };
-  }, [activeTab]);
   const [mySection, setMySection] = useState("matches");
   const [showMobileActions, setShowMobileActions] = useState(false);
   const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
@@ -337,18 +325,17 @@ function App() {
     [accountUser]
   );
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [activeTab]);
+
   const [clubs, setClubs] = useState([]);
   const [slots, setSlots] = useState([]);
   const [posts, setPosts] = useState([]);
   const [profiles, setProfiles] = useState([]);
 
   const [clubSlug, setClubSlug] = useState("all");
-  const getTomorrow = () => {
-    const d = new Date(`${today}T12:00:00`);
-    d.setDate(d.getDate() + 1);
-    return [d.getFullYear(), String(d.getMonth()+1).padStart(2,"0"), String(d.getDate()).padStart(2,"0")].join("-");
-  };
-  const [date, setDate] = useState(getTomorrow);
+  const [date, setDate] = useState(() => addDaysIso(today, 1));
   const [from, setFrom] = useState("16:00");
   const [to, setTo] = useState("23:59");
   const [duration, setDuration] = useState(120);
@@ -356,7 +343,7 @@ function App() {
 
   const [activeSearch, setActiveSearch] = useState({
     club: "all",
-    date: getTomorrow(),
+    date: addDaysIso(today, 1),
     from: "16:00",
     to: "23:59",
     courtType: "all"
@@ -1425,7 +1412,7 @@ function App() {
     return (
       <div className="auth-gate">
         <div className="auth-gate-brand">
-          <span className="brand-mark">P</span>
+          <img className="padletic-logo-mark" src="/assets/padletic-mark-silver.svg" alt="" />
           <strong>PADLETIC</strong>
           <small>Graj, kiedy chcesz.</small>
         </div>
@@ -1473,7 +1460,7 @@ function App() {
           className="brand"
           onClick={() => setActiveTab("home")}
         >
-          <span className="brand-mark">P</span>
+          <img className="padletic-logo-mark" src="/assets/padletic-mark-silver.svg" alt="" />
 
           <span>
             <strong>PADLETIC</strong>
@@ -1531,7 +1518,7 @@ function App() {
             className="mobile-brand"
             onClick={() => setActiveTab("home")}
           >
-            <span className="brand-mark">P</span>
+            <img className="padletic-logo-mark" src="/assets/padletic-mark-silver.svg" alt="" />
             <strong>PADLETIC</strong>
           </button>
 
@@ -1679,8 +1666,8 @@ function App() {
                       const base = new Date(`${date}T12:00:00`);
                       base.setDate(base.getDate() + 1);
                       const nextDate = [base.getFullYear(), String(base.getMonth()+1).padStart(2,"0"), String(base.getDate()).padStart(2,"0")].join("-");
-                      setDate(nextDate); setFrom("16:00"); setTo("22:00"); setSelectedProposal(null);
-                      setActiveSearch((current) => ({ ...current, club: clubSlug, date: nextDate, from: "16:00", to: "22:00", courtType }));
+                      setDate(nextDate); setSelectedProposal(null);
+                      setActiveSearch((current) => ({ ...current, club: clubSlug, date: nextDate, from, to, courtType }));
                     }}>Sprawdź jutro</button>
                   </div>
                 </section>

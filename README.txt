@@ -1,15 +1,17 @@
-PADLETIC REFERENCE REBUILD V1
+PADLETIC — MOBILE REAL REBUILD
 
-Ta paczka jest przebudową struktury widoków na bazie Padel-Alert(4).zip.
-Nie jest to kolejny override starego layoutu.
+Podmień zawartość paczki zgodnie ze strukturą katalogów.
 
-Przebudowane:
-- HomeDashboard.jsx
-- Korty w App.jsx (availability board)
-- Gracze w App.jsx (lista/tabela zamiast kart)
-- Moje w App.jsx (zakładki zamiast kafelków)
-- MatchPage.jsx (fixtures zamiast dashboardu)
-- AdminPanel.jsx (tabela + statystyki)
-- sport-system.css jako nowy izolowany system UI
+Zmiany:
+- faktyczny nowy mobilny Start (osobny JSX, nie tylko CSS)
+- stałe hero bez ludzi + nowy biało/srebrny znak Padletic
+- Korty: czysta lista bez zdjęć
+- domyślnie jutro od 16:00
+- poprawiony pusty stan oraz przyciski
+- nowa wspólna góra i dolna nawigacja dla iOS/Android
+- dopracowane style Mecze, Gracze, Moje i Admin
+- kompaktowe menu profilu
+- desktop Home pozostaje osobnym widokiem
 
-Backend bez zmian.
+Po podmianie:
+cd C:\PROJEKTY\Padel-Alert; git add .; git commit -m "Padletic real mobile rebuild"; git push
