@@ -743,11 +743,11 @@
     background-position: center !important;
     box-shadow: 0 18px 42px rgba(0,0,0,.12);
   }
-  .pd-slot:nth-child(1) { background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%),url('/premium/club-1.jpg') !important; }
-  .pd-slot:nth-child(2) { background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%),url('/premium/club-2.jpg') !important; }
-  .pd-slot:nth-child(3) { background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%),url('/premium/club-3.jpg') !important; }
-  .pd-slot:nth-child(4) { background-image: linear-gradient(180deg,rgba(5,17,24,.28),rgba(5,17,24,.88) 66%),url('/premium/club-1.jpg') !important; }
-  .pd-slot:nth-child(5) { background-image: linear-gradient(180deg,rgba(5,17,24,.28),rgba(5,17,24,.88) 66%),url('/premium/club-2.jpg') !important; }
+  .pd-slot {
+    background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%), var(--pd-club-photo, url('/premium/hero-clean.jpg')) !important;
+    background-size: cover !important;
+    background-position: center !important;
+  }
   .pd-slot::before {
     content: "";
     position: absolute;
@@ -888,9 +888,6 @@
     min-height: 188px !important;
     padding: 18px 18px 15px !important;
   }
-  .pd-slot:nth-child(4) {
-    background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%),url('/premium/club-1.jpg') !important;
-  }
   .pd-slot time { font-size: 31px !important; }
   .pd-slot strong { font-size: 12px !important; }
 
@@ -933,16 +930,5 @@
   .sidebar .brand strong {
     font-size: 13px !important;
     letter-spacing: .015em !important;
-  }
-}
-
-/* FINAL: club image comes from club name mapping, never card position. */
-@media (min-width: 901px) {
-  .pd-slot,
-  .pd-slot:nth-child(1), .pd-slot:nth-child(2), .pd-slot:nth-child(3),
-  .pd-slot:nth-child(4), .pd-slot:nth-child(5), .pd-slot:nth-child(6) {
-    background-image: linear-gradient(180deg,rgba(5,17,24,.25),rgba(5,17,24,.86) 66%), var(--pd-slot-photo) !important;
-    background-size: cover !important;
-    background-position: center !important;
   }
 }

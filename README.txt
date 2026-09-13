@@ -1,17 +1,8 @@
-PADLETIC — MOBILE REAL REBUILD
+PADLETIC — DESKTOP RESTORE / MOBILE KEEP
 
-Podmień zawartość paczki zgodnie ze strukturą katalogów.
+Podmień tylko:
+1. frontend/src/components/HomeDashboard.jsx
+2. frontend/src/styles/desktop-clean-reset.css
 
-Zmiany:
-- faktyczny nowy mobilny Start (osobny JSX, nie tylko CSS)
-- stałe hero bez ludzi + nowy biało/srebrny znak Padletic
-- Korty: czysta lista bez zdjęć
-- domyślnie jutro od 16:00
-- poprawiony pusty stan oraz przyciski
-- nowa wspólna góra i dolna nawigacja dla iOS/Android
-- dopracowane style Mecze, Gracze, Moje i Admin
-- kompaktowe menu profilu
-- desktop Home pozostaje osobnym widokiem
-
-Po podmianie:
-cd C:\PROJEKTY\Padel-Alert; git add .; git commit -m "Padletic real mobile rebuild"; git push
+Ten hotfix przywraca ostatni poprawny desktop i zostawia nowy mobile osobno.
+Nie podmieniaj App.jsx ani mobile-final-2026.css.
