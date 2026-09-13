@@ -284,6 +284,29 @@ function App() {
   const today = getToday();
 
   const [activeTab, setActiveTab] = useState("home");
+
+  // Mobile navigation should always open a tab at its real top.
+  // iOS Safari/PWA and Android Chrome preserve the document scroll position
+  // between conditional tab views, which made headers appear cut underneath
+  // the fixed app bar after switching from a scrolled screen.
+  useEffect(() => {
+    const resetMobileScroll = () => {
+      if (typeof window === "undefined" || window.innerWidth > 900) return;
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      const shell = document.querySelector(".main-shell");
+      if (shell && typeof shell.scrollTo === "function") shell.scrollTo(0, 0);
+    };
+
+    resetMobileScroll();
+    const frame = window.requestAnimationFrame(resetMobileScroll);
+    const timer = window.setTimeout(resetMobileScroll, 40);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
+  }, [activeTab]);
   const [mySection, setMySection] = useState("matches");
   const [showMobileActions, setShowMobileActions] = useState(false);
   const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
