@@ -1233,3 +1233,137 @@
     -webkit-backdrop-filter: blur(11px) saturate(108%) !important;
   }
 }
+
+
+/* =========================================================
+   PADLETIC — DESKTOP FULLSCREEN BACKGROUND FINAL FIX
+   2026-09-15
+   Keeps the same photo visible behind the WHOLE desktop viewport.
+   ========================================================= */
+@media (min-width: 901px) {
+  /* The page itself must not paint an opaque navy layer. */
+  html,
+  body,
+  #root,
+  .app-shell,
+  .main-shell,
+  .main-shell > .page {
+    background-color: transparent !important;
+  }
+
+  /* Fixed photo layer = never ends halfway down the page. */
+  :root[data-theme="dark"] .main-shell::before,
+  :root[data-theme="light"] .main-shell::before,
+  .main-shell::before {
+    content: "" !important;
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 200px !important; /* starts after desktop sidebar */
+    width: auto !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+
+    background-image:
+      linear-gradient(90deg,
+        rgba(4,16,22,.50) 0%,
+        rgba(4,16,22,.24) 18%,
+        rgba(4,16,22,.06) 48%,
+        rgba(4,16,22,.02) 76%,
+        rgba(4,16,22,.10) 100%),
+      linear-gradient(180deg,
+        rgba(3,13,18,.00) 0%,
+        rgba(3,13,18,.03) 65%,
+        rgba(3,13,18,.16) 100%),
+      url('/assets/padletic-bg-desktop-wideview.jpg') !important;
+
+    background-size: cover, cover, cover !important;
+    background-position: center, center, center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed, fixed, fixed !important;
+  }
+
+  /* All desktop content sits over the fixed photo. */
+  .main-shell > .page,
+  .main-shell > .desktop-topbar,
+  .main-shell > header {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  /* Remove old per-page / home-only dark blocks. */
+  .page:has(.padletic-desktop-home),
+  .page:has(.ref-home),
+  .page:has(.pa-premium-home),
+  .padletic-desktop-home,
+  .pd-page,
+  .pd-shell,
+  .pd-content,
+  .pd-home,
+  .pd-matches,
+  .ref-home,
+  .sport-courts,
+  .sport-matches,
+  .sport-players,
+  .sport-my,
+  .sport-admin,
+  .admin-panel,
+  .admin-page,
+  .matches-page,
+  .match-page {
+    background: transparent !important;
+    background-image: none !important;
+  }
+
+  /* Keep sections readable while still showing the photo underneath. */
+  .sport-courts-toolbar,
+  .sport-courts-tools,
+  .sport-availability-board,
+  .sport-time-block,
+  .sport-player-filters,
+  .sport-player-list,
+  .sport-my-profile,
+  .sport-my-tabs,
+  .sport-my-content,
+  .sport-admin-stats > *,
+  .sport-admin-table,
+  .sport-admin-tabs,
+  .match-card,
+  .match-list,
+  .match-filters {
+    background-color: rgba(4, 24, 32, .46) !important;
+    backdrop-filter: blur(10px) saturate(108%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(108%) !important;
+  }
+
+  /* Desktop sidebar stays solid and separate. */
+  .sidebar,
+  .desktop-sidebar,
+  .side-nav,
+  aside {
+    position: relative !important;
+    z-index: 5 !important;
+  }
+}
+
+
+/* PADLETIC — REAL PHYSICAL ZOOM OUT */
+@media (min-width: 901px) {
+  :root[data-theme="dark"] .main-shell::before,
+  :root[data-theme="light"] .main-shell::before,
+  .main-shell::before {
+    background-image:
+      linear-gradient(90deg, rgba(4,16,22,.28), rgba(4,16,22,.05) 48%, rgba(4,16,22,.12)),
+      linear-gradient(180deg, rgba(3,13,18,.00), rgba(3,13,18,.12)),
+      url('/assets/padletic-bg-desktop-zoomout.jpg') !important;
+    background-size: cover, cover, cover !important;
+    background-position: center, center, center !important;
+    background-repeat: no-repeat !important;
+  }
+}

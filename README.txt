@@ -1,13 +1,15 @@
-PADLETIC — DESKTOP BACKGROUND VISIBILITY HOTFIX
+PADLETIC — PRAWDZIWE MOCNE ODDALENIE
 
-Ta wersja:
-- rozjaśnia samo zdjęcie,
-- zmniejsza ciemny overlay,
-- zmniejsza krycie paneli,
-- zostawia to samo tło na wszystkich zakładkach.
+Tym razem oddalenie jest zapisane fizycznie w nowych plikach JPG.
+Nie polega na background-size, więc przeglądarka nie może znowu przybliżyć kadru.
 
 Podmień:
 frontend/src/styles/desktop-clean-reset.css
-frontend/public/assets/padletic-bg-desktop-wideview.jpg
+frontend/src/styles/mobile-final-2026.css
 
-Mobile nie jest ruszany.
+Dodaj:
+frontend/public/assets/padletic-bg-desktop-zoomout.jpg
+frontend/public/assets/padletic-bg-mobile-zoomout.jpg
+
+Desktop: scena zajmuje ~50% szerokości obrazu.
+Mobile: scena zajmuje ~56% szerokości obrazu.
