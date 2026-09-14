@@ -950,3 +950,105 @@
       linear-gradient(180deg, rgba(6,17,24,.02) 0%, rgba(6,17,24,.07) 48%, rgba(6,17,24,.52) 80%, #061118 100%) !important;
   }
 }
+
+
+/* =========================================================
+   PADLETIC — DESKTOP / ONE BACKGROUND ON EVERY TAB
+   2026-09-14
+   Applies ONLY >= 901px. Mobile remains untouched.
+   ========================================================= */
+@media (min-width: 901px) {
+  /* One fixed cinematic scene for the entire desktop content area. */
+  .main-shell {
+    position: relative !important;
+    min-height: 100vh !important;
+    background:
+      linear-gradient(90deg,
+        rgba(4,16,22,.90) 0%,
+        rgba(4,16,22,.72) 20%,
+        rgba(4,16,22,.40) 50%,
+        rgba(4,16,22,.25) 72%,
+        rgba(4,16,22,.46) 100%),
+      linear-gradient(180deg,
+        rgba(3,13,18,.12) 0%,
+        rgba(3,13,18,.18) 55%,
+        rgba(3,13,18,.72) 100%),
+      url('/assets/padletic-bg-desktop-wideview.jpg')
+      center center / cover fixed no-repeat !important;
+  }
+
+  /* Every tab becomes a transparent layer over the same scene. */
+  .page,
+  .page:has(.pa-premium-home),
+  .sport-courts,
+  .sport-players,
+  .sport-my,
+  .sport-matches,
+  .matches-page,
+  .match-page,
+  .smart-lobby,
+  .sport-admin,
+  .admin-panel,
+  .admin-page,
+  [class*="admin-panel"],
+  [class*="match-page"] {
+    background: transparent !important;
+  }
+
+  /* Disable old home-only photo layers so the same global scene wins. */
+  .page:has(.pa-premium-home)::before,
+  .page:has(.pa-premium-home)::after,
+  .pd-home-bg,
+  .pd-home-bg::after {
+    background: transparent !important;
+  }
+
+  /* Glass treatment: content remains readable but the photo is visible
+     behind courts / matches / players / profile / admin. */
+  .sport-page-head,
+  .sport-courts-toolbar,
+  .sport-courts-tools,
+  .sport-availability-board,
+  .sport-time-block,
+  .sport-player-filters,
+  .sport-player-list,
+  .sport-my-profile,
+  .sport-my-tabs,
+  .sport-my-content,
+  .sport-admin-stats > *,
+  .sport-admin-table,
+  .sport-admin-tabs,
+  .match-card,
+  .match-list,
+  .match-filters,
+  .smart-lobby > section,
+  .admin-panel > section,
+  .admin-panel article,
+  [class*="admin-"] article {
+    background-color: rgba(5, 27, 35, .70) !important;
+    backdrop-filter: blur(14px) saturate(112%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(112%) !important;
+  }
+
+  /* Do not turn headings themselves into heavy boxes. */
+  .sport-page-head,
+  .sport-my-profile {
+    background-color: rgba(5, 25, 33, .34) !important;
+  }
+
+  /* Home cards retain their own club photography, but all empty space and
+     sections around them reveal the same global background. */
+  .pd-page,
+  .pd-shell,
+  .pd-content,
+  .pd-home,
+  .pd-matches {
+    background-color: transparent !important;
+  }
+
+  /* Keep the photo running behind long lists when the page is taller than the viewport. */
+  .page {
+    min-height: 100vh !important;
+    background-color: transparent !important;
+  }
+}
