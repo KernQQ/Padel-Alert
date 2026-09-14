@@ -1,19 +1,13 @@
-PADLETIC — MOBILE PODMIANA
+PADLETIC — MOBILE: NOWE TŁO STARTU
 
-Podmieniasz TYLKO 2 pliki:
-frontend/src/components/MobileHomeDashboard.jsx
-frontend/src/styles/mobile-final-2026.css
+Ta paczka rusza wyłącznie MOBILE. Desktop pozostaje bez zmian.
 
-DESKTOP NIE JEST W TEJ PACZCE I NIE JEST ZMIENIANY.
+Podmień/dodaj:
+- frontend/src/components/MobileHomeDashboard.jsx
+- frontend/src/styles/mobile-final-2026.css
+- frontend/public/assets/padletic-mobile-hero-new.jpg
 
-Zmiany:
-- inne tło Start: /premium/hero-clean.jpg (nie padletic-mobile-hero.jpg z rakietą/piłkami)
-- mniejszy, kompaktowy Start
-- mini zdjęcia prawdziwych klubów według mapowania już używanego na desktopie:
-  Padel Arena Południowa -> /premium/club-1.jpg
-  Padel Club -> /premium/club-2.jpg
-  Fabryka Energii -> /premium/club-3.jpg
-- mini zdjęcia przy najbliższym wolnym korcie i kolejnych wolnych
-- sekcja 3 klubów na Start
-- kompaktowy panel Admin na mobile
-- poprawiona wysokość mobilnej góry
+Zmiana:
+- stare zdjęcie rakiety i piłek NIE jest już używane na ekranie Start,
+- nowe tło: nocny kort / szkło / światła / zieleń, bez rakiety na pierwszym planie,
+- miniatury konkretnych klubów przy wolnych kortach zostają.
