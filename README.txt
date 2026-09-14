@@ -1,14 +1,13 @@
-HOTFIX: wspólne tło desktop
+PADLETIC — DESKTOP BACKGROUND VISIBILITY HOTFIX
 
-Poprzednio stary reset CSS miał:
-.main-shell::before { content:none; display:none; }
-
-Ten hotfix nadpisuje dokładnie te reguły.
+Ta wersja:
+- rozjaśnia samo zdjęcie,
+- zmniejsza ciemny overlay,
+- zmniejsza krycie paneli,
+- zostawia to samo tło na wszystkich zakładkach.
 
 Podmień:
 frontend/src/styles/desktop-clean-reset.css
-
-Dodaj/nadpisz:
 frontend/public/assets/padletic-bg-desktop-wideview.jpg
 
-Mobile nie jest modyfikowany.
+Mobile nie jest ruszany.

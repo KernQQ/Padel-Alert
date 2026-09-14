@@ -1168,3 +1168,68 @@
     -webkit-backdrop-filter: blur(15px) saturate(110%) !important;
   }
 }
+
+
+/* =========================================================
+   PADLETIC DESKTOP BG — VISIBILITY HOTFIX 2026-09-14
+   Make the global scene actually visible.
+   ========================================================= */
+@media (min-width: 901px) {
+  :root[data-theme="dark"] .main-shell::before,
+  :root[data-theme="light"] .main-shell::before,
+  .main-shell::before {
+    opacity: 1 !important;
+    filter: none !important;
+    background-image:
+      linear-gradient(90deg,
+        rgba(4,16,22,.56) 0%,
+        rgba(4,16,22,.30) 20%,
+        rgba(4,16,22,.10) 50%,
+        rgba(4,16,22,.04) 76%,
+        rgba(4,16,22,.12) 100%),
+      linear-gradient(180deg,
+        rgba(3,13,18,.02) 0%,
+        rgba(3,13,18,.05) 58%,
+        rgba(3,13,18,.28) 100%),
+      url('/assets/padletic-bg-desktop-wideview.jpg') !important;
+  }
+
+  /* Keep only a light readable tint on the content itself. */
+  .main-shell > .page {
+    background-color: rgba(3, 16, 22, .08) !important;
+  }
+
+  /* Home content no longer paints a dark wall over the image. */
+  .padletic-desktop-home,
+  .pd-page,
+  .pd-shell,
+  .pd-content,
+  .pd-home,
+  .pd-matches,
+  .ref-home {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Glass panels: lighter so the court stays visible underneath. */
+  .sport-courts-toolbar,
+  .sport-courts-tools,
+  .sport-availability-board,
+  .sport-time-block,
+  .sport-player-filters,
+  .sport-player-list,
+  .sport-my-profile,
+  .sport-my-tabs,
+  .sport-my-content,
+  .sport-admin-stats > *,
+  .sport-admin-table,
+  .sport-admin-tabs,
+  .match-card,
+  .match-list,
+  .match-filters {
+    background-color: rgba(5, 25, 33, .54) !important;
+    backdrop-filter: blur(11px) saturate(108%) !important;
+    -webkit-backdrop-filter: blur(11px) saturate(108%) !important;
+  }
+}
