@@ -120,3 +120,18 @@
 @media (max-width:390px){
   .mobile-home-hero-v4{height:315px!important}.mobile-home-hero-content-v4 h1{font-size:38px!important}.mobile-nearest-v4{grid-template-columns:104px 1fr 20px!important}.mobile-nearest-v4>img{width:104px!important}.mobile-home-section-v4{padding-left:15px!important;padding-right:15px!important}.mobile-home-controls-v4{padding-left:15px!important;padding-right:15px!important}.mobile-home-primary-v4{margin-left:15px!important;width:calc(100% - 30px)!important}
 }
+
+
+/* =========================================================
+   PADLETIC — MOBILE BACKGROUND WIDE VIEW 2026-09-14
+   Same scene as desktop, deliberately pulled back.
+   ========================================================= */
+@media (max-width: 900px) {
+  .mobile-home-hero-v4 {
+    background-image:
+      linear-gradient(180deg, rgba(3,15,20,.10) 0%, rgba(3,18,24,.14) 46%, #061820 100%),
+      url('/assets/padletic-bg-mobile-wideview.jpg') !important;
+    background-size: cover !important;
+    background-position: center 46% !important;
+  }
+}

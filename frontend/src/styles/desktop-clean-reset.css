@@ -932,3 +932,21 @@
     letter-spacing: .015em !important;
   }
 }
+
+
+/* =========================================================
+   PADLETIC — DESKTOP BACKGROUND MATCH MOBILE 2026-09-14
+   Desktop keeps its own layout; only the background asset changes.
+   ========================================================= */
+@media (min-width: 901px) {
+  .pd-home-bg {
+    background:
+      url('/assets/padletic-bg-desktop-wideview.jpg') center center / cover no-repeat,
+      #061118 !important;
+  }
+  .pd-home-bg::after {
+    background:
+      linear-gradient(90deg, #061118 0%, rgba(6,17,24,.91) 15%, rgba(6,17,24,.59) 38%, rgba(6,17,24,.19) 70%, rgba(6,17,24,.24) 100%),
+      linear-gradient(180deg, rgba(6,17,24,.02) 0%, rgba(6,17,24,.07) 48%, rgba(6,17,24,.52) 80%, #061118 100%) !important;
+  }
+}

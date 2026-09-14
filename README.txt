@@ -1,13 +1,15 @@
-PADLETIC — MOBILE: NOWE TŁO STARTU
+PADLETIC — wspólne tło Start dla mobile + desktop
 
-Ta paczka rusza wyłącznie MOBILE. Desktop pozostaje bez zmian.
+Zmiana dotyczy TYLKO tła.
+Układy desktop i mobile nadal są rozdzielone.
 
-Podmień/dodaj:
-- frontend/src/components/MobileHomeDashboard.jsx
+Podmień:
 - frontend/src/styles/mobile-final-2026.css
-- frontend/public/assets/padletic-mobile-hero-new.jpg
+- frontend/src/styles/desktop-clean-reset.css
 
-Zmiana:
-- stare zdjęcie rakiety i piłek NIE jest już używane na ekranie Start,
-- nowe tło: nocny kort / szkło / światła / zieleń, bez rakiety na pierwszym planie,
-- miniatury konkretnych klubów przy wolnych kortach zostają.
+Dodaj:
+- frontend/public/assets/padletic-bg-mobile-wideview.jpg
+- frontend/public/assets/padletic-bg-desktop-wideview.jpg
+
+Mobile: zdjęcie jest bardziej oddalone.
+Desktop: ta sama scena, szeroki kadr.
