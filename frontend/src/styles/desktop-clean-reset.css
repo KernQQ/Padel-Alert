@@ -1052,3 +1052,119 @@
     background-color: transparent !important;
   }
 }
+
+
+/* =========================================================
+   PADLETIC DESKTOP BG HOTFIX — exact override
+   Restores the main-shell pseudo layer that an older reset hid.
+   ========================================================= */
+@media (min-width: 901px) {
+  html,
+  body,
+  #root {
+    background: #061118 !important;
+  }
+
+  .main-shell {
+    position: relative !important;
+    isolation: isolate !important;
+    min-height: 100vh !important;
+    background: transparent !important;
+    background-image: none !important;
+  }
+
+  /* Older desktop reset had content:none + display:none on these.
+     Force the global photo layer back on. */
+  :root[data-theme="dark"] .main-shell::before,
+  :root[data-theme="light"] .main-shell::before,
+  .main-shell::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    min-height: 100% !important;
+    background-image:
+      linear-gradient(90deg,
+        rgba(4,16,22,.84) 0%,
+        rgba(4,16,22,.58) 20%,
+        rgba(4,16,22,.24) 52%,
+        rgba(4,16,22,.12) 76%,
+        rgba(4,16,22,.25) 100%),
+      linear-gradient(180deg,
+        rgba(3,13,18,.06) 0%,
+        rgba(3,13,18,.10) 58%,
+        rgba(3,13,18,.56) 100%),
+      url('/assets/padletic-bg-desktop-wideview.jpg') !important;
+    background-size: cover, cover, cover !important;
+    background-position: center, center, center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll, scroll, fixed !important;
+  }
+
+  :root[data-theme="dark"] .main-shell::after,
+  :root[data-theme="light"] .main-shell::after,
+  .main-shell::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* Put the real app above the background photo. */
+  .main-shell > .page,
+  .main-shell > .mobile-topbar {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  /* Remove opaque legacy backgrounds from every desktop tab. */
+  .main-shell > .page,
+  .page:has(.padletic-desktop-home),
+  .page:has(.ref-home),
+  .page:has(.pa-premium-home),
+  .padletic-desktop-home,
+  .ref-home,
+  .sport-courts,
+  .sport-players,
+  .sport-my,
+  .sport-matches,
+  .matches-page,
+  .match-page,
+  .smart-lobby,
+  .sport-admin,
+  .admin-panel,
+  .admin-page {
+    background: transparent !important;
+    background-image: none !important;
+  }
+
+  /* Home had its own photograph layer — disable only that layer. */
+  .pd-home-bg,
+  .pd-home-bg::before,
+  .pd-home-bg::after,
+  .pd-home-bg > span {
+    background: transparent !important;
+    background-image: none !important;
+  }
+
+  /* Transparent/glass surfaces on internal tabs. */
+  .sport-courts-toolbar,
+  .sport-courts-tools,
+  .sport-availability-board,
+  .sport-time-block,
+  .sport-player-filters,
+  .sport-player-list,
+  .sport-my-profile,
+  .sport-my-tabs,
+  .sport-my-content,
+  .sport-admin-stats > *,
+  .sport-admin-table,
+  .sport-admin-tabs,
+  .match-card,
+  .match-list,
+  .match-filters {
+    background-color: rgba(5, 25, 33, .72) !important;
+    backdrop-filter: blur(15px) saturate(110%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(110%) !important;
+  }
+}
