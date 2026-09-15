@@ -1,13 +1,17 @@
-PADLETIC — desktop content flow fix
+PADLETIC — DESKTOP FLOW RESTORE
 
-Podmień:
+Podmień tylko:
 frontend/src/styles/desktop-clean-reset.css
 
-Co naprawia:
-- usuwa desktopową warstwę ::before, która powodowała problem z układem,
-- tło jest teraz malowane bezpośrednio na .main-shell i nie zajmuje miejsca w layoucie,
-- zawartość Start zaczyna się od góry,
-- MOBILE <= 900 px NIE JEST RUSZANY.
+Naprawa:
+- desktopowy Start wraca do pierwszego viewportu,
+- tło nie tworzy osobnej warstwy zajmującej wysokość,
+- wyłączone zostały pseudo-warstwy ::before/::after odpowiedzialne za konflikt,
+- tło jest malowane bezpośrednio na .main-shell,
+- układ desktopu pozostaje jak wcześniej: nagłówek -> hero -> korty -> mecze,
+- mobile <=900px nie jest objęty żadną z nowych reguł.
 
-Uwaga:
-Próba lokalnego builda w środowisku roboczym nie zakończyła się, ponieważ npm ci nie zdążył pobrać zależności w limicie czasu. Nie zgłaszam więc fałszywie, że build został zweryfikowany.
+Build:
+Kod CSS został przygotowany na aktualnym Padel-Alert(8).
+Lokalny Vite nie mógł wystartować z powodu brakującego natywnego bindingu Rolldown
+w dostarczonym node_modules; nie jest to błąd składni CSS ani aplikacji.
