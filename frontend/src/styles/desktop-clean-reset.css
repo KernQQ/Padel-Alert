@@ -1398,3 +1398,61 @@
     transform: none !important;
   }
 }
+
+/* =========================================================
+   PADLETIC 2026-09-15 — FINAL DESKTOP FLOW FIX
+   Background is painted by .main-shell itself. It creates ZERO
+   boxes in document flow, so home content always starts at top.
+   Mobile <=900px is intentionally untouched.
+   ========================================================= */
+@media (min-width: 901px) {
+  .main-shell::before,
+  :root[data-theme="dark"] .main-shell::before,
+  :root[data-theme="light"] .main-shell::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .main-shell {
+    position: relative !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    background-color: #061820 !important;
+    background-image:
+      linear-gradient(90deg, rgba(4,16,22,.34), rgba(4,16,22,.08) 50%, rgba(4,16,22,.18)),
+      linear-gradient(180deg, rgba(3,13,18,.03), rgba(3,13,18,.18)),
+      url('/assets/padletic-bg-desktop-zoomout.jpg') !important;
+    background-size: cover, cover, cover !important;
+    background-position: center, center, center top !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed, fixed, fixed !important;
+  }
+
+  .main-shell > .page {
+    position: relative !important;
+    z-index: 1 !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    transform: none !important;
+    background: transparent !important;
+  }
+
+  .page:has(.padletic-desktop-home) {
+    padding: 0 !important;
+    margin-top: 0 !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .page:has(.padletic-desktop-home) .ref-home,
+  .padletic-desktop-home {
+    margin-top: 0 !important;
+    min-height: 0 !important;
+    background: transparent !important;
+  }
+
+  .padletic-desktop-home {
+    padding-top: 26px !important;
+  }
+}
