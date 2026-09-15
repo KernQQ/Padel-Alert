@@ -151,3 +151,49 @@
     background-repeat: no-repeat !important;
   }
 }
+
+
+/* =========================================================
+   PADLETIC MOBILE — ZOOM OUT LAYOUT FIX
+   Full hero background, no boxed/miniature image.
+   ========================================================= */
+@media (max-width: 900px) {
+  .mobile-home-hero-v4,
+  .mobile-home-hero,
+  .mobile-hero,
+  .home-hero,
+  .hero-bg,
+  .hero-background {
+    position: relative !important;
+    background-image:
+      linear-gradient(180deg, rgba(3,15,20,.04) 0%, rgba(3,18,24,.12) 56%, #061820 100%),
+      url('/assets/padletic-bg-mobile-zoomout-fixed.jpg') !important;
+    background-size: cover !important;
+    background-position: center 34% !important;
+    background-repeat: no-repeat !important;
+    background-color: #061820 !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-home-hero-v4::before,
+  .mobile-home-hero::before,
+  .mobile-hero::before,
+  .home-hero::before,
+  .hero-bg::before,
+  .hero-background::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .mobile-home-hero-v4 img,
+  .mobile-home-hero img,
+  .mobile-hero img,
+  .home-hero img,
+  .hero-bg img,
+  .hero-background img {
+    transform: none !important;
+    object-fit: cover !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}

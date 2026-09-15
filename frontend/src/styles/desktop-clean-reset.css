@@ -1367,3 +1367,34 @@
     background-repeat: no-repeat !important;
   }
 }
+
+
+/* =========================================================
+   PADLETIC DESKTOP — BACKGROUND MUST NOT AFFECT LAYOUT
+   ========================================================= */
+@media (min-width: 901px) {
+  .main-shell {
+    position: relative !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+  }
+
+  .main-shell::before {
+    position: fixed !important;
+    inset: 0 0 0 200px !important;
+    width: auto !important;
+    height: 100vh !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .main-shell > .page {
+    position: relative !important;
+    z-index: 2 !important;
+    margin-top: 0 !important;
+    transform: none !important;
+  }
+}
